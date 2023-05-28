@@ -14,8 +14,10 @@ import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.drawerlayout.widget.DrawerLayout.DrawerListener
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.example.krew.databinding.ActivityMainBinding
+import com.example.krew.databinding.DayInfoBinding
 import com.example.krew.databinding.GroupNavigationDrawerBinding
 import com.example.krew.group.GroupActivity
 import com.example.krew.group.GroupItem
@@ -23,28 +25,36 @@ import com.example.krew.group.GroupRVAdapter
 
 class MainActivity : AppCompatActivity() {
     lateinit var binding: ActivityMainBinding
-    lateinit var groupRVAdapter:GroupRVAdapter
 
+    lateinit var groupRVAdapter:GroupRVAdapter
     val groupArr = ArrayList<GroupItem>()
+
+    lateinit var dayInfoBinding: DayInfoBinding
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
+        dayInfoBinding = DayInfoBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        init()
+        initCalendar()
         initDrawer()
     }
 
-    fun init(){
+    fun initCalendar() {
+        val monthListManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+        val monthListAdapter = AdapterMonth()
 
-        binding.btn.setOnClickListener{
-            if(!binding.drawer.isDrawerOpen(GravityCompat.START)){
-                binding.drawer.openDrawer(GravityCompat.START)
-            } else{
-                binding.drawer.closeDrawer(GravityCompat.START)
-            }
+        binding.calendarCustom.apply {
+            layoutManager = monthListManager
+            adapter = monthListAdapter
+            scrollToPosition(Int.MAX_VALUE/2)
         }
+        val snap = PagerSnapHelper()
+        snap.attachToRecyclerView(binding.calendarCustom)
+
+        val toolbar = dayInfoBinding.toolbar
+        toolbar.title = "클릭한 날짜 받아와야지"
     }
 
     private fun initDrawer(){
@@ -71,10 +81,5 @@ class MainActivity : AppCompatActivity() {
         rv_nav.layoutManager = LinearLayoutManager(
             this, LinearLayoutManager.VERTICAL, false)
 
-
-
-
     }
-
-
 }
