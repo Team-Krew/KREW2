@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Profile">
+    
+    <LinearLayout
+        android:id="@+id/profile_top_section"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="15sp">
+
+        <ImageButton
+            android:id="@+id/profile_go_back_button"
+            android:layout_width="7dp"
+            android:layout_height="33dp"
+            android:layout_weight="1"
+            android:background="@drawable/go_back_img" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="33dp"
+            android:layout_weight="10"
+            android:fontFamily="@font/check_logo_font_bold"
+            android:gravity="center"
+            android:text="프로필 설정"
+            android:textFontWeight="1000"
+            android:textColor="@color/black"
+            android:textSize="20sp" />
+
+        <ImageButton
+            android:id="@+id/profile_check_button"
+            android:layout_width="7dp"
+            android:layout_height="33dp"
+            android:layout_weight="1"
+            android:background="@drawable/check_img" />
+    </LinearLayout>
+
+    <View
+        android:background="#a6a6a6"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        />
+    
+    <LinearLayout
+        android:id="@+id/profile_middle_section"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:padding="20dp">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/profile_thumbnail_img"
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:src="@drawable/profile_default_img"
+            android:layout_margin="30dp"/>
+        <TextView
+            android:id="@+id/profile_username"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="24sp"
+            android:fontFamily="@font/check_logo_font_bold"
+            android:text="김용현"
+            android:textFontWeight="1000"
+            android:textColor="@color/black"
+            android:layout_margin="5dp"/>
+        <TextView
+            android:id="@+id/profile_univ"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="건국대학교"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/profile_bottom_section"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:weightSum="10"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:layout_width="350dp"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:padding="5dp">
+            <TextView
+                android:id="@+id/profile_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="5dp"
+                android:text="이름"
+                android:gravity="left" />
+
+            <EditText
+                android:id="@+id/profile_edit_name"
+                style="@style/profile_style"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="8dp"
+                android:background="@drawable/edit_text_border" />
+
+            <TextView
+                android:id="@+id/profile_self_intro"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="5dp"
+                android:text="자기소개" />
+
+            <EditText
+                android:id="@+id/profile_edit_self_intro"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="8dp"
+                android:inputType="textPersonName"
+                android:background="@drawable/edit_text_border" />
+
+            <TextView
+                android:id="@+id/profile_start_loc"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="5dp"
+                android:text="출발지 설정" />
+
+            <EditText
+                android:id="@+id/profile_edit_start_loc"
+                style="@style/profile_style"
+                android:layout_width="match_parent"
+                android:padding="8dp"
+                android:layout_height="wrap_content"
+                android:background="@drawable/edit_text_border" />
+
+            <TextView
+                android:id="@+id/profile_ready_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="5dp"
+                android:text="일정 준비 시간"
+                tools:layout_editor_absoluteX="131dp"
+                tools:layout_editor_absoluteY="275dp" />
+
+            <EditText
+                android:id="@+id/profile_edit_ready_time"
+                android:background="@drawable/edit_text_border"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="8dp"/>
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

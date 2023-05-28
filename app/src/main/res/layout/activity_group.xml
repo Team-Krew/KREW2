@@ -1,0 +1,272 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".group.GroupActivity">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="15dp"
+        android:elevation="10dp"
+        android:background="@color/white">
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/baseline_arrow_back_24"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="모임관리"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:textAlignment="center"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/iv_check"
+            app:layout_constraintStart_toEndOf="@+id/imageView"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/iv_check"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/baseline_check_24"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:layout_marginStart="50dp"
+        android:text="모임 이름"
+        android:textSize="12sp"
+        android:textColor="@color/light_grey"/>
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginHorizontal="30dp"
+        android:layout_marginVertical="15dp"
+        android:paddingStart="20dp"
+        android:background="@drawable/bg_radius_10dp"
+        android:backgroundTint="@color/light_grey"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:layout_marginStart="50dp"
+        android:text="설명"
+        android:textSize="12sp"
+        android:textColor="@color/light_grey"/>
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginVertical="15dp"
+        android:layout_marginHorizontal="30dp"
+        android:paddingStart="20dp"
+        android:background="@drawable/bg_radius_10dp"
+        android:backgroundTint="@color/light_grey"/>
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:layout_marginStart="50dp"
+        android:text="라벨 색상"
+        android:textSize="12sp"
+        android:textColor="@color/light_grey"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginVertical="15dp"
+        android:layout_marginHorizontal="30dp">
+        <RadioGroup
+            android:id="@+id/rg1"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            >
+            <Space
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"/>
+            <RadioButton
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:id="@+id/rb1"
+                android:button="@null"
+                android:backgroundTint="@color/light_grey"
+                android:background="@drawable/bg_radius_30dp_stroke"
+                />
+            <Space
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"/>
+
+            <RadioButton
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:id="@+id/rb2"
+                android:button="@null"
+                android:backgroundTint="@color/color_gr1"
+                android:background="@drawable/bg_radius_30dp_stroke"
+                />
+
+            <Space
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"/>
+            <RadioButton
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:id="@+id/rb3"
+                android:button="@null"
+                android:backgroundTint="@color/color_gr2"
+                android:background="@drawable/bg_radius_30dp_stroke"
+                />
+
+            <Space
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"/>
+            <RadioButton
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:id="@+id/rb4"
+                android:button="@null"
+                android:backgroundTint="@color/color_gr3"
+                android:background="@drawable/bg_radius_30dp_stroke"
+                />
+            <Space
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"/>
+
+            <RadioButton
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:id="@+id/rb5"
+                android:button="@null"
+                android:backgroundTint="@color/color_gr4"
+                android:background="@drawable/bg_radius_30dp_stroke"
+                />
+            <Space
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"/>
+        </RadioGroup>
+
+        <RadioGroup
+            android:id="@+id/rg2"
+            android:orientation="horizontal"
+            android:layout_marginTop="25dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            >
+            <Space
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"/>
+            <RadioButton
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:id="@+id/rb6"
+                android:button="@null"
+                android:backgroundTint="@color/color_gr5"
+                android:background="@drawable/bg_radius_30dp_stroke"
+                />
+            <Space
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"/>
+
+            <RadioButton
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:id="@+id/rb7"
+                android:button="@null"
+                android:backgroundTint="@color/color_gr6"
+                android:background="@drawable/bg_radius_30dp_stroke"
+                />
+
+            <Space
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"/>
+            <RadioButton
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:id="@+id/rb8"
+                android:button="@null"
+                android:backgroundTint="@color/color_gr7"
+                android:background="@drawable/bg_radius_30dp_stroke"
+                />
+
+            <Space
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"/>
+            <RadioButton
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:id="@+id/rb9"
+                android:button="@null"
+                android:backgroundTint="@color/color_gr8"
+                android:background="@drawable/bg_radius_30dp_stroke"
+                />
+            <Space
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"/>
+
+            <RadioButton
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:id="@+id/rb10"
+                android:button="@null"
+                android:backgroundTint="@color/dark_grey"
+                android:background="@drawable/bg_radius_30dp_stroke"
+                />
+            <Space
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"/>
+        </RadioGroup>
+
+    </LinearLayout>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_marginStart="50dp"
+        android:text="참가자 목록"
+        android:textSize="12sp"
+        android:textColor="@color/light_grey"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_recycler"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="20dp"
+        android:layout_marginHorizontal="30dp"/>
+
+</LinearLayout>
