@@ -13,15 +13,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.KREW"
         tools:targetApi="31">
-
         <activity
             android:name=".controller.SplashActivity"
-            android:exported="true"
-            android:theme="@style/SplashTheme"></activity>
-        <activity android:name=".controller.GroupActivity"
-            android:exported="true" />
-        <activity
-            android:name=".controller.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -30,7 +23,20 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".controller.Profile"
+            android:name=".controller.GroupActivity"
+            android:exported="true" />
+        <activity
+            android:name=".controller.MainActivity"
+            android:exported="true">
+        </activity>
+        <activity
+            android:name=".controller.ProfileActivity"
+            android:exported="false" />
+        <activity
+            android:name=".controller.addSchedule"
+            android:exported="false" />
+        <activity
+            android:name=".controller.FindLocation"
             android:exported="false" />
     </application>
 

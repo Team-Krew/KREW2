@@ -1,8 +1,9 @@
-package com.example.krew.controller
+package com.example.krew.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.example.krew.model.DayInfo
 import com.example.krew.databinding.DayInfoRowBinding
 
 class AdapterDayInfo (val items:ArrayList<DayInfo>):RecyclerView.Adapter<AdapterDayInfo.ViewHolder>(){

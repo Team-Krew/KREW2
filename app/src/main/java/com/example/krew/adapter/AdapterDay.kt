@@ -1,4 +1,4 @@
-package com.example.krew.controller
+package com.example.krew.adapter
 
 import android.graphics.Color
 import android.view.LayoutInflater

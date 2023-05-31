@@ -1,25 +1,25 @@
-package com.example.krew.controller
+package com.example.krew.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.krew.databinding.MemberItemBinding
-import com.example.krew.model.MemberItem
+import com.example.krew.databinding.GroupItemBinding
+import com.example.krew.model.GroupItem
 
-class MemberRVAdapter(
-    private val dataList: ArrayList<MemberItem>,
-) : RecyclerView.Adapter<MemberRVAdapter.ItemViewHolder>(){
+class GroupRVAdapter(
+    private val dataList: ArrayList<GroupItem>,
+) : RecyclerView.Adapter<GroupRVAdapter.ItemViewHolder>(){
 
     inner class ItemViewHolder(val binding:
-                               MemberItemBinding):RecyclerView.ViewHolder(binding.root){
-        fun bind(data: MemberItem){
+                               GroupItemBinding):RecyclerView.ViewHolder(binding.root){
+        fun bind(data: GroupItem){
         }
     }
 
     override fun onCreateViewHolder(
         parent: ViewGroup, viewType: Int
     ): ItemViewHolder {
-        val binding = MemberItemBinding.inflate(LayoutInflater.from(parent.context))
+        val binding = GroupItemBinding.inflate(LayoutInflater.from(parent.context))
         return ItemViewHolder(binding)
     }
 
@@ -28,8 +28,11 @@ class MemberRVAdapter(
         holder.bind(dataList[position])
 
         holder.apply {
-            binding.tvName.text = listposition.name
+            binding.tvGroupName.text = listposition.group_name
+            binding.tvGroupHead.text = listposition.group_head
+            binding.swGroup.isChecked = listposition.check
         }
+
     }
 
     override fun getItemCount(): Int = dataList.size
