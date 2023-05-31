@@ -1,18 +1,12 @@
-package com.example.krew
+package com.example.krew.controller
 
 import android.graphics.Color
-import android.icu.util.LocaleData
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.example.krew.databinding.ListItemDayBinding
-import java.text.DateFormat
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
 import java.util.*
-import kotlin.time.Duration.Companion.days
 
 class AdapterDay(val tempMonth:Int, val dayList: MutableList<Date>): RecyclerView.Adapter<AdapterDay.DayView>() {
     val ROW = 6

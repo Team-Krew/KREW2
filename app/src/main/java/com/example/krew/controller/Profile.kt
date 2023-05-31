@@ -1,4 +1,4 @@
-package com.example.krew.yong
+package com.example.krew.controller
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle

@@ -1,32 +1,21 @@
-package com.example.krew
+package com.example.krew.controller
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.Gravity
-import android.view.MotionEvent
-import android.view.View
-import android.widget.Button
 import android.widget.ImageButton
-import android.widget.Toast
-import androidx.constraintlayout.widget.Group
-import androidx.core.view.GravityCompat
-import androidx.drawerlayout.widget.DrawerLayout
-import androidx.drawerlayout.widget.DrawerLayout.DrawerListener
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
+import com.example.krew.R
 import com.example.krew.databinding.ActivityMainBinding
 import com.example.krew.databinding.DayInfoBinding
-import com.example.krew.databinding.GroupNavigationDrawerBinding
-import com.example.krew.group.GroupActivity
-import com.example.krew.group.GroupItem
-import com.example.krew.group.GroupRVAdapter
+import com.example.krew.model.GroupItem
 
 class MainActivity : AppCompatActivity() {
     lateinit var binding: ActivityMainBinding
 
-    lateinit var groupRVAdapter:GroupRVAdapter
+    lateinit var groupRVAdapter: GroupRVAdapter
     val groupArr = ArrayList<GroupItem>()
 
     lateinit var dayInfoBinding: DayInfoBinding

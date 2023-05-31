@@ -1,8 +1,7 @@
-package com.example.krew
+package com.example.krew.controller
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import com.example.krew.databinding.ActivityAddScheduleBinding
 import com.example.krew.databinding.ActivityFindLocationBinding
 
 class FindLocation : AppCompatActivity() {

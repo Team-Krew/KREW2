@@ -1,4 +1,4 @@
-package com.example.krew
+package com.example.krew.controller
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -18,7 +18,7 @@ class addSchedule : AppCompatActivity() {
     fun initLayout(){
         binding.apply {
             backBtn.setOnClickListener {
-                val intent = Intent(this@addSchedule,MainActivity::class.java)
+                val intent = Intent(this@addSchedule, MainActivity::class.java)
                 startActivity(intent)
             }
             checkBtn.setOnClickListener{

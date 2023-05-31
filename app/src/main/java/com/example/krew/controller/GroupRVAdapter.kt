@@ -1,12 +1,10 @@
-package com.example.krew.group
+package com.example.krew.controller
 
-import android.content.ClipData
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.krew.databinding.GroupItemBinding
-import com.example.krew.databinding.MemberItemBinding
-import java.lang.reflect.Member
+import com.example.krew.model.GroupItem
 
 class GroupRVAdapter(
     private val dataList: ArrayList<GroupItem>,

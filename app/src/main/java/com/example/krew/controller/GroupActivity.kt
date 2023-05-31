@@ -1,16 +1,14 @@
-package com.example.krew.group
+package com.example.krew.controller
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.krew.R
 import com.example.krew.databinding.ActivityGroupBinding
-import com.example.krew.databinding.GroupItemBinding
-import java.lang.reflect.Member
+import com.example.krew.model.MemberItem
 
 class GroupActivity : AppCompatActivity() {
     lateinit var binding:ActivityGroupBinding
-    lateinit var memberRVAdapter:MemberRVAdapter
+    lateinit var memberRVAdapter: MemberRVAdapter
 
     val itemArr = ArrayList<MemberItem>()
 

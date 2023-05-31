@@ -1,4 +1,4 @@
-package com.example.krew.group
+package com.example.krew.model
 
 data class GroupItem(
     var group_name:String,

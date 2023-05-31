@@ -1,4 +1,4 @@
-package com.example.krew
+package com.example.krew.controller
 
 import android.graphics.Color
 
