@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "506592091541",
+    "project_id": "krew-d2549",
+    "storage_bucket": "krew-d2549.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:506592091541:android:91de768e4ee26fbf41ea9c",
+        "android_client_info": {
+          "package_name": "com.example.krew"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "506592091541-mqkmt6ia8im3r2ggki8u3daj1d4kn8st.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.krew",
+            "certificate_hash": "92fbf3c5ef7a79ae9e48e5fcad2a21d0f62b24cc"
+          }
+        },
+        {
+          "client_id": "506592091541-j39alcpdlr78g69799bglp5hclnaac1f.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDyHF0d9PclQv22Tn4E36DhTpF1F4nH4nA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "506592091541-j39alcpdlr78g69799bglp5hclnaac1f.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
