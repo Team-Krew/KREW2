@@ -23,7 +23,6 @@ class MainActivity : AppCompatActivity() {
 
     lateinit var dayInfoBinding: DayInfoBinding
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
