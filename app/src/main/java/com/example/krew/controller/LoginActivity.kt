@@ -9,6 +9,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import com.example.krew.R
 import com.example.krew.databinding.ActivityLoginBinding
+import com.google.android.gms.auth.api.Auth
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
@@ -38,41 +39,47 @@ class LoginActivity : AppCompatActivity() {
 
         firebaseAuth = FirebaseAuth.getInstance()
         launcher = registerForActivityResult(
-            ActivityResultContracts.StartActivityForResult(), ActivityResultCallback { result ->
-                Log.e(TAG, "resultCode : ${result.resultCode}")
-                Log.e(TAG, "result : $result")
-                if (result.resultCode == RESULT_OK) {
-                    val task = GoogleSignIn.getSignedInAccountFromIntent(result.data)
-                    try {
-                        task.getResult(ApiException::class.java)?.let { account ->
-                            tokenId = account.idToken
-                            if (tokenId != null && tokenId != "") {
-                                val credential: AuthCredential = GoogleAuthProvider.getCredential(account.idToken, null)
-                                firebaseAuth.signInWithCredential(credential)
-                                    .addOnCompleteListener {
-                                        if (firebaseAuth.currentUser != null) {
-                                            val user: FirebaseUser = firebaseAuth.currentUser!!
-                                            email = user.email.toString()
-                                            val googleSignInToken = account.idToken ?: ""
-                                            if (googleSignInToken != "") {
-                                                Log.d(TAG, "googleSignInToken : $googleSignInToken")
-                                                val intent = Intent(this@LoginActivity, MainActivity::class.java)
-                                                intent.putExtra("user_email", email)
-                                                intent.putExtra("user_name", user.displayName.toString())
-                                                intent.putExtra("user_uid", user.uid)
-                                                startActivity(intent)
-                                            } else {
-                                                Log.e(TAG, "googleSignInToken이 null")
-                                            }
+            ActivityResultContracts.StartActivityForResult()
+        ) { result ->
+            Log.e(TAG, "resultCode : ${result.resultCode}")
+            Log.e(TAG, "result : ${intent.extras.toString()}")
+            if (result.resultCode == RESULT_OK) {
+                val task = GoogleSignIn.getSignedInAccountFromIntent(result.data)
+                try {
+                    task.getResult(ApiException::class.java)?.let { account ->
+                        tokenId = account.idToken
+                        if (tokenId != null && tokenId != "") {
+                            val credential: AuthCredential =
+                                GoogleAuthProvider.getCredential(account.idToken, null)
+                            firebaseAuth.signInWithCredential(credential)
+                                .addOnCompleteListener {
+                                    if (firebaseAuth.currentUser != null) {
+                                        val user: FirebaseUser = firebaseAuth.currentUser!!
+                                        email = user.email.toString()
+                                        val googleSignInToken = account.idToken ?: ""
+                                        if (googleSignInToken != "") {
+                                            Log.d(TAG, "googleSignInToken : $googleSignInToken")
+                                            val intent =
+                                                Intent(this@LoginActivity, MainActivity::class.java)
+                                            intent.putExtra("user_email", email)
+                                            intent.putExtra(
+                                                "user_name",
+                                                user.displayName.toString()
+                                            )
+                                            intent.putExtra("user_uid", user.uid)
+                                            startActivity(intent)
+                                        } else {
+                                            Log.e(TAG, "googleSignInToken이 null")
                                         }
                                     }
-                            }
-                        } ?: throw Exception()
-                    }   catch (e: Exception) {
-                        e.printStackTrace()
-                    }
+                                }
+                        }
+                    } ?: throw Exception()
+                } catch (e: Exception) {
+                    e.printStackTrace()
                 }
-            })
+            }
+        }
 
         binding.run {
             loginBtn.setOnClickListener {
@@ -82,7 +89,7 @@ class LoginActivity : AppCompatActivity() {
                         .requestEmail()
                         .build()
                     val googleSignInClient = GoogleSignIn.getClient(this@LoginActivity, gso)
-                    val signInIntent: Intent = googleSignInClient.signInIntent
+                    val signInIntent = googleSignInClient.signInIntent
                     launcher.launch(signInIntent)
                 }
             }
