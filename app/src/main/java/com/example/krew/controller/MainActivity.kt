@@ -60,7 +60,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initDrawer(){
-
         val button = findViewById<ImageButton>(R.id.iv_add_groups)!!
         val rv_nav = findViewById<RecyclerView>(R.id.rv_groups)!!
 
