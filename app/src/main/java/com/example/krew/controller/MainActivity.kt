@@ -4,7 +4,9 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.Gravity
 import android.widget.ImageButton
+import androidx.core.view.GravityCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
@@ -46,6 +48,15 @@ class MainActivity : AppCompatActivity() {
 
         val toolbar = dayInfoBinding.toolbar
         toolbar.title = "클릭한 날짜 받아와야지"
+
+        binding.mainBtnNav.setOnClickListener {
+            if(!binding.drawer.isDrawerOpen(GravityCompat.START)){
+                binding.drawer.openDrawer(GravityCompat.START)
+            }else{
+                binding.drawer.closeDrawer(GravityCompat.START)
+            }
+
+        }
     }
 
     private fun initDrawer(){

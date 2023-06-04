@@ -10,8 +10,38 @@
         android:id="@+id/drawer_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".controller.MainActivity">
+        tools:context=".controller.MainActivity"
+        android:orientation="vertical">
 
+        <LinearLayout
+            android:id="@+id/main_top_section"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="15sp">
+
+            <ImageButton
+                android:id="@+id/main_btn_nav"
+                android:layout_width="7dp"
+                android:layout_height="33dp"
+                android:layout_weight="1"
+                android:background="@drawable/baseline_group_24" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="33dp"
+                android:layout_weight="10"
+                android:fontFamily="@font/check_logo_font_bold"
+                android:gravity="center"
+                android:text="캘린더"
+                android:textFontWeight="1000"
+                android:textColor="@color/black"
+                android:textSize="20sp" />
+            <View
+                android:layout_width="7dp"
+                android:layout_height="33dp"
+                android:layout_weight="1"
+                android:background="@null"/>
+        </LinearLayout>
 
         <androidx.recyclerview.widget.RecyclerView
             android:layout_weight="1"
