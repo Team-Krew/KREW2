@@ -21,3 +21,4 @@
 -androidManifest에 액티비티 추가
 -Project 수준 build.gradle, settings.gradle 모듈 수준 build.gradle에 각각 관련된 것 들 implementation
 
+PR 요청함.
