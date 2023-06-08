@@ -11,6 +11,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.example.krew.R
+import com.example.krew.adapter.AdapterDay
+import com.example.krew.adapter.AdapterDayInfo
 import com.example.krew.adapter.AdapterMonth
 import com.example.krew.adapter.GroupRVAdapter
 import com.example.krew.databinding.ActivityMainBinding
@@ -35,6 +37,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun initCalendar() {
+        //메인 캘린더 open
         val monthListManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
         val monthListAdapter = AdapterMonth()
 
@@ -43,6 +46,7 @@ class MainActivity : AppCompatActivity() {
             adapter = monthListAdapter
             scrollToPosition(Int.MAX_VALUE/2)
         }
+
         val snap = PagerSnapHelper()
         snap.attachToRecyclerView(binding.calendarCustom)
 
@@ -55,8 +59,8 @@ class MainActivity : AppCompatActivity() {
             }else{
                 binding.drawer.closeDrawer(GravityCompat.START)
             }
-
         }
+
     }
 
     private fun initDrawer(){

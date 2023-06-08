@@ -3,4 +3,6 @@
     <string name="google_">Google</string>
     <string name="check_info1">모임 일정이 \n등록되었습니다!</string>
     <string name="check_info2">모임 구성원에게 일정 등록 알림이 전송됩니다.</string>
+    <string name="search_a_place">Search for a Place</string>
+    <string name="apiKey">AIzaSyAhRYt3BUkkl3JRGWodHEW5JkMKF0aKW1g</string>
 </resources>
