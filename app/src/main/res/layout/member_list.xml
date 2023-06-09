@@ -2,25 +2,26 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/CrewGrid"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:layout_margin="10dp"
-    android:background="@drawable/crewlayout">
-
+    android:background="@drawable/crewlayout"
+    android:orientation="vertical">
+  
     <ImageView
         android:id="@+id/recrewImage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
-        android:background="@drawable/baseline_account_circle_24" />
+        android:background="@drawable/memberlist_not_checked_image"/>
 
     <TextView
         android:id="@+id/recrewName"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="5dp"
-        android:paddingBottom="5dp"
-        android:text="CrewName"
-        android:gravity="center"/>
+        android:layout_marginStart="11dp"
+        android:gravity="center"
+        android:paddingBottom="10dp"
+        android:text="CrewName" />
+  
 </LinearLayout>
