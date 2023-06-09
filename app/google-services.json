@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "506592091541",
+    "firebase_url": "https://krew-d2549-default-rtdb.firebaseio.com",
     "project_id": "krew-d2549",
     "storage_bucket": "krew-d2549.appspot.com"
   },
@@ -14,11 +15,35 @@
       },
       "oauth_client": [
         {
+          "client_id": "506592091541-6ufk0j09r9ljf7mvn5lpuopgg6nl4bds.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.krew",
+            "certificate_hash": "e170e931333dfd14a0b89296c4cab244aab4a947"
+          }
+        },
+        {
+          "client_id": "506592091541-l632u2s5dch0o3im6jt4edako2rs3b4j.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.krew",
+            "certificate_hash": "b79b80c5b3432ac2e7edc390610ea1e80fee9a9c"
+          }
+        },
+        {
           "client_id": "506592091541-mqkmt6ia8im3r2ggki8u3daj1d4kn8st.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.example.krew",
             "certificate_hash": "92fbf3c5ef7a79ae9e48e5fcad2a21d0f62b24cc"
+          }
+        },
+        {
+          "client_id": "506592091541-u37cm1dqu0ujfls8hgidh6fuu1n1m8a2.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.krew",
+            "certificate_hash": "c1c3de39056c07a3607e29c180fd3799176d72a9"
           }
         },
         {
