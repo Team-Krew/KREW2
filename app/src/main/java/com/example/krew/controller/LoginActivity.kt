@@ -82,6 +82,7 @@ class LoginActivity : AppCompatActivity() {
                         .requestEmail()
                         .build()
                     val googleSignInClient = GoogleSignIn.getClient(this@LoginActivity, gso)
+
                     val signInIntent: Intent = googleSignInClient.signInIntent
                     launcher.launch(signInIntent)
                 }

@@ -4,11 +4,15 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.Gravity
 import android.widget.ImageButton
+import androidx.core.view.GravityCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.example.krew.R
+import com.example.krew.adapter.AdapterDay
+import com.example.krew.adapter.AdapterDayInfo
 import com.example.krew.adapter.AdapterMonth
 import com.example.krew.adapter.GroupRVAdapter
 import com.example.krew.databinding.ActivityMainBinding
@@ -23,7 +27,6 @@ class MainActivity : AppCompatActivity() {
 
     lateinit var dayInfoBinding: DayInfoBinding
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -34,6 +37,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun initCalendar() {
+        //메인 캘린더 open
         val monthListManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
         val monthListAdapter = AdapterMonth()
 
@@ -42,15 +46,24 @@ class MainActivity : AppCompatActivity() {
             adapter = monthListAdapter
             scrollToPosition(Int.MAX_VALUE/2)
         }
+
         val snap = PagerSnapHelper()
         snap.attachToRecyclerView(binding.calendarCustom)
 
         val toolbar = dayInfoBinding.toolbar
         toolbar.title = "클릭한 날짜 받아와야지"
+
+        binding.mainBtnNav.setOnClickListener {
+            if(!binding.drawer.isDrawerOpen(GravityCompat.START)){
+                binding.drawer.openDrawer(GravityCompat.START)
+            }else{
+                binding.drawer.closeDrawer(GravityCompat.START)
+            }
+        }
+
     }
 
     private fun initDrawer(){
-
         val button = findViewById<ImageButton>(R.id.iv_add_groups)!!
         val rv_nav = findViewById<RecyclerView>(R.id.rv_groups)!!
 

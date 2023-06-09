@@ -23,7 +23,7 @@ class GroupActivity : AppCompatActivity() {
     }
 
     private fun init(){
-
+        
     }
 
     private fun initRecycler(){
