@@ -7,7 +7,7 @@
     android:layout_height="wrap_content"
     android:background="@drawable/crewlayout"
     android:orientation="vertical">
-
+  
     <ImageView
         android:id="@+id/recrewImage"
         android:layout_width="wrap_content"
@@ -23,4 +23,5 @@
         android:gravity="center"
         android:paddingBottom="10dp"
         android:text="CrewName" />
+  
 </LinearLayout>

@@ -4,15 +4,21 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.krew.databinding.MemberItemBinding
-import com.example.krew.model.MemberItem
 
-class MemberRVAdapter(
-    private val dataList: ArrayList<MemberItem>,
-) : RecyclerView.Adapter<MemberRVAdapter.ItemViewHolder>(){
+class MemberRVAdapter(private val users:ArrayList<String>)
+    : RecyclerView.Adapter<MemberRVAdapter.ItemViewHolder>(){
 
-    inner class ItemViewHolder(val binding:
-                               MemberItemBinding):RecyclerView.ViewHolder(binding.root){
-        fun bind(data: MemberItem){
+    interface OnItemClickListener{
+        fun OnItemClick(position:Int)
+    }
+
+    var itemClickListener:OnItemClickListener?= null
+
+    inner class ItemViewHolder(val binding:MemberItemBinding):RecyclerView.ViewHolder(binding.root){
+        init{
+            binding.root.setOnClickListener{
+                itemClickListener!!.OnItemClick(bindingAdapterPosition)
+            }
         }
     }
 
@@ -24,17 +30,18 @@ class MemberRVAdapter(
     }
 
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
-        val listposition = dataList[position]
-        holder.bind(dataList[position])
-
-        holder.apply {
-            binding.tvName.text = listposition.name
+        holder.binding.apply{
+            tvName.text = users[position]
+            //Log.e("Recycling", model.name)
+            //tvName.text = model.Participant?.get(position)?.name
         }
     }
 
-    override fun getItemCount(): Int = dataList.size
-
     override fun getItemViewType(position: Int): Int {
         return position
+    }
+
+    override fun getItemCount(): Int {
+        return users.size
     }
 }
