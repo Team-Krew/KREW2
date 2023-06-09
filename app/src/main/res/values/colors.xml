@@ -12,13 +12,15 @@
     <color name="light_grey">#FFd9d9d9</color>
     <color name="dark_grey">#FF676767</color>
 
+    <color name="color_gr0">#d9d9d9</color>
     <color name="color_gr1">#F07A7A</color>
     <color name="color_gr2">#F5A74C</color>
     <color name="color_gr3">#FFF173</color>
     <color name="color_gr4">#66FF99</color>
     <color name="color_gr5">#6FB1EF</color>
-    <color name="color_gr6">#C692EF</color>
-    <color name="color_gr7">#F97BB7</color>
-    <color name="color_gr8">#A16B6B</color>
+    <color name="color_gr6">#5159DD</color>
+    <color name="color_gr7">#C692EF</color>
+    <color name="color_gr8">#F97BB7</color>
+    <color name="color_gr9">#A16B6B</color>
     <color name="check_button">#15BB44</color>
 </resources>

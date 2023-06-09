@@ -10,9 +10,9 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="15dp"
+        android:background="@color/white"
         android:elevation="10dp"
-        android:background="@color/white">
+        android:padding="15dp">
 
         <ImageView
             android:id="@+id/imageView"
@@ -28,10 +28,10 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="모임관리"
+            android:textAlignment="center"
             android:textColor="@color/black"
             android:textSize="16sp"
             android:textStyle="bold"
-            android:textAlignment="center"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/iv_check"
             app:layout_constraintStart_toEndOf="@+id/imageView"
@@ -51,222 +51,257 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
         android:layout_marginStart="50dp"
+        android:layout_marginTop="30dp"
         android:text="모임 이름"
-        android:textSize="12sp"
-        android:textColor="@color/light_grey"/>
+        android:textColor="@color/light_grey"
+        android:textSize="12sp" />
+
     <EditText
+        android:id="@+id/et_group_name"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_marginHorizontal="30dp"
         android:layout_marginVertical="15dp"
-        android:paddingStart="20dp"
         android:background="@drawable/bg_radius_10dp"
-        android:backgroundTint="@color/light_grey"/>
+        android:backgroundTint="@color/light_grey"
+        android:paddingStart="20dp" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
         android:layout_marginStart="50dp"
+        android:layout_marginTop="30dp"
         android:text="설명"
-        android:textSize="12sp"
-        android:textColor="@color/light_grey"/>
+        android:textColor="@color/light_grey"
+        android:textSize="12sp" />
+
     <EditText
+        android:id="@+id/et_group_info"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:layout_marginVertical="15dp"
         android:layout_marginHorizontal="30dp"
-        android:paddingStart="20dp"
+        android:layout_marginVertical="15dp"
         android:background="@drawable/bg_radius_10dp"
-        android:backgroundTint="@color/light_grey"/>
+        android:backgroundTint="@color/light_grey"
+        android:paddingStart="20dp" />
 
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
         android:layout_marginStart="50dp"
+        android:layout_marginTop="30dp"
         android:text="라벨 색상"
-        android:textSize="12sp"
-        android:textColor="@color/light_grey"/>
+        android:textColor="@color/light_grey"
+        android:textSize="12sp" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
+        android:layout_marginHorizontal="30dp"
         android:layout_marginVertical="15dp"
-        android:layout_marginHorizontal="30dp">
+        android:orientation="vertical">
+
         <RadioGroup
             android:id="@+id/rg1"
-            android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            >
-            <Space
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"/>
-            <RadioButton
-                android:layout_width="35dp"
-                android:layout_height="35dp"
-                android:id="@+id/rb1"
-                android:button="@null"
-                android:backgroundTint="@color/light_grey"
-                android:background="@drawable/bg_radius_30dp_stroke"
-                />
-            <Space
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"/>
-
-            <RadioButton
-                android:layout_width="35dp"
-                android:layout_height="35dp"
-                android:id="@+id/rb2"
-                android:button="@null"
-                android:backgroundTint="@color/color_gr1"
-                android:background="@drawable/bg_radius_30dp_stroke"
-                />
+            android:orientation="horizontal">
 
             <Space
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"/>
+                android:layout_weight="1" />
+
             <RadioButton
+                android:id="@+id/color_gr0"
                 android:layout_width="35dp"
                 android:layout_height="35dp"
-                android:id="@+id/rb3"
-                android:button="@null"
-                android:backgroundTint="@color/color_gr2"
-                android:background="@drawable/bg_radius_30dp_stroke"
-                />
+                android:background="@drawable/selector_radio_button_label_color0"
+                android:button="@null" />
 
             <Space
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"/>
-            <RadioButton
-                android:layout_width="35dp"
-                android:layout_height="35dp"
-                android:id="@+id/rb4"
-                android:button="@null"
-                android:backgroundTint="@color/color_gr3"
-                android:background="@drawable/bg_radius_30dp_stroke"
-                />
-            <Space
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"/>
+                android:layout_weight="1" />
 
             <RadioButton
+                android:id="@+id/color_gr1"
                 android:layout_width="35dp"
                 android:layout_height="35dp"
-                android:id="@+id/rb5"
-                android:button="@null"
-                android:backgroundTint="@color/color_gr4"
-                android:background="@drawable/bg_radius_30dp_stroke"
-                />
+                android:background="@drawable/selector_radio_button_label_color1"
+                android:button="@null" />
+
             <Space
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"/>
+                android:layout_weight="1" />
+
+            <RadioButton
+                android:id="@+id/color_gr2"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:background="@drawable/selector_radio_button_label_color2"
+                android:button="@null" />
+
+            <Space
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+
+            <RadioButton
+                android:id="@+id/color_gr3"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:background="@drawable/selector_radio_button_label_color3"
+                android:button="@null" />
+
+            <Space
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+
+            <RadioButton
+                android:id="@+id/color_gr4"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:background="@drawable/selector_radio_button_label_color4"
+                android:button="@null" />
+
+            <Space
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
         </RadioGroup>
 
         <RadioGroup
             android:id="@+id/rg2"
-            android:orientation="horizontal"
-            android:layout_marginTop="25dp"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            >
-            <Space
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"/>
-            <RadioButton
-                android:layout_width="35dp"
-                android:layout_height="35dp"
-                android:id="@+id/rb6"
-                android:button="@null"
-                android:backgroundTint="@color/color_gr5"
-                android:background="@drawable/bg_radius_30dp_stroke"
-                />
-            <Space
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"/>
-
-            <RadioButton
-                android:layout_width="35dp"
-                android:layout_height="35dp"
-                android:id="@+id/rb7"
-                android:button="@null"
-                android:backgroundTint="@color/color_gr6"
-                android:background="@drawable/bg_radius_30dp_stroke"
-                />
+            android:layout_marginTop="25dp"
+            android:orientation="horizontal">
 
             <Space
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"/>
+                android:layout_weight="1" />
+
             <RadioButton
+                android:id="@+id/color_gr5"
                 android:layout_width="35dp"
                 android:layout_height="35dp"
-                android:id="@+id/rb8"
-                android:button="@null"
-                android:backgroundTint="@color/color_gr7"
-                android:background="@drawable/bg_radius_30dp_stroke"
-                />
+                android:background="@drawable/selector_radio_button_label_color5"
+                android:button="@null" />
 
             <Space
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"/>
-            <RadioButton
-                android:layout_width="35dp"
-                android:layout_height="35dp"
-                android:id="@+id/rb9"
-                android:button="@null"
-                android:backgroundTint="@color/color_gr8"
-                android:background="@drawable/bg_radius_30dp_stroke"
-                />
-            <Space
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"/>
+                android:layout_weight="1" />
 
             <RadioButton
+                android:id="@+id/color_gr6"
                 android:layout_width="35dp"
                 android:layout_height="35dp"
-                android:id="@+id/rb10"
-                android:button="@null"
-                android:backgroundTint="@color/dark_grey"
-                android:background="@drawable/bg_radius_30dp_stroke"
-                />
+                android:background="@drawable/selector_radio_button_label_color6"
+                android:button="@null" />
+
             <Space
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"/>
+                android:layout_weight="1" />
+
+            <RadioButton
+                android:id="@+id/color_gr7"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:background="@drawable/selector_radio_button_label_color7"
+                android:button="@null" />
+
+            <Space
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+
+            <RadioButton
+                android:id="@+id/color_gr8"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:background="@drawable/selector_radio_button_label_color8"
+                android:button="@null" />
+
+            <Space
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+
+            <RadioButton
+                android:id="@+id/color_gr9"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:background="@drawable/selector_radio_button_label_color9"
+                android:button="@null" />
+
+            <Space
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
         </RadioGroup>
 
     </LinearLayout>
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
         android:layout_marginStart="50dp"
+        android:layout_marginTop="20dp"
         android:text="참가자 목록"
-        android:textSize="12sp"
-        android:textColor="@color/light_grey"/>
+        android:textColor="@color/light_grey"
+        android:textSize="12sp" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_recycler"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="20dp"
-        android:layout_marginHorizontal="30dp"/>
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="30dp">
 
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_group"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/btn_add_user"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <LinearLayout
+                android:id="@+id/btn_add_user"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_radius_10dp_stroke"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:padding="15dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <ImageView
+                    android:id="@+id/iv_userImg"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:background="@drawable/bg_radius_100dp"
+                    android:backgroundTint="@color/light_grey"
+                    android:src="@drawable/baseline_add_24"
+                    app:tint="@color/white" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:text="사용자 추가"
+                    android:textColor="@color/dark_grey"
+                    android:textSize="16sp" />
+            </LinearLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 </LinearLayout>

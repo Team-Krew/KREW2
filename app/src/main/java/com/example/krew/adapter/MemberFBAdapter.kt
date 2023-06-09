@@ -1,12 +1,18 @@
 package com.example.krew.adapter
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.krew.databinding.MemberItemBinding
+import com.example.krew.model.Calendar
+import com.example.krew.model.MemberItem
+import com.example.krew.model.User
+import com.firebase.ui.database.FirebaseRecyclerAdapter
+import com.firebase.ui.database.FirebaseRecyclerOptions
 
-class MemberRVAdapter(private val users:ArrayList<String>)
-    : RecyclerView.Adapter<MemberRVAdapter.ItemViewHolder>(){
+class MemberFBAdapter(options: FirebaseRecyclerOptions<Calendar>)
+    : FirebaseRecyclerAdapter<Calendar, MemberFBAdapter.ItemViewHolder>(options){
 
     interface OnItemClickListener{
         fun OnItemClick(position:Int)
@@ -29,19 +35,14 @@ class MemberRVAdapter(private val users:ArrayList<String>)
         return ItemViewHolder(binding)
     }
 
-    override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ItemViewHolder, position: Int, model:Calendar) {
         holder.binding.apply{
-            tvName.text = users[position]
-            //Log.e("Recycling", model.name)
+            Log.e("Recycling", model.name)
             //tvName.text = model.Participant?.get(position)?.name
         }
     }
 
     override fun getItemViewType(position: Int): Int {
         return position
-    }
-
-    override fun getItemCount(): Int {
-        return users.size
     }
 }

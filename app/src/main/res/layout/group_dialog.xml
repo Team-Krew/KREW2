@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_radius_10dp_stroke"
+    android:backgroundTint="@color/white"
+    android:orientation="vertical"
+    tools:context=".controller.GroupDialog">
+
+    <ImageView
+        android:id="@+id/btn_cancel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_gravity="right"
+        android:src="@drawable/baseline_clear_24" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:paddingHorizontal="30dp"
+        android:paddingBottom="30dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingStart="10dp"
+            android:text="이메일"
+            android:textSize="15sp" />
+
+        <EditText
+            android:id="@+id/et_group_dialog"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_radius_10dp_stroke"
+            android:padding="10dp"
+            android:paddingVertical="5dp"
+            android:textColor="@color/black"
+            android:textSize="15sp"
+            android:inputType="text"
+            android:singleLine="true"
+            android:imeOptions="actionDone"/>
+
+        <Button
+            android:id="@+id/btn_group_dialog"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/bg_group_dialog_button"
+            android:enabled="false"
+            android:text="요청 보내기" />
+    </LinearLayout>
+</LinearLayout>
