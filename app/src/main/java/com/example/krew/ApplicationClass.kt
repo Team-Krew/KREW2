@@ -12,6 +12,7 @@ class ApplicationClass : Application() {
     companion object {
         // 만들어져있는 SharedPreferences 를 사용해야합니다. 재생성하지 않도록 유념해주세요
         lateinit var sSharedPreferences: SharedPreferences
+        lateinit var spEditor:SharedPreferences.Editor
 
         // JWT Token Header 키 값
         val X_ACCESS_TOKEN = "X-ACCESS-TOKEN"
@@ -32,8 +33,9 @@ class ApplicationClass : Application() {
         Log.e("created application", "wowowo")
         sSharedPreferences =
             applicationContext.getSharedPreferences("KREW", MODE_PRIVATE)
+        spEditor = sSharedPreferences.edit()
 
-        sSharedPreferences.edit().putString("user_id", "seokjun2000@gmail.com").apply()
+        spEditor.putString("user_id", "seokjun2000@gmail.com").apply()
         user_id = sSharedPreferences.getString("user_id", null)
     }
 }

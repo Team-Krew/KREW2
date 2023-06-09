@@ -4,15 +4,16 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.krew.databinding.GroupItemBinding
+import com.example.krew.model.Calendar
 import com.example.krew.model.GroupItem
 
 class GroupRVAdapter(
-    private val dataList: ArrayList<GroupItem>,
+    private val dataList: ArrayList<Calendar>,
 ) : RecyclerView.Adapter<GroupRVAdapter.ItemViewHolder>(){
 
     inner class ItemViewHolder(val binding:
                                GroupItemBinding):RecyclerView.ViewHolder(binding.root){
-        fun bind(data: GroupItem){
+        fun bind(data: Calendar){
         }
     }
 
@@ -28,9 +29,8 @@ class GroupRVAdapter(
         holder.bind(dataList[position])
 
         holder.apply {
-            binding.tvGroupName.text = listposition.group_name
-            binding.tvGroupHead.text = listposition.group_head
-            binding.swGroup.isChecked = listposition.check
+            binding.tvGroupName.text = listposition.name
+            binding.tvGroupHead.text = listposition.admin
         }
 
     }

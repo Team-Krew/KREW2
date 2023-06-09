@@ -15,13 +15,14 @@ import com.example.krew.adapter.AdapterMonth
 import com.example.krew.adapter.GroupRVAdapter
 import com.example.krew.databinding.ActivityMainBinding
 import com.example.krew.databinding.DayInfoBinding
+import com.example.krew.model.Calendar
 import com.example.krew.model.GroupItem
 
 class MainActivity : AppCompatActivity() {
     lateinit var binding: ActivityMainBinding
 
     lateinit var groupRVAdapter: GroupRVAdapter
-    val groupArr = ArrayList<GroupItem>()
+    val groupArr = ArrayList<Calendar>()
 
     lateinit var dayInfoBinding: DayInfoBinding
 
@@ -69,15 +70,6 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-        for(i in 1..5){
-            groupArr.add(
-                GroupItem(
-                    i.toString(),
-                    i.toString(),
-                    false
-                )
-            )
-        }
         groupRVAdapter = GroupRVAdapter(groupArr)
         rv_nav.adapter = groupRVAdapter
         rv_nav.layoutManager = LinearLayoutManager(

@@ -28,6 +28,7 @@
         </activity>
         <activity
             android:name=".controller.GroupActivity"
+            android:windowSoftInputMode="adjustNothing"
             android:exported="true" />
         <activity
             android:name=".controller.MainActivity"
