@@ -1,19 +1,36 @@
 package com.example.krew.adapter
 
+import android.content.res.ColorStateList
+import android.content.res.Resources
+import android.content.res.loader.ResourcesProvider
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
+import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.RecyclerView
+import com.example.krew.R
 import com.example.krew.databinding.GroupItemBinding
 import com.example.krew.model.Calendar
 import com.example.krew.model.GroupItem
 
 class GroupRVAdapter(
-    private val dataList: ArrayList<Calendar>,
+    private val dataList: ArrayList<GroupItem>,
 ) : RecyclerView.Adapter<GroupRVAdapter.ItemViewHolder>(){
 
-    inner class ItemViewHolder(val binding:
-                               GroupItemBinding):RecyclerView.ViewHolder(binding.root){
-        fun bind(data: Calendar){
+    interface OnItemClickListener{
+        fun OnItemClick(position:Int)
+
+    }
+
+    var itemClickListener:OnItemClickListener?= null
+
+    inner class ItemViewHolder(val binding:GroupItemBinding):RecyclerView.ViewHolder(binding.root){
+        init{
+            binding.tvGroupName.setOnClickListener{
+                itemClickListener!!.OnItemClick(bindingAdapterPosition)
+            }
+
+
         }
     }
 
@@ -26,12 +43,15 @@ class GroupRVAdapter(
 
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
         val listposition = dataList[position]
-        holder.bind(dataList[position])
-
-        holder.apply {
-            binding.tvGroupName.text = listposition.name
-            binding.tvGroupHead.text = listposition.admin
+        holder.binding.apply {
+            tvGroupName.text = listposition.group_name
+            tvGroupHead.text = listposition.group_head
+            //tagColor.setBackgroundColor(listposition.group_label)
+            tagColor.backgroundTintList = ColorStateList.valueOf(listposition.group_label)
+            //rvGroup.setBackgroundColor(resources.getColor(colorCode, null))
         }
+
+
 
     }
 

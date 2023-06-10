@@ -50,7 +50,7 @@ class addSchedule : AppCompatActivity() {
 
     fun initRecyclerView(){
         for(i in 1..10){
-            itemarr.add(GroupItem(i.toString(),i.toString(),false))
+            itemarr.add(GroupItem(i.toString(),i.toString(),i.toString(),i,false))
         }
         ScheduleAdapter = ScheduleAdapter(itemarr)
         ScheduleAdapter.itemClickListener = object:ScheduleAdapter.OnItemClickListener{
