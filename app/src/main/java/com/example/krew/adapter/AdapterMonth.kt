@@ -1,16 +1,17 @@
 package com.example.krew.adapter
 
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.krew.controller.MainActivity
 import com.example.krew.databinding.ListItemMonthBinding
-
-
 import java.util.*
 
-class AdapterMonth: RecyclerView.Adapter<AdapterMonth.MonthView>() {
+
+class AdapterMonth() : RecyclerView.Adapter<AdapterMonth.MonthView>() {
 
     val center = Int.MAX_VALUE /2
     private var calendar = Calendar.getInstance()
@@ -41,6 +42,7 @@ class AdapterMonth: RecyclerView.Adapter<AdapterMonth.MonthView>() {
         }
 
         val dayListManager = GridLayoutManager(holder.monthBinding.root.context, 7)
+
         val dayListAdapter = AdapterDay(tempMonth, dayList)
 
         holder.monthBinding.itemMonthDayList.apply{
