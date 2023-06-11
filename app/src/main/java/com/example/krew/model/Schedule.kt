@@ -8,7 +8,7 @@ data class Schedule(
     var date: String,
     var time: String,
     var place: String,
-){
+): java.io.Serializable{
     constructor():this(
         "no_info",
         null,

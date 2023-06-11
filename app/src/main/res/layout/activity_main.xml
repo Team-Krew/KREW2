@@ -27,6 +27,7 @@
                 android:background="@drawable/baseline_group_24" />
 
             <TextView
+                android:id="@+id/main_title"
                 android:layout_width="0dp"
                 android:layout_height="33dp"
                 android:layout_weight="10"
