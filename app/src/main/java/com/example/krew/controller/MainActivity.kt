@@ -26,6 +26,7 @@ import com.example.krew.model.GroupItem
 import com.example.krew.model.User
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.database.ktx.database
+import com.google.firebase.database.ktx.getValue
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.messaging.FirebaseMessaging
 import org.json.JSONObject
@@ -72,17 +73,14 @@ class MainActivity : AppCompatActivity() {
         if (calendars != null) {
             for (id in calendars) {
                 mDatabase.child(id).get().addOnSuccessListener {
-                    val json = JSONObject(it.value.toString())
-                    Log.e("Firebase communication",
-                        "${json.getString("calendar_id")}," +
-                                "${json.getString("name")}," +
-                                "${json.getString("comment")}," +
-                                "${json.getString("label")}")
+                    val cal: Calendar
+                    cal = it.getValue<Calendar>() as Calendar
+
                     groupArr.add(GroupItem(
-                        json.getString("calendar_id"),
-                        json.getString("name"),
-                        json.getString("admin"),
-                        resources.getColor(json.getInt("label"), null),
+                        cal.calendar_id,
+                        cal.name,
+                        cal.admin.toString(),
+                        resources.getColor(cal.label.toInt(), null),
                         true
                     ))
                     groupRVAdapter.notifyDataSetChanged()

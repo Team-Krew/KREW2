@@ -12,7 +12,9 @@ import com.example.krew.adapter.GroupFBAdapter
 import com.example.krew.adapter.MemberRVAdapter
 import com.example.krew.databinding.ActivityGroupBinding
 import com.example.krew.model.Calendar
+import com.google.android.datatransport.runtime.util.PriorityMapping.toInt
 import com.google.firebase.database.ktx.database
+import com.google.firebase.database.ktx.getValue
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.*
 import kotlinx.coroutines.tasks.await
@@ -174,7 +176,6 @@ class GroupActivity : AppCompatActivity() {
 
     private fun confirmGroup() {
         binding.apply {
-
             val calendar = Firebase.database.getReference("Calendar")
             if (curCalendarID == null) {
                 val db = Firebase.database.reference
@@ -228,11 +229,12 @@ class GroupActivity : AppCompatActivity() {
         val mDatabase = Firebase.database.getReference("Calendar")
         mDatabase.child(curCalendarID!!).get().addOnSuccessListener {
             Log.e("Firebase communication", "value: ${it.value.toString()}")
-            val json = JSONObject(it.value.toString())
+            val cal : Calendar
+            cal = it.getValue<Calendar>() as Calendar
             binding.apply {
-                etGroupName.setText(json.getString("name").toString())
-                etGroupInfo.setText(json.getString("comment").toString())
-                colorCode = json.getString("label").toInt()
+                etGroupName.setText(cal.name)
+                etGroupInfo.setText(cal.comment)
+                colorCode = cal.label.toInt()
 
                 var i = 0;
                 for (code in colorArr) {
@@ -243,7 +245,8 @@ class GroupActivity : AppCompatActivity() {
                 else rg2.check(rbArr[i]);
             }
             if(it.value.toString().contains("participant")){
-                val arr = json.getString("participant").removeSurrounding("[", "]").split(",")
+
+                val arr = cal.Participant.toString().removeSurrounding("[", "]").split(",")
                 userArr.apply {
                     for (u in arr)
                         add(u.removeSurrounding("\"", "\""))
