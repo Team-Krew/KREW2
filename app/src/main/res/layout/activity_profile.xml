@@ -63,7 +63,7 @@
             android:layout_height="wrap_content"
             android:textSize="24sp"
             android:fontFamily="@font/check_logo_font_bold"
-            android:text="김용현"
+            android:text=""
             android:textFontWeight="1000"
             android:textColor="@color/black"
             android:layout_margin="5dp"/>

@@ -2,11 +2,13 @@ package com.example.krew.controller
 
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.Gravity
 import android.widget.ImageButton
+import android.widget.TextView
 import androidx.core.view.GravityCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.PagerSnapHelper
@@ -21,6 +23,7 @@ import com.example.krew.databinding.ActivityMainBinding
 import com.example.krew.databinding.DayInfoBinding
 import com.example.krew.model.Calendar
 import com.example.krew.model.GroupItem
+import com.example.krew.model.User
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
@@ -32,7 +35,7 @@ class MainActivity : AppCompatActivity() {
 
     lateinit var groupRVAdapter: GroupRVAdapter
     val groupArr = ArrayList<GroupItem>()
-
+    lateinit var cur_user : User
     lateinit var dayInfoBinding: DayInfoBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -40,6 +43,12 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         dayInfoBinding = DayInfoBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        val bundle = intent.extras!!
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            cur_user = bundle.getSerializable("cur_user", User::class.java) as User
+        }else{
+            cur_user = bundle.getSerializable("cur_user") as User
+        }
         initCalendar()
         initDrawer()
 
@@ -95,6 +104,7 @@ class MainActivity : AppCompatActivity() {
         val monthListManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
         val monthListAdapter = AdapterMonth()
 
+        binding.mainTitle.text = cur_user.name + "의 달력"
         binding.calendarCustom.apply {
             layoutManager = monthListManager
             adapter = monthListAdapter
@@ -120,6 +130,11 @@ class MainActivity : AppCompatActivity() {
 
         val rv_nav = findViewById<RecyclerView>(R.id.rv_groups)!!
         val button = findViewById<ImageButton>(R.id.iv_add_groups)!!
+
+        val tv_name = findViewById<TextView>(R.id.tv_name)
+        val tv_email = findViewById<TextView>(R.id.tv_email)
+        tv_name.text = cur_user.name
+        tv_email.text = ApplicationClass.sSharedPreferences.getString("user_email", "").toString()
 
         button.setOnClickListener {
             val intent = Intent(this, GroupActivity::class.java)
