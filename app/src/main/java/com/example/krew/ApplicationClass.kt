@@ -34,7 +34,7 @@ class ApplicationClass : Application() {
         sSharedPreferences = applicationContext.getSharedPreferences("KREW", MODE_PRIVATE)
         spEditor = sSharedPreferences.edit()
 
-//        spEditor.putString("user_id", "seokjun2000@gmail.com").apply()
-        user_id = sSharedPreferences.getString("user_id", null)
+        //spEditor.putString("id", null) //wiping calendar data
+        user_id = sSharedPreferences.getString("user_email", null)
     }
 }
