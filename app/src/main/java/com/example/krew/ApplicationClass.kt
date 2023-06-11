@@ -35,6 +35,6 @@ class ApplicationClass : Application() {
         spEditor = sSharedPreferences.edit()
 
 //        spEditor.putString("user_id", "seokjun2000@gmail.com").apply()
-//        user_id = sSharedPreferences.getString("user_id", null)
+        user_id = sSharedPreferences.getString("user_id", null)
     }
 }

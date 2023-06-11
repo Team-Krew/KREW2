@@ -109,6 +109,10 @@ class GroupActivity : AppCompatActivity() {
                 }
             }
 
+            binding.ivBack.setOnClickListener{
+                finish()
+            }
+
             /*RadioButton*/
             colorGr0.setOnClickListener {
                 binding.rg2.clearCheck()
