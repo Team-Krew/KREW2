@@ -64,6 +64,7 @@ class LoginActivity : AppCompatActivity() {
                                                 val user_email = ApplicationClass.sSharedPreferences.getString("user_email", null)
                                                 if(user_email == null){
                                                     val intent = Intent(this@LoginActivity, ProfileActivity::class.java)
+                                                    database.child("User").child(firebaseAuth.currentUser!!.uid).setValue(User(firebaseAuth.currentUser!!.uid, account.displayName.toString(), "", "", ""))
                                                     ApplicationClass.spEditor.putString("user_email", email).apply()
                                                     startActivity(intent)
                                                 }else{
