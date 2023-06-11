@@ -149,7 +149,8 @@ class MainActivity : AppCompatActivity() {
 
         groupRVAdapter.itemClickListener = object:GroupRVAdapter.OnItemClickListener{
             override fun OnItemClick(position: Int) {
-                if(groupArr[position].group_head == ApplicationClass.user_id){
+                if(groupArr[position].group_head
+                    == ApplicationClass.sSharedPreferences.getString("user_email", "").toString()){
                     val intent = Intent(this@MainActivity, GroupActivity::class.java)
                     intent.putExtra("id", groupArr[position].group_id)
                     startActivity(intent)
