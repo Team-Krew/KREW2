@@ -31,13 +31,13 @@ class ProfileActivity : AppCompatActivity() {
     }
 
     private fun initLayout() {
-        binding.profileName.text = cur_user.displayName.toString()
+        binding.profileUsername.text = cur_user.displayName.toString()
         binding.profileEditName.setText(cur_user.displayName.toString())
 
         database.child("User").child(cur_user.uid).get().addOnSuccessListener {
             cur_user2 = it.getValue<User>()!!
             binding.apply {
-                profileName.text = cur_user2.name
+                profileUsername.text = cur_user2.name
                 profileEditName.setText(cur_user2.name)
                 profileEditSelfIntro.setText(cur_user2.comment)
                 profileEditReadyTime.setText(cur_user2.time)
@@ -45,7 +45,7 @@ class ProfileActivity : AppCompatActivity() {
             }
         }
         binding.profileGoBackButton.setOnClickListener{
-            startActivity(Intent(this@ProfileActivity, LoginActivity::class.java))
+            finish()
         }
 
         binding.profileCheckButton.setOnClickListener{
