@@ -8,7 +8,6 @@ data class Calendar(
     var admin: String?,
     var Participant: ArrayList<String>?,
 
-
 ){
     constructor(): this(
         "no_info",
