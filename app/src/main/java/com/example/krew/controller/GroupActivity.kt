@@ -184,7 +184,7 @@ class GroupActivity : AppCompatActivity() {
                     Log.e("Firebase communication", "getting cnum val :${it.value.toString()}")
                     cNum = it.value.toString().toInt()
 
-                    val email = ApplicationClass.sSharedPreferences.getString("user_id", null)
+                    val email = ApplicationClass.sSharedPreferences.getString("user_email", null)
                     val cal = Calendar(
                         cNum.toString(),
                         etGroupName.text.toString(),

@@ -35,6 +35,6 @@ class ApplicationClass : Application() {
         spEditor = sSharedPreferences.edit()
 
         //spEditor.putString("id", null) //wiping calendar data
-
+        user_id = sSharedPreferences.getString("user_email", null)
     }
 }
