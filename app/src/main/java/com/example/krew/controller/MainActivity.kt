@@ -104,8 +104,7 @@ class MainActivity : AppCompatActivity() {
         val snap = PagerSnapHelper()
         snap.attachToRecyclerView(binding.calendarCustom)
 
-        val toolbar = dayInfoBinding.toolbar
-        toolbar.title = "클릭한 날짜 받아와야지"
+        val dayText = dayInfoBinding.dayText
 
         binding.mainBtnNav.setOnClickListener {
             if(!binding.drawer.isDrawerOpen(GravityCompat.START)){
