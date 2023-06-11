@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
     <application
         android:name=".ApplicationClass"
@@ -13,8 +14,8 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/Theme.KREW"
-        tools:targetApi="30">
+        android:theme="@style/Theme.KREW">
+
         <activity
             android:name=".controller.LoginActivity"
             android:exported="true" />
@@ -49,6 +50,24 @@
         <activity
             android:name=".controller.ProgrammaticAutocompleteGeocodingActivity"
             android:exported="false" />
+
+<!--        <activity-->
+<!--            android:name=".controller.TestMainActivity"-->
+<!--            android:exported="true">-->
+<!--            <intent-filter>-->
+<!--                <action android:name="android.intent.action.MAIN" />-->
+
+<!--                <category android:name="android.intent.category.LAUNCHER" />-->
+<!--            </intent-filter>-->
+<!--        </activity>-->
+
+        <service
+            android:name=".apimodel.MyFirebaseMessagingService"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+            </intent-filter>
+        </service>
 
     </application>
 

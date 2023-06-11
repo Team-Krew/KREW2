@@ -11,6 +11,7 @@ import androidx.core.view.GravityCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
+import com.example.krew.ApplicationClass
 import com.example.krew.R
 import com.example.krew.adapter.AdapterDay
 import com.example.krew.adapter.AdapterDayInfo
@@ -20,6 +21,11 @@ import com.example.krew.databinding.ActivityMainBinding
 import com.example.krew.databinding.DayInfoBinding
 import com.example.krew.model.Calendar
 import com.example.krew.model.GroupItem
+import com.google.android.gms.tasks.OnCompleteListener
+import com.google.firebase.database.ktx.database
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.messaging.FirebaseMessaging
+import org.json.JSONObject
 
 class MainActivity : AppCompatActivity() {
     lateinit var binding: ActivityMainBinding
@@ -36,6 +42,52 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
         initCalendar()
         initDrawer()
+
+        FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
+            if (!task.isSuccessful) {
+                Log.d("Firebase Communication", "Fetching FCM registration token failed ${task.exception}")
+                return@OnCompleteListener
+            }
+            val deviceToken = task.result
+            Log.e("Firebase Communication", "token=${deviceToken}")
+        })
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    override fun onResume() {
+        super.onResume()
+        val mDatabase = Firebase.database.getReference("Calendar")
+        val calendars =
+            ApplicationClass.sSharedPreferences.getString("calendars", null)?.split(",")
+        Log.e("Firebase communication", "${calendars?.size}")
+        if (calendars != null) {
+            for (id in calendars) {
+                mDatabase.child(id).get().addOnSuccessListener {
+                    val json = JSONObject(it.value.toString())
+                    Log.e("Firebase communication",
+                        "${json.getString("calendar_id")}," +
+                                "${json.getString("name")}," +
+                                "${json.getString("comment")}," +
+                                "${json.getString("label")}")
+                    groupArr.add(GroupItem(
+                        json.getString("calendar_id"),
+                        json.getString("name"),
+                        json.getString("admin"),
+                        resources.getColor(json.getInt("label"), null),
+                        true
+                    ))
+                    groupRVAdapter.notifyDataSetChanged()
+                }
+            }
+        }
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    override fun onPause() {
+        super.onPause()
+        Log.e("Condition Check", "On Pause Called")
+        groupArr.clear()
+        groupRVAdapter.notifyDataSetChanged()
     }
 
     fun initCalendar() {
@@ -65,11 +117,12 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    private fun initDrawer(){
-        val button = findViewById<ImageButton>(R.id.iv_add_groups)!!
-        val rv_nav = findViewById<RecyclerView>(R.id.rv_groups)!!
+    private fun initDrawer() {
 
-        button.setOnClickListener{
+        val rv_nav = findViewById<RecyclerView>(R.id.rv_groups)!!
+        val button = findViewById<ImageButton>(R.id.iv_add_groups)!!
+
+        button.setOnClickListener {
             val intent = Intent(this, GroupActivity::class.java)
             startActivity(intent)
         }
@@ -77,7 +130,20 @@ class MainActivity : AppCompatActivity() {
         groupRVAdapter = GroupRVAdapter(groupArr)
         rv_nav.adapter = groupRVAdapter
         rv_nav.layoutManager = LinearLayoutManager(
-            this, LinearLayoutManager.VERTICAL, false)
+            this, LinearLayoutManager.VERTICAL, false
+        )
+
+        groupRVAdapter.itemClickListener = object:GroupRVAdapter.OnItemClickListener{
+            override fun OnItemClick(position: Int) {
+                if(groupArr[position].group_head == ApplicationClass.user_id){
+                    val intent = Intent(this@MainActivity, GroupActivity::class.java)
+                    intent.putExtra("id", groupArr[position].group_id)
+                    startActivity(intent)
+
+                }
+            }
+
+        }
 
     }
 
