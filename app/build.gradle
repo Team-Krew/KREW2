@@ -16,7 +16,7 @@ android {
     defaultConfig {
         applicationId "com.example.krew"
         minSdk 30
-        targetSdk 33
+        targetSdk 31
         versionCode 1
         versionName "1.0"
 
@@ -56,6 +56,7 @@ dependencies {
 
     //places api implementation
     implementation 'com.google.android.libraries.places:places:3.1.0'
+    implementation 'com.google.firebase:firebase-messaging-ktx:23.0.3'
 
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'

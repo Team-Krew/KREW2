@@ -1,5 +1,6 @@
 package com.example.krew.controller
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
@@ -25,7 +26,8 @@ import com.example.krew.model.User
 class MainActivity : AppCompatActivity() {
     lateinit var binding: ActivityMainBinding
     lateinit var groupRVAdapter: GroupRVAdapter
-    val groupArr = ArrayList<Calendar>()
+    val groupArr = ArrayList<GroupItem>()
+
     lateinit var cur_user : User
     lateinit var dayInfoBinding: DayInfoBinding
 
@@ -89,4 +91,6 @@ class MainActivity : AppCompatActivity() {
             this, LinearLayoutManager.VERTICAL, false)
 
     }
+
+
 }

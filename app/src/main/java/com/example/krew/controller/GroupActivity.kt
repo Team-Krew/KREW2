@@ -28,25 +28,36 @@ import kotlin.collections.set
 * 키보드 올라오면 리사이클러뷰 사라지는거 해결
 *   - 이전 문제 : 키보드의 '완료' 버튼을 누르지 않고 바로 다이얼로그의 버튼을 누르면
                 ime 에러와 함께 리사이클러뷰에 포함되지 않음
-* 초대장 보내기
+
+* 초대장 보내기 -> 유저에 토큰 저장
+*             -> 토큰을 통해 메세지 전달 postman 참고
+*             -> 날라온 정보를 저장하여 바로 응답하지 않더라도 남겨놓았다가 해결
+*             -> 새로운 창을 만들어서 날라온 요청들에 응답
 * */
 class GroupActivity : AppCompatActivity() {
 
-    lateinit var binding:ActivityGroupBinding
+    lateinit var binding: ActivityGroupBinding
     lateinit var memberRVAdapter: MemberRVAdapter
     val userArr = ArrayList<String>()
 
-    var curCalendarID:String ?= null
-    var colorCode:Int = 0
-    val colorArr =  arrayListOf(
-        R.color.color_gr0,R.color.color_gr1,R.color.color_gr2,R.color.color_gr3,R.color.color_gr4,
-        R.color.color_gr5,R.color.color_gr6,R.color.color_gr7,R.color.color_gr8,R.color.color_gr9
+    var curCalendarID: String? = null
+    var colorCode: Int = 0
+    val colorArr = arrayListOf(
+        R.color.color_gr0,
+        R.color.color_gr1,
+        R.color.color_gr2,
+        R.color.color_gr3,
+        R.color.color_gr4,
+        R.color.color_gr5,
+        R.color.color_gr6,
+        R.color.color_gr7,
+        R.color.color_gr8,
+        R.color.color_gr9
     )
     val rbArr = arrayListOf(
         R.id.color_gr0, R.id.color_gr1, R.id.color_gr2, R.id.color_gr3, R.id.color_gr4,
         R.id.color_gr5, R.id.color_gr6, R.id.color_gr7, R.id.color_gr8, R.id.color_gr9,
     )
-
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -56,12 +67,12 @@ class GroupActivity : AppCompatActivity() {
         curCalendarID = intent.getStringExtra("id")
         initRV()
         init()
-        if(curCalendarID != null){
+        if (curCalendarID != null) {
             connectFB();
         }
     }
 
-    private fun initRV(){
+    private fun initRV() {
         memberRVAdapter = MemberRVAdapter(userArr)
         binding.rvGroup.adapter = memberRVAdapter
         binding.rvGroup.layoutManager =
@@ -75,27 +86,25 @@ class GroupActivity : AppCompatActivity() {
         }
     }
 
-    private fun init(){
+    private fun init() {
         binding.apply {
             /*확인 버튼 클릭시 이벤트 처리*/
-            var str:String ?= null
+            var str: String? = null
             var flag = false
             ivCheck.setOnClickListener {
-                if(etGroupName.text.isNullOrBlank()){
+                if (etGroupName.text.isNullOrBlank()) {
                     str = "그룹이름을 적어주세요"
-                } else if(etGroupInfo.text.isNullOrBlank()){
+                } else if (etGroupInfo.text.isNullOrBlank()) {
                     str = "설명을 적어주세요"
-                } else if(colorCode == 0){
+                } else if (colorCode == 0) {
                     str = "라벨 색상을 선택하세요"
                 } else {
                     flag = true
                 }
 
-                if(flag){
+                if (flag) {
                     confirmGroup()
-                    Toast.makeText(this@GroupActivity, "등록되었습니다.", Toast.LENGTH_SHORT).show()
-                    finish()
-                } else{
+                } else {
                     Toast.makeText(this@GroupActivity, str, Toast.LENGTH_SHORT).show()
                 }
             }
@@ -105,39 +114,39 @@ class GroupActivity : AppCompatActivity() {
                 binding.rg2.clearCheck()
                 colorCode = colorArr[0]
             }
-            colorGr1.setOnClickListener{
+            colorGr1.setOnClickListener {
                 binding.rg2.clearCheck()
                 colorCode = colorArr[1]
             }
-            colorGr2.setOnClickListener{
+            colorGr2.setOnClickListener {
                 binding.rg2.clearCheck()
                 colorCode = colorArr[2]
             }
-            colorGr3.setOnClickListener{
+            colorGr3.setOnClickListener {
                 binding.rg2.clearCheck()
                 colorCode = colorArr[3]
             }
-            colorGr4.setOnClickListener{
+            colorGr4.setOnClickListener {
                 binding.rg2.clearCheck()
                 colorCode = colorArr[4]
             }
-            colorGr5.setOnClickListener{
+            colorGr5.setOnClickListener {
                 binding.rg1.clearCheck()
                 colorCode = colorArr[5]
             }
-            colorGr6.setOnClickListener{
+            colorGr6.setOnClickListener {
                 binding.rg1.clearCheck()
                 colorCode = colorArr[6]
             }
-            colorGr7.setOnClickListener{
+            colorGr7.setOnClickListener {
                 binding.rg1.clearCheck()
                 colorCode = colorArr[7]
             }
-            colorGr8.setOnClickListener{
+            colorGr8.setOnClickListener {
                 binding.rg1.clearCheck()
                 colorCode = colorArr[8]
             }
-            colorGr9.setOnClickListener{
+            colorGr9.setOnClickListener {
                 binding.rg1.clearCheck()
                 colorCode = colorArr[9]
                 //rvGroup.setBackgroundColor(resources.getColor(colorCode, null))
@@ -153,28 +162,24 @@ class GroupActivity : AppCompatActivity() {
                     binding.rvGroup.adapter?.notifyDataSetChanged()
                 }
             })
-            btnAddUser.setOnClickListener{
+            btnAddUser.setOnClickListener {
                 dlg.show()
             }
         }
     }
 
-    private fun confirmGroup(){
+    private fun confirmGroup() {
         binding.apply {
 
             val calendar = Firebase.database.getReference("Calendar")
-            if(curCalendarID == null) {
+            if (curCalendarID == null) {
                 val db = Firebase.database.reference
                 var cNum = 0
 
-                CoroutineScope(Dispatchers.Main).launch {
-                    CoroutineScope(Dispatchers.Main).async {
-                        db.child("CNum").get().addOnSuccessListener {
-                            Log.e("Firebase communication", "getting cnum val :${it.value.toString()}")
-                            cNum = it.value.toString().toInt()
+                db.child("CNum").get().addOnSuccessListener {
+                    Log.e("Firebase communication", "getting cnum val :${it.value.toString()}")
+                    cNum = it.value.toString().toInt()
 
-                        }
-                    }.await()
                     val email = ApplicationClass.sSharedPreferences.getString("user_id", null)
                     val cal = Calendar(
                         cNum.toString(),
@@ -187,30 +192,35 @@ class GroupActivity : AppCompatActivity() {
                     calendar.child(cNum.toString()).setValue(cal)
                     addtoSharedPreference(cNum.toString())
 
-                    Log.e("Firebase communication", "getting cnum val again :${cNum}")
-                    db.child("CNum").setValue(cNum+1)
+                    Log.e("Firebase communication", "checking sSharedPreference :" +
+                            "${ApplicationClass.sSharedPreferences.getString("calendars", "")}")
+                    db.child("CNum").setValue(cNum + 1)
                     db.child("CNum").get().addOnSuccessListener {
-                        Log.e("Firebase communication", "getting cnum val again and again:${it.value.toString()}")
+                        Log.e(
+                            "Firebase communication",
+                            "getting cnum val again and again:${it.value.toString()}"
+                        )
+                    }
+
+                    Toast.makeText(this@GroupActivity, "등록되었습니다.", Toast.LENGTH_SHORT).show()
+                    finish()
                 }
-
-
-
-                }
-            } else{
+            } else {
                 val taskMap: MutableMap<String, Any> = HashMap()
-                taskMap[curCalendarID!!+"/name"] = etGroupName.text.toString()
-                taskMap[curCalendarID!!+"/comment"] = etGroupInfo.text.toString()
-                taskMap[curCalendarID!!+"/label"] = colorCode
-                taskMap[curCalendarID!!+"/participant"] = userArr
+                taskMap[curCalendarID!! + "/name"] = etGroupName.text.toString()
+                taskMap[curCalendarID!! + "/comment"] = etGroupInfo.text.toString()
+                taskMap[curCalendarID!! + "/label"] = colorCode
+                taskMap[curCalendarID!! + "/participant"] = userArr
                 calendar.updateChildren(taskMap)
+                Toast.makeText(this@GroupActivity, "수정되었습니다.", Toast.LENGTH_SHORT).show()
+                finish()
             }
         }
     }
 
 
-
     @SuppressLint("NotifyDataSetChanged")
-    private fun connectFB(){
+    private fun connectFB() {
         val mDatabase = Firebase.database.getReference("Calendar")
         mDatabase.child(curCalendarID!!).get().addOnSuccessListener {
             Log.e("Firebase communication", "value: ${it.value.toString()}")
@@ -221,36 +231,38 @@ class GroupActivity : AppCompatActivity() {
                 colorCode = json.getString("label").toInt()
 
                 var i = 0;
-                for(code in colorArr){
-                    if(code == colorCode) i = colorArr.indexOf(code);
+                for (code in colorArr) {
+                    if (code == colorCode) i = colorArr.indexOf(code);
                 }
 
-                if(i<5) rg1.check(rbArr[i])
+                if (i < 5) rg1.check(rbArr[i])
                 else rg2.check(rbArr[i]);
             }
-            val arr = json.getString("participant").removeSurrounding("[","]").split(",")
-            userArr.apply {
-                for(u in arr)
-                    add(u.removeSurrounding("\"", "\""))
+            if(it.value.toString().contains("participant")){
+                val arr = json.getString("participant").removeSurrounding("[", "]").split(",")
+                userArr.apply {
+                    for (u in arr)
+                        add(u.removeSurrounding("\"", "\""))
+                }
+                Log.e("Firebase communication", userArr.toString())
+                binding.rvGroup.adapter?.notifyDataSetChanged()
             }
-            Log.e("Firebase communication", userArr.toString())
-            binding.rvGroup.adapter?.notifyDataSetChanged()
         }.addOnFailureListener {
             Log.e("Firebase communication", "Communication Failure")
         }
     }
 
-    private fun addtoSharedPreference(id:String){
+    private fun addtoSharedPreference(id: String) {
         var str = ApplicationClass.sSharedPreferences.getString("calendars", null)
-        if(str != null){
+        if (str != null) {
             str += ",$id"
-        } else{
+        } else {
             str = id
         }
-        ApplicationClass.spEditor.putString("calendars", str)
+        ApplicationClass.spEditor.putString("calendars", str).apply()
     }
 
-    private fun sendInvitation(){
-        
+    private fun sendInvitation() {
+
     }
 }
