@@ -3,26 +3,20 @@ package com.example.krew.controller
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
-import android.view.Gravity
 import android.widget.ImageButton
 import androidx.core.view.GravityCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.example.krew.R
-import com.example.krew.adapter.AdapterDay
-import com.example.krew.adapter.AdapterDayInfo
 import com.example.krew.adapter.AdapterMonth
 import com.example.krew.adapter.GroupRVAdapter
 import com.example.krew.databinding.ActivityMainBinding
 import com.example.krew.databinding.DayInfoBinding
 import com.example.krew.model.Calendar
-import com.example.krew.model.GroupItem
 
 class MainActivity : AppCompatActivity() {
     lateinit var binding: ActivityMainBinding
-
     lateinit var groupRVAdapter: GroupRVAdapter
     val groupArr = ArrayList<Calendar>()
 
@@ -51,8 +45,7 @@ class MainActivity : AppCompatActivity() {
         val snap = PagerSnapHelper()
         snap.attachToRecyclerView(binding.calendarCustom)
 
-        val toolbar = dayInfoBinding.toolbar
-        toolbar.title = "클릭한 날짜 받아와야지"
+        val dayText = dayInfoBinding.dayText
 
         binding.mainBtnNav.setOnClickListener {
             if(!binding.drawer.isDrawerOpen(GravityCompat.START)){

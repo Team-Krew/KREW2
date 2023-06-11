@@ -11,9 +11,11 @@ import android.widget.Toast
 import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.example.krew.R
+import com.example.krew.controller.DayInfoActivity
 import com.example.krew.controller.MainActivity
 import com.example.krew.controller.addSchedule
 import com.example.krew.databinding.ListItemDayBinding
+import java.text.SimpleDateFormat
 import java.util.*
 
 class AdapterDay(val tempMonth:Int, val dayList: MutableList<Date>): RecyclerView.Adapter<AdapterDay.DayView>() {
@@ -26,8 +28,14 @@ class AdapterDay(val tempMonth:Int, val dayList: MutableList<Date>): RecyclerVie
     }
 
     override fun onBindViewHolder(holder: DayView, position: Int) {
+        //날짜 클릭시 이벤트 처리
         holder.dayBinding.itemDayLayout.setOnClickListener {
-            Toast.makeText(holder.dayBinding.root.context, "${dayList[position]}", Toast.LENGTH_SHORT).show()
+            val intent = Intent(holder.dayBinding.root.context, DayInfoActivity::class.java)
+            //날짜 가공
+            val today = formatDate(dayList[position])
+            intent.putExtra("today", today)
+            holder.dayBinding.root.context.startActivity(intent)
+
         }
 
 
@@ -41,6 +49,10 @@ class AdapterDay(val tempMonth:Int, val dayList: MutableList<Date>): RecyclerVie
         if(tempMonth != dayList[position].month) {
             holder.dayBinding.itemDayText.alpha = 0.4f
         }
+    }
+    fun formatDate(date: Date): String {
+        val format = SimpleDateFormat("yyyy년 MM월 dd일", Locale.getDefault())
+        return format.format(date)
     }
 
     override fun getItemCount(): Int {

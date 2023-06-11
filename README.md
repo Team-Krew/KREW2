@@ -2,6 +2,9 @@
 건국대 모바일 프로그래밍 1팀 기말 프로젝트
 
 ## 프로젝트 파이팅!!
+<<<<<<< HEAD
+S
+=======
 
 6월8일 변경사항
 
@@ -29,3 +32,4 @@
 -Project 수준 build.gradle, settings.gradle 모듈 수준 build.gradle에 각각 관련된 것 들 implementation
 
 PR 요청함.
+>>>>>>> 8f88bc9772d4d145bb0996ccd26296932835c3e7
