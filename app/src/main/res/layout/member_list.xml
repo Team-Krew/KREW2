@@ -6,22 +6,27 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:background="@drawable/crewlayout"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:layout_margin="10dp"
+    android:padding="15dp">
   
     <ImageView
         android:id="@+id/recrewImage"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="5dp"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_marginTop="15dp"
+        android:layout_gravity="center"
         android:background="@drawable/memberlist_not_checked_image"/>
 
     <TextView
         android:id="@+id/recrewName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="11dp"
+        android:layout_gravity="center"
         android:gravity="center"
-        android:paddingBottom="10dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginBottom="15dp"
+        android:textAlignment="center"
         android:text="CrewName" />
   
 </LinearLayout>

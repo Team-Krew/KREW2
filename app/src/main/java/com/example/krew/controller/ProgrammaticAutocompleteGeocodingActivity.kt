@@ -1,5 +1,6 @@
 package com.example.krew.controller
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
@@ -20,6 +21,7 @@ import com.example.krew.R
 import com.example.krew.adapter.PlacePredictionAdapter
 import com.example.krew.apimodel.GeocodingResult
 import com.example.krew.apimodel.LatLngAdapter
+import com.example.krew.model.GroupItem
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.libraries.places.api.Places
@@ -141,7 +143,8 @@ class ProgrammaticAutocompleteGeocodingActivity : AppCompatActivity() {
                 }
                 // Use Gson to convert the response JSON object to a POJO
                 val result: GeocodingResult = gson.fromJson(results.getString(0), GeocodingResult::class.java)
-                ActivityIntent(result)
+                Log.i("result",result.toString())
+                ActivityIntent(placePrediction,result)
             } catch (e: JSONException) {
                 e.printStackTrace()
                 Log.e("checkJsonexception",e.printStackTrace().toString())
@@ -151,10 +154,12 @@ class ProgrammaticAutocompleteGeocodingActivity : AppCompatActivity() {
         // Add the request to the Request queue.
         queue.add(request)
     }
-
-    fun ActivityIntent(result:GeocodingResult){
+    @SuppressWarnings("deprecation")
+    fun ActivityIntent(placePrediction: AutocompletePrediction,result:GeocodingResult){
+        Log.i("ACTIVITYINTENTINPABEFORE","ACTIVITYINTENTINPABEFORE")
         val intent = Intent(this@ProgrammaticAutocompleteGeocodingActivity, addSchedule::class.java)
         intent.putExtra("formattedAddress",result.formatted_address)
+        intent.putExtra("place",placePrediction.getPrimaryText(null).toString())
         startActivity(intent)
         finish()
     }
