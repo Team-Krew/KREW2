@@ -29,6 +29,7 @@ import com.example.krew.model.Schedule
 import com.firebase.ui.database.FirebaseRecyclerOptions
 import com.google.android.libraries.places.api.Places
 import com.google.android.play.integrity.internal.c
+import com.google.android.play.integrity.internal.y
 import com.google.firebase.database.*
 import com.google.firebase.database.ktx.database
 import com.google.firebase.database.ktx.getValue
@@ -200,7 +201,7 @@ class addSchedule : AppCompatActivity() {
                     this@addSchedule,android.R.style.Theme_Holo_Light_Dialog,
                     { view, year, month, dayOfMonth ->
                         scheduleVar.endDate = "$year-${month+1}-$dayOfMonth"
-                        if(scheduleVar.endDate.compareTo(scheduleVar.startDate)==0 || scheduleVar.endDate.compareTo(scheduleVar.startDate)==1){
+                        if(scheduleVar.endDate.compareTo(scheduleVar.startDate)==0 || scheduleVar.endDate.compareTo(scheduleVar.startDate)>0){
                             endDateBtn1.text = scheduleVar.endDate
                             if(!toggleButton.isChecked){
                                 @SuppressWarnings("deprecation")
@@ -209,14 +210,15 @@ class addSchedule : AppCompatActivity() {
                                         scheduleVar.endDateHour = "$hourOfDay:$minute"
                                         //동일날짜
                                         if(scheduleVar.endDate.compareTo(scheduleVar.startDate)==0) {
-                                            if (scheduleVar.endDateHour.compareTo(scheduleVar.startDateHour)==1 || scheduleVar.endDateHour.compareTo(scheduleVar.startDateHour)==0) {
+                                            Log.i("scheduleVar.endDateHour.compareTo(scheduleVar.startDateHour)",scheduleVar.endDateHour.compareTo(scheduleVar.startDateHour).toString())
+                                            if (scheduleVar.endDateHour.compareTo(scheduleVar.startDateHour) > 0 || scheduleVar.endDateHour.compareTo(scheduleVar.startDateHour)==0) {
                                                 endDateBtn2.text = scheduleVar.endDateHour.toString()
                                             }else{
                                                 Toast.makeText(this@addSchedule,"올바르지 않은 형식입니다.",Toast.LENGTH_SHORT).show()
                                                 clearendBtn()
                                             }
                                             //endDate가 더 큰 값
-                                        }else if(scheduleVar.endDate.compareTo(scheduleVar.startDate)==1){
+                                        }else if(scheduleVar.endDate.compareTo(scheduleVar.startDate)>0){
                                             endDateBtn2.text = scheduleVar.endDateHour.toString()
                                             //endDate가 더 작은 값
                                         }else{
