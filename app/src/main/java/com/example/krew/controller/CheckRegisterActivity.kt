@@ -25,4 +25,11 @@ class CheckRegisterActivity : AppCompatActivity() {
             }
         }
     }
+
+    fun setalarm(){
+        // 알람 정보 받아오기
+        //schedule안의 admin, participant정보 받아오기.
+        //admin, participant들이 User에 있는 사람인지 체크
+        //있으면
+    }
 }
