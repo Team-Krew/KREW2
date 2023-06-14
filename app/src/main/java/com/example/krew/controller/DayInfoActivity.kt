@@ -1,5 +1,6 @@
 package com.example.krew.controller
 
+import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.os.PersistableBundle
@@ -32,6 +33,11 @@ class DayInfoActivity : AppCompatActivity(){
         dayInfoData.add(DayInfo("건대입구", "14:00", Color.MAGENTA))
         dayInfoData.add(DayInfo("용현이집", "02:30", Color.YELLOW))
         binding.backBtn.setOnClickListener {
+            finish()
+        }
+        binding.addBtn.setOnClickListener {
+            val intent = Intent(this@DayInfoActivity,addSchedule::class.java)
+            startActivity(intent)
             finish()
         }
     }
