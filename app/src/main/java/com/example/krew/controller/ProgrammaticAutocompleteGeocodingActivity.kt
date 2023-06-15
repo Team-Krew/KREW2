@@ -155,10 +155,11 @@ class ProgrammaticAutocompleteGeocodingActivity : AppCompatActivity() {
     @SuppressWarnings("deprecation")
     fun ActivityIntent(placePrediction: AutocompletePrediction,result:GeocodingResult){
         Log.i("ACTIVITYINTENTINPABEFORE","ACTIVITYINTENTINPABEFORE")
-        val intent = Intent(this@ProgrammaticAutocompleteGeocodingActivity, AddSchedule::class.java)
-        intent.putExtra("formattedAddress",result.formatted_address)
-        intent.putExtra("place",placePrediction.getPrimaryText(null).toString())
-        startActivity(intent)
+        val intent_ret = Intent(this@ProgrammaticAutocompleteGeocodingActivity, AddSchedule::class.java)
+        intent_ret.putExtra("formattedAddress",result.formatted_address)
+        intent_ret.putExtra("place",placePrediction.getPrimaryText(null).toString())
+        intent_ret.putExtra("selected_date", intent.getStringExtra("selected_date").toString())
+        startActivity(intent_ret)
         finish()
     }
 

@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.core.content.ContextCompat.startActivity
+import com.example.krew.ApplicationClass
 import com.example.krew.R
 import com.example.krew.databinding.ActivityMainBinding
 import com.example.krew.databinding.ActivityProfileBinding
@@ -56,7 +57,8 @@ class ProfileActivity : AppCompatActivity() {
             val comment = binding.profileEditSelfIntro.text.toString()
             val address = binding.profileEditStartLoc.text.toString()
             val uid = cur_user.uid
-            val tempUser = User(uid, user_token, edt_name, address, comment, ready_time,)
+            val user_email = ApplicationClass.sSharedPreferences.getString("user_email", null)
+            val tempUser = User(uid, user_token, user_email!!, edt_name, address, comment, ready_time,)
             database.child("User").child(tempUser.user_id).setValue(tempUser)
             Toast.makeText(this, "회원 정보 수정이 완료되었습니다.", Toast.LENGTH_SHORT).show()
             val intent = Intent(this, MainActivity::class.java)

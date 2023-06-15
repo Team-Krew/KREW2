@@ -34,7 +34,7 @@ class DayInfoActivity : AppCompatActivity(){
         }
         binding.addBtn.setOnClickListener {
             val intent = Intent(this@DayInfoActivity,AddSchedule::class.java)
-            intent.putExtra("today", today)
+            intent.putExtra("selected_date", today)
             startActivity(intent)
             finish()
         }

@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
+import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView.LayoutManager
 import com.example.krew.ApplicationClass
@@ -34,13 +35,13 @@ class AddSchedule : AppCompatActivity() {
     lateinit var ScheduleAdapter:ScheduleAdapter
     var itemarr = ArrayList<GroupItem>()
     var calarr = ArrayList<Calendar>()
+    var checked_groupItems = ArrayList<GroupItem>()
     lateinit var today: String
     override fun onCreate(savedInstanceState: Bundle?) {
         binding = ActivityAddScheduleBinding.inflate(layoutInflater)
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
         val apikey = getString(R.string.apiKey)
-
 
         Log.i("OnCreateStartAddScheduleActivity","OnCreateStartAddScheduleActivity")
         if(apikey.isEmpty()){
@@ -57,7 +58,9 @@ class AddSchedule : AppCompatActivity() {
         binding.startDateBtn2.setText(scheduleVar.startDateHour)
         binding.endDateBtn1.setText(endDate)
         binding.endDateBtn2.setText(scheduleVar.endDateHour)
-        binding.LocationName.text = scheduleVar.placename.toString()
+        binding.LocationName.text = scheduleVar.placename
+
+        today = intent.getStringExtra("selected_date")!!
 
         initRecyclerView()
         initLayout()
@@ -65,13 +68,25 @@ class AddSchedule : AppCompatActivity() {
 
     //데이터 읽어와서 쓰고 수정.
     fun initRecyclerView(){
-        today = intent.getStringExtra("today")!!
         layoutManager =
                 LinearLayoutManager(this@AddSchedule, LinearLayoutManager.HORIZONTAL, false)
         ScheduleAdapter = ScheduleAdapter(itemarr)
         ScheduleAdapter.itemClickListener = object:ScheduleAdapter.OnItemClickListener{
             override fun OnItemClick(position: Int) {
-                ScheduleAdapter.items[position].check = !ScheduleAdapter.items[position].check
+                val target = ScheduleAdapter.items[position]
+                if(target.check == false){
+                    if (target !in checked_groupItems) {
+                        target.check = true
+                        checked_groupItems.add(target)
+                        println(checked_groupItems)
+                    }
+                }else{
+                    if (target in checked_groupItems){
+                        target.check = false
+                        checked_groupItems.remove(target)
+                        println(checked_groupItems)
+                    }
+                }
                 ScheduleAdapter.notifyDataSetChanged()
             }
         }
@@ -235,6 +250,7 @@ class AddSchedule : AppCompatActivity() {
             LocationAddr.setOnClickListener {
                 backupDateBeforeIntent()
                 val intent = Intent(this@AddSchedule, ProgrammaticAutocompleteGeocodingActivity::class.java)
+                intent.putExtra("selected_date", today)
                 startActivity(intent)
                 finish()
                 }
@@ -258,23 +274,22 @@ class AddSchedule : AppCompatActivity() {
         //스케줄 id->SNum calendar_list->groupITem에서 checktrue인 group_id를 가지고있는 캘린더들 가져오기
         //title->name 날짜: startdate, startdatehour(if종일, 00:00), place->string
         val mDatabase = Firebase.database.getReference("Calendar")
-        val calendars =
-            ApplicationClass.sSharedPreferences.getString("calendars", null)?.split(",")
-        if (calendars != null) {
-            for (id in calendars) {
-                mDatabase.child(id).get().addOnSuccessListener {
-                    val cal: Calendar
-                    cal = it.getValue<Calendar>() as Calendar
-                    calarr.add(cal)
-                    Log.i("nowCalendar",calarr.toString())
+        val checked_items = checked_groupItems
+//        val calendars =
+//            ApplicationClass.sSharedPreferences.getString("calendars", null)?.split(",")
+        if (checked_items != null) {
+            for (group_item in checked_items) {
+                for (cal in ApplicationClass.cur_calendar_list){
+                    if (cal.calendar_id == group_item.group_id) {
+                        calarr.add(cal)
+                        break
+                    }
                 }
             }
-            Log.i("nowCalenda333r",calarr.toString())
         }
+        println("calarrrrrr" + calarr)
         db.child("SNum").get().addOnSuccessListener {
             sNum = it.value.toString().toInt()
-            Log.e("date1", binding.startDateBtn1.text.toString())
-            Log.e("date2", binding.startDateBtn2.text.toString())
             val sch = Schedule(
                 sNum.toString(),
                 calarr,
@@ -340,29 +355,20 @@ class AddSchedule : AppCompatActivity() {
     }
     @SuppressLint("NotifyDataSetChanged")
     override fun onStart() {
-        Log.i("OnStart","OnStart")
         super.onStart()
         layoutManager = LinearLayoutManager(this@AddSchedule,
             LinearLayoutManager.HORIZONTAL, false)
-        val mDatabase = Firebase.database.getReference("Calendar")
-        val calendars =
-            ApplicationClass.sSharedPreferences.getString("calendars", null)?.split(",")
-        Log.e("Firebase communication in addschedule", "${calendars?.size}")
-        if (calendars != null) {
-            for (id in calendars) {
-                mDatabase.child(id).get().addOnSuccessListener {
-                    val cal: Calendar
-                    cal = it.getValue<Calendar>() as Calendar
-                    itemarr.add(GroupItem(
-                        cal.calendar_id,
-                        cal.name,
-                        cal.admin.toString(),
-                        resources.getColor(cal.label.toInt(), null),
-                        false
-                    ))
-                    ScheduleAdapter.notifyDataSetChanged()
-                }
-            }
+        val calendar_list = ApplicationClass.cur_calendar_list
+        println(calendar_list)
+        for (cal in calendar_list!!){
+            itemarr.add(GroupItem(
+                cal.calendar_id,
+                cal.name,
+                cal.admin.toString(),
+                resources.getColor(cal.label, null),
+                false
+            ))
+            ScheduleAdapter.notifyDataSetChanged()
         }
     }
     override fun onDestroy() {
@@ -386,3 +392,29 @@ class AddSchedule : AppCompatActivity() {
 //                }
 //
 //            }
+//@SuppressLint("NotifyDataSetChanged")
+//override fun onStart() {
+//    super.onStart()
+//    layoutManager = LinearLayoutManager(this@AddSchedule,
+//        LinearLayoutManager.HORIZONTAL, false)
+//    val mDatabase = Firebase.database.getReference("Calendar")
+//    val calendars =
+//        ApplicationClass.sSharedPreferences.getString("calendars", null)?.split(",")
+//    Log.e("Firebase communication in addschedule", "${calendars?.size}")
+//    if (calendars != null) {
+//        for (id in calendars) {
+//            mDatabase.child(id).get().addOnSuccessListener {
+//                val cal: Calendar
+//                cal = it.getValue<Calendar>() as Calendar
+//                itemarr.add(GroupItem(
+//                    cal.calendar_id,
+//                    cal.name,
+//                    cal.admin.toString(),
+//                    resources.getColor(cal.label.toInt(), null),
+//                    false
+//                ))
+//                ScheduleAdapter.notifyDataSetChanged()
+//            }
+//        }
+//    }
+//}

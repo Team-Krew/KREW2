@@ -73,7 +73,7 @@ class LoginActivity : AppCompatActivity() {
                                                             }
                                                             val deviceToken = task.result
                                                             val intent = Intent(this@LoginActivity, ProfileActivity::class.java)
-                                                            database.child("User").child(firebaseAuth.currentUser!!.uid).setValue(User(firebaseAuth.currentUser!!.uid, deviceToken, account.displayName.toString(), "", "", "", ))
+                                                            database.child("User").child(firebaseAuth.currentUser!!.uid).setValue(User(firebaseAuth.currentUser!!.uid, deviceToken, email, account.displayName.toString(), "", "", "", ))
                                                             ApplicationClass.spEditor.putString("user_email", email).apply()
                                                             intent.putExtra("user_token", deviceToken)
                                                             startActivity(intent)
@@ -84,6 +84,8 @@ class LoginActivity : AppCompatActivity() {
                                                     database.child("User").child(cur_user.uid).get().addOnSuccessListener {
                                                         val intent = Intent(this, MainActivity::class.java)
                                                         cur_user2 = it.getValue<User>() as User
+                                                        ApplicationClass.cur_user = cur_user2
+                                                        ApplicationClass.updateCalendarList()
                                                         intent.putExtra("cur_user", cur_user2)
                                                         startActivity(intent)
                                                     }
