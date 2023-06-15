@@ -48,6 +48,7 @@ class MainActivity : AppCompatActivity() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             cur_user = bundle.getSerializable("cur_user", User::class.java) as User
         }else{
+            @Suppress("DEPRECATION")
             cur_user = bundle.getSerializable("cur_user") as User
         }
         initCalendar()
@@ -80,7 +81,7 @@ class MainActivity : AppCompatActivity() {
                         cal.calendar_id,
                         cal.name,
                         cal.admin.toString(),
-                        resources.getColor(cal.label.toInt(), null),
+                        resources.getColor(cal.label, null),
                         true
                     ))
                     groupRVAdapter.notifyDataSetChanged()
@@ -121,7 +122,6 @@ class MainActivity : AppCompatActivity() {
                 binding.drawer.closeDrawer(GravityCompat.START)
             }
         }
-
     }
 
     private fun initDrawer() {

@@ -7,13 +7,14 @@ data class Calendar(
     var label: Int,
     var admin: String?,
     var Participant: ArrayList<String>?,
-
+    var schedule_list: ArrayList<Schedule>?,
 ){
     constructor(): this(
         "no_info",
         "no_info",
         "no_info",
         0,
+        null,
         null,
         null,
         )

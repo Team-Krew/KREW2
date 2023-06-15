@@ -1,6 +1,5 @@
 package com.example.krew.controller
 
-import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
@@ -21,7 +20,6 @@ import com.example.krew.R
 import com.example.krew.adapter.PlacePredictionAdapter
 import com.example.krew.apimodel.GeocodingResult
 import com.example.krew.apimodel.LatLngAdapter
-import com.example.krew.model.GroupItem
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.libraries.places.api.Places
@@ -157,7 +155,7 @@ class ProgrammaticAutocompleteGeocodingActivity : AppCompatActivity() {
     @SuppressWarnings("deprecation")
     fun ActivityIntent(placePrediction: AutocompletePrediction,result:GeocodingResult){
         Log.i("ACTIVITYINTENTINPABEFORE","ACTIVITYINTENTINPABEFORE")
-        val intent = Intent(this@ProgrammaticAutocompleteGeocodingActivity, addSchedule::class.java)
+        val intent = Intent(this@ProgrammaticAutocompleteGeocodingActivity, AddSchedule::class.java)
         intent.putExtra("formattedAddress",result.formatted_address)
         intent.putExtra("place",placePrediction.getPrimaryText(null).toString())
         startActivity(intent)
@@ -165,7 +163,7 @@ class ProgrammaticAutocompleteGeocodingActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-        val intent = Intent(this@ProgrammaticAutocompleteGeocodingActivity,addSchedule::class.java)
+        val intent = Intent(this@ProgrammaticAutocompleteGeocodingActivity,AddSchedule::class.java)
         startActivity(intent)
         finish()
     }

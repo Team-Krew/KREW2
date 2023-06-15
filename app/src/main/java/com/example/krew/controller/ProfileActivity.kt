@@ -22,7 +22,9 @@ class ProfileActivity : AppCompatActivity() {
     lateinit var binding: ActivityProfileBinding
     val cur_user = FirebaseAuth.getInstance().currentUser!!
     lateinit var cur_user2: User
+    lateinit var user_token: String
     val database = FirebaseDatabase.getInstance().getReference()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityProfileBinding.inflate(layoutInflater)
@@ -33,7 +35,7 @@ class ProfileActivity : AppCompatActivity() {
     private fun initLayout() {
         binding.profileUsername.text = cur_user.displayName.toString()
         binding.profileEditName.setText(cur_user.displayName.toString())
-
+        user_token = intent.getStringExtra("user_token")!!
         database.child("User").child(cur_user.uid).get().addOnSuccessListener {
             cur_user2 = it.getValue<User>()!!
             binding.apply {
@@ -54,7 +56,7 @@ class ProfileActivity : AppCompatActivity() {
             val comment = binding.profileEditSelfIntro.text.toString()
             val address = binding.profileEditStartLoc.text.toString()
             val uid = cur_user.uid
-            val tempUser = User(uid, edt_name, address, comment, ready_time)
+            val tempUser = User(uid, user_token, edt_name, address, comment, ready_time,)
             database.child("User").child(tempUser.user_id).setValue(tempUser)
             Toast.makeText(this, "회원 정보 수정이 완료되었습니다.", Toast.LENGTH_SHORT).show()
             val intent = Intent(this, MainActivity::class.java)
