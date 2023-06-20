@@ -143,55 +143,57 @@ class AddSchedule : AppCompatActivity() {
                 //해당 부분에 main calendar View로 돌아가는 intent문 작성
                 //일정 db에 업데이트하는 1문 추가 작성
                 //다 유효값이 들어가 있는 경우에만 firebase에 추가하는 구문 추가
-                if (toggleButton.isChecked) {
-                    if (ScheduleName.text.isNotEmpty() && startDateBtn1.text.isNotEmpty() &&
-                        endDateBtn1.text.isNotEmpty() && LocationAddr.text.isNotEmpty()
-                    ) {
-                        //여기다가 schedule add하는 과정 추가
-                        makeSchedule()
-                        var intent = Intent(this@AddSchedule, CheckRegisterActivity::class.java)
-                        startActivity(intent)
-                        clearVar()
-                        clearAllBtn()
-                        finish()
-                    } else {
-                        var str = "올바른 입력이 아닙니다. "
-                        if (ScheduleName.text.isEmpty()) {
-                            str += "일정 이름, "
-                        } else if (startDateBtn1.text.isEmpty()) {
-                            str += "출발 날짜,"
-                        } else if (endDateBtn1.text.isEmpty()) {
-                            str += "도착 날짜, "
-                        } else if (LocationAddr.text.isEmpty()) {
-                            str += "장소, "
+                if (checked_groupItems.size != 0) {
+                    if (toggleButton.isChecked) {
+                        if (ScheduleName.text.isNotEmpty() && startDateBtn1.text.isNotEmpty() &&
+                            endDateBtn1.text.isNotEmpty() && LocationAddr.text.isNotEmpty()
+                        ) {
+                            //여기다가 schedule add하는 과정 추가
+                            makeSchedule()
+                            var intent = Intent(this@AddSchedule, CheckRegisterActivity::class.java)
+                            startActivity(intent)
+                            clearVar()
+                            clearAllBtn()
+                            finish()
+                        } else {
+                            var str = "올바른 입력이 아닙니다. "
+                            if (ScheduleName.text.isEmpty()) {
+                                str += "일정 이름, "
+                            } else if (startDateBtn1.text.isEmpty()) {
+                                str += "출발 날짜,"
+                            } else if (endDateBtn1.text.isEmpty()) {
+                                str += "도착 날짜, "
+                            } else if (LocationAddr.text.isEmpty()) {
+                                str += "장소, "
+                            }
+                            str += "을(를) 작성해주세요."
+                            Toast.makeText(this@AddSchedule, str, Toast.LENGTH_SHORT).show()
                         }
-                        str += "을(를) 작성해주세요."
-                        Toast.makeText(this@AddSchedule, str, Toast.LENGTH_SHORT).show()
-                    }
-                } else {
-                    if (ScheduleName.text.isNotEmpty() && startDateBtn1.text.isNotEmpty() && startDateBtn2.text.isNotEmpty() &&
-                        endDateBtn1.text.isNotEmpty() && endDateBtn2.text.isNotEmpty() && LocationAddr.text.isNotEmpty()
-                    ) {
-                        //여기다가 schedule add하는 과정 추가
-                        makeSchedule()
-                        var intent = Intent(this@AddSchedule, CheckRegisterActivity::class.java)
-                        startActivity(intent)
-                        clearVar()
-                        clearAllBtn()
-                        finish()
                     } else {
-                        var str = "올바른 입력이 아닙니다. "
-                        if (ScheduleName.text.isEmpty()) {
-                            str += "일정 이름, "
-                        } else if (startDateBtn1.text.isEmpty() || startDateBtn2.text.isEmpty()) {
-                            str += "출발 날짜 및 시간, "
-                        } else if (endDateBtn1.text.isEmpty() || endDateBtn2.text.isEmpty()) {
-                            str += "도착 날짜 및 시간, "
-                        } else if (LocationAddr.text.isEmpty()) {
-                            str += "장소, "
+                        if (ScheduleName.text.isNotEmpty() && startDateBtn1.text.isNotEmpty() && startDateBtn2.text.isNotEmpty() &&
+                            endDateBtn1.text.isNotEmpty() && endDateBtn2.text.isNotEmpty() && LocationAddr.text.isNotEmpty()
+                        ) {
+                            //여기다가 schedule add하는 과정 추가
+                            makeSchedule()
+                            var intent = Intent(this@AddSchedule, CheckRegisterActivity::class.java)
+                            startActivity(intent)
+                            clearVar()
+                            clearAllBtn()
+                            finish()
+                        } else {
+                            var str = "올바른 입력이 아닙니다. "
+                            if (ScheduleName.text.isEmpty()) {
+                                str += "일정 이름, "
+                            } else if (startDateBtn1.text.isEmpty() || startDateBtn2.text.isEmpty()) {
+                                str += "출발 날짜 및 시간, "
+                            } else if (endDateBtn1.text.isEmpty() || endDateBtn2.text.isEmpty()) {
+                                str += "도착 날짜 및 시간, "
+                            } else if (LocationAddr.text.isEmpty()) {
+                                str += "장소, "
+                            }
+                            str += "을(를) 작성해주세요."
+                            Toast.makeText(this@AddSchedule, str, Toast.LENGTH_SHORT).show()
                         }
-                        str += "을(를) 작성해주세요."
-                        Toast.makeText(this@AddSchedule, str, Toast.LENGTH_SHORT).show()
                     }
                 }
             }
@@ -311,7 +313,7 @@ class AddSchedule : AppCompatActivity() {
                 activityResultLauncher.launch(intent)
             }
             addMemberButton.setOnClickListener {
-                val intent = Intent(this@AddSchedule,GroupActivity::class.java)
+                val intent = Intent(this@AddSchedule, GroupActivity::class.java)
                 startActivity(intent)
             }
         }

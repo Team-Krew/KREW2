@@ -41,9 +41,7 @@ class AdapterDay(val tempMonth:Int, val dayList: MutableList<Date>): RecyclerVie
             for (cal in ApplicationClass.cur_calendar_list){
                 if(cal.schedule_list != null) {
                     val temp_schedule_list = cal.schedule_list as ArrayList<Schedule>
-//                    println(temp_schedule_list)
                     for (t in temp_schedule_list) {
-//                        println("target_date: " + t.date)
                         if (t.date == today) {
                             dayInfo_list.add(DayInfo(t.title, t.place, t.time, Color.CYAN))
                         }
@@ -51,6 +49,8 @@ class AdapterDay(val tempMonth:Int, val dayList: MutableList<Date>): RecyclerVie
                 }
             }
 
+            val count = dayInfo_list.size
+            if(count != 0) holder.dayBinding.numSchedule.setText("+$count")
 
             holder.dayBinding.itemDayLayout.setOnClickListener {
                 val intent = Intent(holder.dayBinding.root.context, DayInfoActivity::class.java)
@@ -60,7 +60,6 @@ class AdapterDay(val tempMonth:Int, val dayList: MutableList<Date>): RecyclerVie
                 intent.putExtra("dayInfo_list", dayInfo_list)
                 holder.dayBinding.root.context.startActivity(intent)
             }
-
 
             holder.dayBinding.itemDayText.text = dayList[position].date.toString()
             holder.dayBinding.itemDayText.setTextColor(when(position%7){
