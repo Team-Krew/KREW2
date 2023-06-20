@@ -44,7 +44,7 @@ import kotlin.coroutines.CoroutineContext
 
 class MainActivity : AppCompatActivity() {
     lateinit var binding: ActivityMainBinding
-
+    lateinit var monthListAdapter: AdapterMonth
     lateinit var groupRVAdapter: GroupRVAdapter
     val groupArr = ArrayList<GroupItem>()
     lateinit var cur_user : User
@@ -58,7 +58,6 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
         CoroutineScope(Dispatchers.Main).launch {
             ApplicationClass.updateCalendarList()
-
         }
 
         cur_user = ApplicationClass.cur_user
@@ -102,7 +101,6 @@ class MainActivity : AppCompatActivity() {
     @SuppressLint("NotifyDataSetChanged")
     override fun onResume() {
         super.onResume()
-
         val database = Firebase.database.getReference("Calendar")
         database.get().addOnSuccessListener {
             ApplicationClass.cur_calendar_list.clear()
@@ -124,6 +122,10 @@ class MainActivity : AppCompatActivity() {
                     }
                 }
             }
+            CoroutineScope(Dispatchers.Main).launch {
+                ApplicationClass.updateCalendarList()
+                monthListAdapter.notifyDataSetChanged()
+            }
             groupRVAdapter.notifyDataSetChanged()
         }
     }
@@ -131,7 +133,7 @@ class MainActivity : AppCompatActivity() {
     fun initCalendar() {
         //메인 캘린더 open
         val monthListManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
-        val monthListAdapter = AdapterMonth()
+        monthListAdapter = AdapterMonth()
 
         binding.mainTitle.text = cur_user.name + "의 달력"
         binding.calendarCustom.apply {
@@ -181,6 +183,19 @@ class MainActivity : AppCompatActivity() {
                     val intent = Intent(this@MainActivity, GroupActivity::class.java)
                     intent.putExtra("id", ApplicationClass.cur_calendar_list[position].calendar_id)
                     startActivity(intent)
+                }
+            }
+
+            override fun OnSwitchClick(position: Int, isChecked: Boolean) {
+                val temp = ApplicationClass.cur_calendar_list[position]
+                if (isChecked == true) {
+                    if (temp !in ApplicationClass.on_calendar_list) {
+                        ApplicationClass.on_calendar_list.add(temp)
+                        monthListAdapter.notifyDataSetChanged()
+                    }
+                } else {
+                    ApplicationClass.on_calendar_list.remove(temp)
+                    monthListAdapter.notifyDataSetChanged()
                 }
             }
         }
