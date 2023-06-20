@@ -13,6 +13,7 @@ import com.example.krew.model.User
 import com.google.firebase.database.ktx.database
 import com.google.firebase.database.ktx.getValue
 import com.google.firebase.ktx.Firebase
+import kotlinx.coroutines.tasks.await
 
 
 // 앱이 실행될때 1번만 실행이 됩니다.
@@ -38,7 +39,8 @@ class ApplicationClass : Application() {
         var user_id: String? = null
 
         //유저 캘린더 리스트 업데이트 함수
-        fun updateCalendarList() {
+        suspend fun updateCalendarList() {
+            Log.i("제발 먼저 실행","제발 먼저 실행")
             val database = Firebase.database.getReference("Calendar")
             database.get().addOnSuccessListener {
                 cur_calendar_list.clear()
@@ -51,25 +53,20 @@ class ApplicationClass : Application() {
                 for (cal in calendar_list) {
                     if (cal.admin == user_id) {
                         cur_calendar_list.add(cal)
+                        Log.i("printcalendar.list.cal",cal.toString())
                         continue
                     }
                     if (cal.Participant != null) {
                         if (user_id in cal.Participant as ArrayList<String>) {
+                            Log.i("printcalendar.list.cal2",cal.toString())
                             cur_calendar_list.add(cal)
                             continue
                         }
                     }
-               }
-            }
-//            val database2 = Firebase.database.getReference("Schedule")
-//            database2.get().addOnSuccessListener {
-//                val iter = it.children.iterator()
-//                while (iter.hasNext()){
-//                    val temp = iter.next()
-//                    val schedule = temp.getValue<Schedule>() as Schedule
-//                    val calendar = schedule.calendar_list as ArrayList<Calendar>
-//                }
-//            }
+                }
+            }.await()
+            Log.i("제발 두번째 실행","제발 두번째 실행")
+            Log.i("캘린더 사이즈",cur_calendar_list.size.toString())
         }
     }
         // 앱이 처음 생성되는 순간, SP를 새로 만들어주고, 레트로핏 인스턴스를 생성합니다.
