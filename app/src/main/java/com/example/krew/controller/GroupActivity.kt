@@ -196,7 +196,8 @@ class GroupActivity : AppCompatActivity() {
                     etGroupInfo.text.toString(),
                     colorCode,
                     email,
-                    userArr
+                    userArr,
+                    null,
                 )
                 calendar.child(cNum.toString()).setValue(cal)
                 addtoSharedPreference(cNum.toString())
