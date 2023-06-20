@@ -9,6 +9,7 @@ import com.example.krew.ApplicationClass
 import com.example.krew.controller.DayInfoActivity
 import com.example.krew.databinding.ListItemDayBinding
 import com.example.krew.model.Calendar
+import com.example.krew.model.DayInfo
 import com.example.krew.model.Schedule
 import com.google.firebase.database.ktx.database
 import com.google.firebase.database.ktx.getValue
@@ -36,29 +37,28 @@ class AdapterDay(val tempMonth:Int, val dayList: MutableList<Date>): RecyclerVie
         CoroutineScope(Dispatchers.Main).launch {
             ApplicationClass.updateCalendarList()
             val today = formatDate(dayList[position])
-            val schedule_list =  ArrayList<Schedule>()
+            val dayInfo_list =  ArrayList<DayInfo>()
             for (cal in ApplicationClass.cur_calendar_list){
                 if(cal.schedule_list != null) {
                     val temp_schedule_list = cal.schedule_list as ArrayList<Schedule>
-                    println(temp_schedule_list)
+//                    println(temp_schedule_list)
                     for (t in temp_schedule_list) {
-                        println("target_date: " + t.date)
+//                        println("target_date: " + t.date)
                         if (t.date == today) {
-                            schedule_list.add(t)
+                            dayInfo_list.add(DayInfo(t.place, t.time, Color.CYAN))
                         }
                     }
                 }
             }
 
-//            println(schedule_list)
 
             holder.dayBinding.itemDayLayout.setOnClickListener {
                 val intent = Intent(holder.dayBinding.root.context, DayInfoActivity::class.java)
                 //날짜 가공
                 val today = formatDate(dayList[position])
                 intent.putExtra("today", today)
+                intent.putExtra("dayInfo_list", dayInfo_list)
                 holder.dayBinding.root.context.startActivity(intent)
-
             }
 
 
@@ -76,6 +76,7 @@ class AdapterDay(val tempMonth:Int, val dayList: MutableList<Date>): RecyclerVie
         //날짜 클릭시 이벤트 처리
 
     }
+
     fun formatDate(date: Date): String {
         val format = SimpleDateFormat("yyyy년 MM월 dd일", Locale.getDefault())
         return format.format(date)

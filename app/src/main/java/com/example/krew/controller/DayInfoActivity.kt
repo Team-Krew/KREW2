@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.krew.adapter.AdapterDayInfo
 import com.example.krew.databinding.DayInfoBinding
 import com.example.krew.model.DayInfo
+import com.example.krew.model.Schedule
 
 class DayInfoActivity : AppCompatActivity(){
     lateinit var binding: DayInfoBinding
@@ -24,11 +25,13 @@ class DayInfoActivity : AppCompatActivity(){
 
     fun initData(){
         val today = intent.getStringExtra("today")
+        val dayInfo_list = intent.getSerializableExtra("dayInfo_list") as ArrayList<DayInfo>
         binding.dayText.setText(today)
 
-        dayInfoData.add(DayInfo("예를 들면 헬스장", "08:00", Color.CYAN))
-        dayInfoData.add(DayInfo("건대입구", "14:00", Color.MAGENTA))
-        dayInfoData.add(DayInfo("용현이집", "02:30", Color.YELLOW))
+        for (day in dayInfo_list){
+            dayInfoData.add(DayInfo(day.location, day.time, day.color))
+        }
+
         binding.backBtn.setOnClickListener {
             finish()
         }
