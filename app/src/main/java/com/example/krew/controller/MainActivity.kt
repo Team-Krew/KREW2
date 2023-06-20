@@ -36,6 +36,9 @@ import com.google.firebase.database.ktx.database
 import com.google.firebase.database.ktx.getValue
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.messaging.FirebaseMessaging
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import org.json.JSONObject
 
 class MainActivity : AppCompatActivity() {
@@ -79,7 +82,9 @@ class MainActivity : AppCompatActivity() {
         Log.d("Firebase communication", "${calendars?.size}")
 
 
-        ApplicationClass.updateCalendarList()
+        CoroutineScope(Dispatchers.Main).launch {
+            ApplicationClass.updateCalendarList()
+        }
 
 //        if (calendars != null) {
 //            for (id in calendars) {

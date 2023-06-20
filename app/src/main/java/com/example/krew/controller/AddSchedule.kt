@@ -6,6 +6,7 @@ import android.app.TimePickerDialog
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.provider.CalendarContract.Calendars
 import android.util.Log
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -39,6 +40,7 @@ class AddSchedule : AppCompatActivity() {
         binding = ActivityAddScheduleBinding.inflate(layoutInflater)
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
+        Log.i("checkONCreate","checkONCreate")
         val apikey = getString(R.string.apiKey)
 
         Log.i("OnCreateStartAddScheduleActivity","OnCreateStartAddScheduleActivity")
@@ -59,7 +61,6 @@ class AddSchedule : AppCompatActivity() {
         binding.LocationName.text = scheduleVar.placename
 
         today = intent.getStringExtra("selected_date")!!
-
         initRecyclerView()
         initLayout()
     }
@@ -262,8 +263,12 @@ class AddSchedule : AppCompatActivity() {
                     LocationName.text = placename.toString()
                     scheduleVar.placename = placename.toString()
                 }
+            addMemberButton.setOnClickListener {
+                val intent = Intent(this@AddSchedule,GroupActivity::class.java)
+                startActivity(intent)
             }
         }
+    }
     fun makeSchedule(){
         val startDate1 = binding.startDateBtn1.text.toString()
         val startDate2 = binding.startDateBtn2.text.toString()
@@ -352,26 +357,51 @@ class AddSchedule : AppCompatActivity() {
         //sharedPreference로 값 가져와서
         super.onResume()
     }
+
     @SuppressLint("NotifyDataSetChanged")
     override fun onStart() {
         super.onStart()
-        layoutManager = LinearLayoutManager(this@AddSchedule,
-            LinearLayoutManager.HORIZONTAL, false)
+        CoroutineScope(Dispatchers.Main).launch {
+            Log.i("OnStart","OnStart")
+            ApplicationClass.updateCalendarList()
+            Log.i("onresume","onresume")
+            val calendars =
+                ApplicationClass.sSharedPreferences.getString("calendars", null)?.split(",")
+            Log.d("Firebase communication", "${calendars?.size}")
+            Log.i("제발나중에 실행","제발나중에 실행")
+            Log.i("checkcur_calendar_list.size",ApplicationClass.cur_calendar_list.size.toString())
+            Log.i("checkitemarrsize",itemarr.size.toString())
+            //GroupActivity에서 일정 추가하고 다시 돌아왔을때 ApplicationClass에 데이터 추가가 안돼서 오류가 나옴.
+            if(itemarr==null) {
+                itemarrAdd()
+            }else if(calendars!!.size!=itemarr.size){
+                itemarr.clear()
+                itemarrAdd()
+            }
+            layoutManager = LinearLayoutManager(this@AddSchedule,
+                LinearLayoutManager.HORIZONTAL, false)
+            ScheduleAdapter.notifyDataSetChanged()
+            Log.i("onstartend","onstartend")
+        }
+    }
+    fun itemarrAdd(){
         val calendar_list = ApplicationClass.cur_calendar_list
         println(calendar_list)
-        for (cal in calendar_list!!){
-            itemarr.add(GroupItem(
-                cal.calendar_id,
-                cal.name,
-                cal.admin.toString(),
-                resources.getColor(cal.label, null),
-                false
-            ))
-            ScheduleAdapter.notifyDataSetChanged()
+        for (cal in calendar_list!!) {
+            itemarr.add(
+                GroupItem(
+                    cal.calendar_id,
+                    cal.name,
+                    cal.admin.toString(),
+                    resources.getColor(cal.label, null),
+                    false
+                )
+            )
         }
     }
     override fun onDestroy() {
         super.onDestroy()
+        Log.i("onDestroy","onDestroy")
     }
 }
 

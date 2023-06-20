@@ -220,6 +220,7 @@ class GroupActivity : AppCompatActivity() {
                 taskMap[curCalendarID!! + "/participant"] = userArr
                 calendar.updateChildren(taskMap)
                 Toast.makeText(this@GroupActivity, "수정되었습니다.", Toast.LENGTH_SHORT).show()
+                Log.i("finishGroupActivity","FinishGroupActivity")
                 finish()
             }
         }
