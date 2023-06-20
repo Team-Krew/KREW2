@@ -20,7 +20,7 @@ class ApplicationClass : Application() {
         lateinit var sSharedPreferences: SharedPreferences
         lateinit var spEditor: SharedPreferences.Editor
 
-        // JWT Token Header 키 값
+      // JWT Token Header 키 값
         val X_ACCESS_TOKEN = "X-ACCESS-TOKEN"
 
         val REQUIRED_PERMISSIONS = arrayOf(
@@ -32,10 +32,9 @@ class ApplicationClass : Application() {
 
         // 현재 유저가 속한 Calendar 리스트
         var cur_calendar_list: ArrayList<Calendar> = ArrayList<Calendar>()
-
-        //유저 이메일
-        var user_id: String? = null
-
+        //유저 아이디
+        var user_id:String?=null
+    }
         //유저 캘린더 리스트 업데이트 함수
         fun updateCalendarList() {
             val database = Firebase.database.getReference("Calendar")
@@ -66,11 +65,13 @@ class ApplicationClass : Application() {
     // 앱이 처음 생성되는 순간, SP를 새로 만들어주고, 레트로핏 인스턴스를 생성합니다.
     override fun onCreate() {
         super.onCreate()
-        Log.e("created application", "wowowo")
         sSharedPreferences = applicationContext.getSharedPreferences("KREW", MODE_PRIVATE)
         spEditor = sSharedPreferences.edit()
 
-        //spEditor.putString("id", null) //wiping calendar data
+        //spEditor.remove("calendars").apply()
         user_id = sSharedPreferences.getString("user_email", null)
+
     }
+
+
 }

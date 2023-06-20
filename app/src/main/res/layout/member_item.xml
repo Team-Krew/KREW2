@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:padding="15dp"
     android:orientation="vertical"
@@ -9,20 +9,12 @@
     android:background="@drawable/bg_radius_10dp_stroke"
     >
 
-    <ImageView
-        android:id="@+id/iv_userImg"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
-        android:src="@drawable/baseline_settings_24"
-        android:background="@drawable/bg_radius_100dp"
-        android:backgroundTint="@color/light_grey"/>
-
     <TextView
         android:id="@+id/tv_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="USERNAME"
-        android:layout_marginTop="10dp"
         android:textColor="@color/dark_grey"
-        android:textSize="16sp"/>
+        android:textSize="16sp"
+        android:singleLine="true"/>
 </LinearLayout>
