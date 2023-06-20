@@ -202,7 +202,7 @@ class GroupActivity : AppCompatActivity() {
 
                 db.child("CNum").setValue(cNum + 1)
                 db.child("CNum").get().addOnSuccessListener {
-                    sendInvitation()
+                    sendInvitation(cal)
                 }
             } else {
                 val taskMap: MutableMap<String, Any> = HashMap()
@@ -255,7 +255,7 @@ class GroupActivity : AppCompatActivity() {
     }
 
 
-    private fun sendInvitation() {
+    private fun sendInvitation(cal:Calendar) {
         Log.e("Firebase Communication", "0 added Successfully")
         val database = FirebaseDatabase.getInstance()
         val ref = database.getReference("User")
@@ -291,8 +291,8 @@ class GroupActivity : AppCompatActivity() {
             "to": "${user.user_token}",
             "priority" : "high",
             "data": {
-                "title": " Invitation.",
-                "body": "from. "
+                "title": "${cal.name}에서 초대 요청이 왔습니다.",
+                "body": "from. ${cal.admin}"
             }
         }
     """.trimIndent()

@@ -438,7 +438,7 @@ class AddSchedule : AppCompatActivity() {
             val calendars =
                 ApplicationClass.sSharedPreferences.getString("calendars", null)?.split(",")
             //GroupActivity에서 일정 추가하고 다시 돌아왔을때 ApplicationClass에 데이터 추가가 안돼서 오류가 나옴.
-            if(itemarr==null) {
+            if(itemarr==null || calendars == null) {
                 itemarrAdd()
             }else if(calendars!!.size!=itemarr.size){
                 itemarr.clear()
