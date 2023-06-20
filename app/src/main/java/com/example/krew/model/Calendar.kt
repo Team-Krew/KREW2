@@ -16,6 +16,6 @@ data class Calendar(
         0,
         null,
         null,
-        ArrayList<Schedule>(),
+        null,
         )
 }

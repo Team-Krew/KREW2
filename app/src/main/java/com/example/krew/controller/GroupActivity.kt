@@ -199,7 +199,7 @@ class GroupActivity : AppCompatActivity() {
                     colorCode,
                     email,
                     userArr,
-                    ArrayList<Schedule>(),
+                    null,
                 )
                 calendar.child(cNum.toString()).setValue(cal)
 

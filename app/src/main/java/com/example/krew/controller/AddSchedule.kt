@@ -295,7 +295,6 @@ class AddSchedule : AppCompatActivity() {
             sNum = it.value.toString().toInt()
             val sch = Schedule(
                 sNum.toString(),
-                calarr,
                 binding.ScheduleName.text.toString(),
                 today,
                 startDate1,
@@ -303,19 +302,18 @@ class AddSchedule : AppCompatActivity() {
             )
             Schedule.child(sNum.toString()).setValue(sch)
             val user_calendar = ApplicationClass.cur_calendar_list
-//            println(user_calendar[0].schedule_list)
-            for (cal in user_calendar){
-                for (uCal in calarr){
+            for (uCal in user_calendar){
+                for (cal in calarr){
                     if (uCal.calendar_id == cal.calendar_id){
-                        if (cal.schedule_list!!.size == 0){
-//                            val temp_list = ArrayList<Schedule>()
-                            cal.schedule_list!!.add(sch)
-//                            println("dsffdsdf" + uCal.schedule_list)
+                        if (uCal.schedule_list == null){
+                            uCal.schedule_list = ArrayList()
+                            uCal.schedule_list!!.add(sch)
+                        }else{
+                            uCal.schedule_list!!.add(sch)
                         }
                     }
                 }
 
-//                println(uCal)
                 mDatabase.child(uCal.calendar_id).setValue(uCal)
             }
 
