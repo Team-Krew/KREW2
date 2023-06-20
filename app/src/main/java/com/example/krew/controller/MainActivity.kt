@@ -70,7 +70,6 @@ class MainActivity : AppCompatActivity() {
                 return@OnCompleteListener
             }
             val deviceToken = task.result
-            Log.d("Firebase Communication", "token=${deviceToken}")
         })
 
         val database = FirebaseDatabase.getInstance()
@@ -124,6 +123,7 @@ class MainActivity : AppCompatActivity() {
             }
             CoroutineScope(Dispatchers.Main).launch {
                 ApplicationClass.updateCalendarList()
+
                 monthListAdapter.notifyDataSetChanged()
             }
             groupRVAdapter.notifyDataSetChanged()
@@ -162,6 +162,12 @@ class MainActivity : AppCompatActivity() {
 
         val tv_name = findViewById<TextView>(R.id.tv_name)
         val tv_email = findViewById<TextView>(R.id.tv_email)
+        val iv_setting = findViewById<ImageButton>(R.id.iv_setting)
+        iv_setting.setOnClickListener {
+            val intent = Intent(this, ProfileActivity::class.java)
+            intent.putExtra("user_token", cur_user.user_token)
+            startActivity(intent)
+        }
         tv_name.text = cur_user.name
         tv_email.text = ApplicationClass.sSharedPreferences.getString("user_email", "").toString()
 
