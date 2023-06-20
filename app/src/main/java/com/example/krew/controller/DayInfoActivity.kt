@@ -25,11 +25,15 @@ class DayInfoActivity : AppCompatActivity(){
 
     fun initData(){
         val today = intent.getStringExtra("today")
-        val dayInfo_list = intent.getSerializableExtra("dayInfo_list") as ArrayList<DayInfo>
+        var dayInfo_list:kotlin.collections.ArrayList<DayInfo>?=null
+        if(intent.getSerializableExtra("dayInfo_list")!=null)
+            dayInfo_list = intent.getSerializableExtra("dayInfo_list") as ArrayList<DayInfo>
+        else
+            return
         binding.dayText.setText(today)
 
         for (day in dayInfo_list){
-            dayInfoData.add(DayInfo(day.location, day.time, day.color))
+            dayInfoData.add(DayInfo(day.title, day.location, day.time, day.color))
         }
 
         binding.backBtn.setOnClickListener {

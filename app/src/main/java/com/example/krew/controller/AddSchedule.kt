@@ -10,6 +10,7 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView.LayoutManager
 import com.example.krew.ApplicationClass
@@ -23,12 +24,18 @@ import com.example.krew.databinding.ActivityAddScheduleBinding
 import com.example.krew.model.Calendar
 import com.example.krew.model.GroupItem
 import com.example.krew.model.Schedule
+import com.example.krew.model.TempUser
 import com.google.android.libraries.places.api.Places
 import com.google.android.play.integrity.internal.f
 import com.google.firebase.database.*
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
+import io.opencensus.metrics.export.Value
 import kotlinx.coroutines.*
+import kotlinx.coroutines.tasks.await
+import java.io.OutputStreamWriter
+import java.net.HttpURLConnection
+import java.net.URL
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -40,6 +47,7 @@ class AddSchedule : AppCompatActivity() {
     var itemarr = ArrayList<GroupItem>()
     var calarr = ArrayList<Calendar>()
     var checked_groupItems = ArrayList<GroupItem>()
+    lateinit var check_msgUser:MutableSet<String>
     lateinit var apikey :String
     private val AUTOCOMPLETE_REQUEST_CODE = 1
 
@@ -54,7 +62,6 @@ class AddSchedule : AppCompatActivity() {
                 formattedAddress = it.data?.getStringExtra("formattedAddress")
                 place = it.data?.getStringExtra("place")
                 selected_date = it.data?.getStringExtra("selected_date")
-
 
                 Log.e("Firebase Communication", "in addschedule $formattedAddress, $place, $selected_date")
 
@@ -72,6 +79,7 @@ class AddSchedule : AppCompatActivity() {
         binding = ActivityAddScheduleBinding.inflate(layoutInflater)
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
+        check_msgUser =kotlin.collections.mutableSetOf()
         Log.i("checkONCreate", "checkONCreate")
         apikey = getString(R.string.apiKey)
         Log.i("OnCreateStartAddScheduleActivity", "OnCreateStartAddScheduleActivity")
@@ -99,8 +107,7 @@ class AddSchedule : AppCompatActivity() {
 
     //데이터 읽어와서 쓰고 수정.
     fun initRecyclerView() {
-        layoutManager =
-            LinearLayoutManager(this@AddSchedule, LinearLayoutManager.HORIZONTAL, false)
+        layoutManager = LinearLayoutManager(this@AddSchedule, LinearLayoutManager.HORIZONTAL, false)
         ScheduleAdapter = ScheduleAdapter(itemarr)
         ScheduleAdapter.itemClickListener = object : ScheduleAdapter.OnItemClickListener {
             override fun OnItemClick(position: Int) {
@@ -144,12 +151,16 @@ class AddSchedule : AppCompatActivity() {
                         endDateBtn1.text.isNotEmpty() && LocationAddr.text.isNotEmpty()
                     ) {
                         //여기다가 schedule add하는 과정 추가
-                        makeSchedule()
-                        var intent = Intent(this@AddSchedule, CheckRegisterActivity::class.java)
-                        startActivity(intent)
-                        clearVar()
-                        clearAllBtn()
-                        finish()
+                        CoroutineScope(Dispatchers.Main).launch {
+                            backupDateBeforeIntent()
+                            val r = makeSchedule()
+                            //여기서 메세지 보내기
+                            setalarm(r)
+                            Log.i("calarr",calarr.toString())
+                            var intent = Intent(this@AddSchedule, CheckRegisterActivity::class.java)
+                            startActivity(intent)
+                            finish()
+                        }
                     } else {
                         var str = "올바른 입력이 아닙니다. "
                         if (ScheduleName.text.isEmpty()) {
@@ -168,13 +179,17 @@ class AddSchedule : AppCompatActivity() {
                     if (ScheduleName.text.isNotEmpty() && startDateBtn1.text.isNotEmpty() && startDateBtn2.text.isNotEmpty() &&
                         endDateBtn1.text.isNotEmpty() && endDateBtn2.text.isNotEmpty() && LocationAddr.text.isNotEmpty()
                     ) {
+                        CoroutineScope(Dispatchers.Main).launch {
+                            backupDateBeforeIntent()
+                            val r = makeSchedule()
+                            //여기서 메세지 보내기
+                            setalarm(r)
+                            Log.i("calarr",calarr.toString())
+                            var intent = Intent(this@AddSchedule, CheckRegisterActivity::class.java)
+                            startActivity(intent)
+                            finish()
+                        }
                         //여기다가 schedule add하는 과정 추가
-                        makeSchedule()
-                        var intent = Intent(this@AddSchedule, CheckRegisterActivity::class.java)
-                        startActivity(intent)
-                        clearVar()
-                        clearAllBtn()
-                        finish()
                     } else {
                         var str = "올바른 입력이 아닙니다. "
                         if (ScheduleName.text.isEmpty()) {
@@ -305,10 +320,7 @@ class AddSchedule : AppCompatActivity() {
                     Intent(this@AddSchedule, ProgrammaticAutocompleteGeocodingActivity::class.java)
                 intent.putExtra("selected_date", today)
                 activityResultLauncher.launch(intent)
-
-                startActivity(intent)
-                finish()
-                }
+            }
             addMemberButton.setOnClickListener {
                 val intent = Intent(this@AddSchedule,GroupActivity::class.java)
                 startActivity(intent)
@@ -316,7 +328,97 @@ class AddSchedule : AppCompatActivity() {
         }
     }
 
-    fun makeSchedule(){
+    fun setalarm(scheduleid: Int) {
+        //유저한테 알람제목, 알람 날짜, 시간
+        val database = FirebaseDatabase.getInstance()
+        val ref = database.getReference("User")
+        ref.addValueEventListener(object:ValueEventListener{
+            override fun onDataChange(datasnapshot: DataSnapshot) {
+                for (cal in calarr) {
+                    Log.i("checkcal",cal.toString())
+                    if (cal.schedule_list != null) {
+                        for (sch in cal.schedule_list!!) {
+                            Log.i("checksch",sch.toString())
+                            if(sch.schedule_id.toInt()==scheduleid){
+                                if (cal.Participant != null) {
+                                    for (par in cal.Participant!!) {
+                                        Log.i("checkpar",par.toString())
+                                        check_msgUser.add(par)
+                                    }
+                                }
+                                Log.i("checkadmin",cal.admin.toString())
+                                check_msgUser.add(cal.admin.toString())
+                            }
+                        }
+                    }
+                }
+                Log.i("checkmsgUser",check_msgUser.toString())
+                for (userSnapshot in datasnapshot.children) {
+                    val user = userSnapshot.getValue(TempUser::class.java)
+                    Log.i("checkuser",user.toString())
+                    for(user2 in check_msgUser){
+                        if (user!!.user_email.compareTo(user2)==0 ) {
+                            CoroutineScope(Dispatchers.IO).launch {
+                                // 메시지 생성
+                                Log.i("checkBindingsschedulename",binding.ScheduleName.text.toString())
+                                Log.i("checkBindingstartdatebtn1",binding.startDateBtn1.text.toString())
+                                Log.i("checkBindingstartdatebtn2",binding.startDateBtn2.text.toString())
+                                val message = """
+        {
+            "to": "${user.user_token}",
+            "priority" : "high",
+            "data": {
+                "title": "${binding.ScheduleName.text.toString()}",
+                "body": "${binding.startDateBtn1.text},${binding.startDateBtn2.text.toString()}"
+            }
+        }
+    """.trimIndent()
+                                Log.i("messagecheck",message)
+                                // 메시지 전송
+                                val fcmUrl = URL("https://fcm.googleapis.com/fcm/send")
+                                val connection = fcmUrl.openConnection() as HttpURLConnection
+                                connection.requestMethod = "POST"
+                                connection.doOutput = true
+                                connection.doInput = true
+                                connection.setRequestProperty(
+                                    "Authorization",
+                                    "key=AAAAdfM93ZU:APA91bEVZZFgM7tNf9iZA0Io635iKosh7t1igKfDmdBmThrPJTL_eC1VjGKGeF8TwfjCYj2URqglZKHhnof4f5ThSR9rYSrls0FsYcQFSkAdPmKmg_llUiM3iopOxLttOcU_TdQoNCie"
+                                )
+                                connection.setRequestProperty("Content-Type", "application/json")
+                                withContext(Dispatchers.IO) {
+                                    val outputStreamWriter =
+                                        OutputStreamWriter(connection.outputStream)
+                                    outputStreamWriter.write(message)
+                                    outputStreamWriter.flush()
+                                    outputStreamWriter.close()
+                                }
+
+                                // 응답 처리
+                                val responseCode = connection.responseCode
+                                if (responseCode == HttpURLConnection.HTTP_OK) {
+                                    Log.e("json_result", "Message sent successfully")
+                                } else {
+                                    Log.e("json_result", "Message not sent")
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            override fun onCancelled(error: DatabaseError) {
+                TODO("Not yet implemented")
+            }
+        })
+    }
+    fun checkMSG(msguser:String):Boolean{
+        for(i in check_msgUser){
+            if(i.compareTo(msguser)==0){
+                return false
+            }
+        }
+        return true
+    }
+    suspend fun makeSchedule():Int{
         val startDate1 = binding.startDateBtn1.text.toString()
         val startDate2 = binding.startDateBtn2.text.toString()
         val Schedule = Firebase.database.getReference("Schedule")
@@ -343,8 +445,8 @@ class AddSchedule : AppCompatActivity() {
             val sch = Schedule(
                 sNum.toString(),
                 binding.ScheduleName.text.toString(),
-                today,
                 startDate1,
+                startDate2,
                 binding.LocationAddr.text.toString()
             )
             Schedule.child(sNum.toString()).setValue(sch)
@@ -367,8 +469,8 @@ class AddSchedule : AppCompatActivity() {
             db.child("SNum").setValue(sNum + 1)
             Toast.makeText(this@AddSchedule, "등록되었습니다.", Toast.LENGTH_SHORT).show()
             finish()
-        }
-
+        }.await()
+        return sNum
     }
 
     fun backupDateBeforeIntent() {

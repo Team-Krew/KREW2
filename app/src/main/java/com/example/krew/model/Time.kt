@@ -1,13 +1,19 @@
 package com.example.krew.model
 
 data class Time(
-    var schedule: Schedule?,
-    var user: User?,
+    val schedule: String,
+    val schedulename: String,
+    val admin: String,
+    var target: String,
+    var date: String,
     var time: String,
 ): java.io.Serializable{
     constructor():this(
-        null,
-        null,
         "no_info",
+        "no_info",
+        "no_info",
+        "no_info",
+        "no_info",
+        "no_info"
     )
 }

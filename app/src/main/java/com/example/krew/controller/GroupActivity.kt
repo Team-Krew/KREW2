@@ -282,7 +282,7 @@ class GroupActivity : AppCompatActivity() {
                     Log.e(tagNotification, userArr.size.toString())
                     for (email in userArr) {
                         val user = userSnapshot.getValue(TempUser::class.java)
-                        if (email == user!!.user_email) {
+                        if (email == user!!.user_email) { //이메일 비교해서 맞으면 넣기
                             val dataref = database.reference.child("Invitation")
                             val newDataref = dataref.push()
                             newDataref.setValue(
