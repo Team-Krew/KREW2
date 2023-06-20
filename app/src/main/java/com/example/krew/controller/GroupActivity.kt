@@ -1,7 +1,6 @@
 package com.example.krew.controller
 
 import android.annotation.SuppressLint
-import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
@@ -13,9 +12,7 @@ import com.example.krew.adapter.MemberRVAdapter
 import com.example.krew.databinding.ActivityGroupBinding
 import com.example.krew.model.Calendar
 import com.example.krew.model.Invitation
-import com.example.krew.model.Schedule
 import com.example.krew.model.TempUser
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
@@ -215,7 +212,7 @@ class GroupActivity : AppCompatActivity() {
                 taskMap[curCalendarID!! + "/participant"] = userArr
                 calendar.updateChildren(taskMap)
                 Toast.makeText(this@GroupActivity, "수정되었습니다.", Toast.LENGTH_SHORT).show()
-                Log.i("finishGroupActivity","FinishGroupActivity")
+                Log.i("finishGroupActivity", "FinishGroupActivity")
                 finish()
             }
         }
@@ -260,19 +257,6 @@ class GroupActivity : AppCompatActivity() {
 
     private fun sendInvitation() {
         Log.e("Firebase Communication", "0 added Successfully")
-        val fcmUrl = URL("https://fcm.googleapis.com/fcm/send")
-        val connection = fcmUrl.openConnection() as HttpURLConnection
-
-        connection.requestMethod = "POST"
-        connection.doOutput = true
-        connection.doInput = true
-
-        // FCM 서버 키 설정
-        connection.setRequestProperty(
-            "Authorization",
-            "key=AAAAdfM93ZU:APA91bEVZZFgM7tNf9iZA0Io635iKosh7t1igKfDmdBmThrPJTL_eC1VjGKGeF8TwfjCYj2URqglZKHhnof4f5ThSR9rYSrls0FsYcQFSkAdPmKmg_llUiM3iopOxLttOcU_TdQoNCie"
-        )
-        connection.setRequestProperty("Content-Type", "application/json")
         val database = FirebaseDatabase.getInstance()
         val ref = database.getReference("User")
 
@@ -307,16 +291,28 @@ class GroupActivity : AppCompatActivity() {
             "to": "${user.user_token}",
             "priority" : "high",
             "data": {
-                "title": "Title",
-                "body": "Body"
+                "title": " Invitation.",
+                "body": "from. "
             }
         }
     """.trimIndent()
+                                val fcmUrl = URL("https://fcm.googleapis.com/fcm/send")
+                                val connection = fcmUrl.openConnection() as HttpURLConnection
+
+                                connection.requestMethod = "POST"
+                                connection.doOutput = true
+                                connection.doInput = true
+
+                                // FCM 서버 키 설정
+                                connection.setRequestProperty(
+                                    "Authorization",
+                                    "key=AAAAdfM93ZU:APA91bEVZZFgM7tNf9iZA0Io635iKosh7t1igKfDmdBmThrPJTL_eC1VjGKGeF8TwfjCYj2URqglZKHhnof4f5ThSR9rYSrls0FsYcQFSkAdPmKmg_llUiM3iopOxLttOcU_TdQoNCie"
+                                )
+                                connection.setRequestProperty("Content-Type", "application/json")
 
                                 // 메시지 전송
                                 withContext(Dispatchers.IO) {
-                                    val outputStreamWriter =
-                                        OutputStreamWriter(connection.outputStream)
+                                    val outputStreamWriter = OutputStreamWriter(connection.outputStream)
                                     outputStreamWriter.write(message)
                                     outputStreamWriter.flush()
                                     outputStreamWriter.close()

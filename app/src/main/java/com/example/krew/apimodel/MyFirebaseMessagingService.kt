@@ -41,7 +41,7 @@ class MyFirebaseMessagingService:FirebaseMessagingService() {
         if(remoteMessage.data.isNotEmpty()){
             Log.e(TAG, "remote data: ${remoteMessage.data["title"]}")
             Log.e(TAG, "remote data: ${remoteMessage.data["body"]}")
-            if(remoteMessage.data["title"] == "초대합니다."){
+            if(remoteMessage.data["body"]!!.split(".")[0] == "from"){
                 sendNotification(remoteMessage)
             } else{
                 send1Notification(remoteMessage)

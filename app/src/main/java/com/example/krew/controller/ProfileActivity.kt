@@ -85,6 +85,7 @@ class ProfileActivity : AppCompatActivity() {
             val intent = Intent(this, MainActivity::class.java)
             intent.putExtra("cur_user", cur_user2)
             startActivity(intent)
+            finish()
         }
 
         binding.profileEditStartLoc.setOnClickListener {

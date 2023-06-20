@@ -2,6 +2,7 @@ package com.example.krew.adapter
 
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.content.Context
 import android.content.res.ColorStateList
 import android.content.res.Resources
 import android.content.res.loader.ResourcesProvider
@@ -62,7 +63,7 @@ class GroupRVAdapter(
             tvGroupHead.text = listposition.admin
 
             Log.d("ColorCode", "color = ${listposition.label}, ${R.color.color_gr4}")
-            tagColor.backgroundTintList = ColorStateList.valueOf(listposition.label)
+            tagColor.backgroundTintList = context.resources.getColorStateList(listposition.label)
 
         }
     }

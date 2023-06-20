@@ -80,6 +80,7 @@ class LoginActivity : AppCompatActivity() {
                                                             ApplicationClass.spEditor.putString("user_uid", cur_user2.user_id).apply()
                                                             intent.putExtra("user_token", deviceToken)
                                                             startActivity(intent)
+                                                            finish()
                                                         })
                                                 }else{  //기 로그인인 경우
                                                     cur_user = firebaseAuth.currentUser!!
@@ -89,6 +90,7 @@ class LoginActivity : AppCompatActivity() {
                                                         ApplicationClass.cur_user = cur_user2
                                                         intent.putExtra("cur_user", cur_user2)
                                                         startActivity(intent)
+                                                        finish()
                                                     }
 
                                                 }

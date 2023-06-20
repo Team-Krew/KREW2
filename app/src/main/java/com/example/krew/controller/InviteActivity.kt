@@ -45,7 +45,7 @@ class InviteActivity : AppCompatActivity() {
             val database = FirebaseDatabase.getInstance()
             val ref = database.getReference("Invitation/$key")
             btnAccept.setOnClickListener {
-                Log.e(TAG, "calendar_key: ${key}, calendar_id: ${invitation.calendar_id}")
+                Log.e(TAG, "Granted: calendar_key: ${key}, calendar_id: ${invitation.calendar_id}")
 
                 ref.removeValue()
                     .addOnSuccessListener {
@@ -75,23 +75,25 @@ class InviteActivity : AppCompatActivity() {
                         }
                     }
 
-                    Log.e(TAG, "id ${cal.calendar_id} reject invitation arr => ${arr.toString()}")
+                    Log.e(TAG, "Denied: id ${cal.calendar_id} reject invitation arr => ${arr.toString()}")
                     val updates = HashMap<String, Any>()
                     updates["participant"] = arr as List<Any>
                     mDatabase.updateChildren(updates)
+
+                    ref.removeValue()
+                        .addOnSuccessListener {
+                            Log.e(TAG, "Data Deleted: Rejected request")
+                            finish()
+                        }
+                        .addOnFailureListener { exception ->
+                            Log.e(TAG, "Data Deleting Fail: Rejected Request -> $exception")
+                        }
 
                 }.addOnFailureListener {
                     Log.e("Firebase communication", "Communication Failure")
                 }
 
-                ref.removeValue()
-                    .addOnSuccessListener {
-                        Log.e(TAG, "Data Deleted")
-                        finish()
-                    }
-                    .addOnFailureListener { exception ->
-                        Log.e(TAG, "Data Deleted -> $exception")
-                    }
+
             }
         }
     }
