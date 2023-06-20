@@ -5,6 +5,9 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
+import com.example.krew.ApplicationClass
+import com.example.krew.ApplicationClass.Companion.cur_user
 import com.example.krew.R
 import com.example.krew.model.Calendar
 import com.example.krew.model.Schedule
@@ -15,6 +18,7 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.ktx.getValue
 
 class SplashActivity : AppCompatActivity() {
     val database = FirebaseDatabase.getInstance().getReference()
@@ -28,9 +32,22 @@ class SplashActivity : AppCompatActivity() {
 //            2131034164, "whereami2048@gmail.com", par_list, null))
 
         Handler(Looper.getMainLooper()).postDelayed({
-            val intent = Intent(this, LoginActivity::class.java)
-            startActivity(intent)
-            finish()
+            if(ApplicationClass.sSharedPreferences.getString("user_uid", "") != ""){
+                val cur_uid = ApplicationClass.sSharedPreferences.getString("user_uid", "")!!
+                database.child("User").child(cur_uid).get().addOnSuccessListener {
+                    val intent = Intent(this, MainActivity::class.java)
+                    val cur_user2 = it.getValue<User>() as User
+                    cur_user = cur_user2
+                    intent.putExtra("cur_user", cur_user2)
+                    startActivity(intent)
+                    finish()
+                }
+
+            }else {
+                val intent = Intent(this, LoginActivity::class.java)
+                startActivity(intent)
+                finish()
+            }
         }, 1500)
     }
 

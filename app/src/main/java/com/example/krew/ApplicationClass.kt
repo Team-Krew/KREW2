@@ -8,6 +8,7 @@ import android.util.Log
 import androidx.annotation.RequiresApi
 import com.example.krew.model.Calendar
 import com.example.krew.model.GroupItem
+import com.example.krew.model.Schedule
 import com.example.krew.model.User
 import com.google.firebase.database.ktx.database
 import com.google.firebase.database.ktx.getValue
@@ -58,11 +59,19 @@ class ApplicationClass : Application() {
                             continue
                         }
                     }
-                }
+               }
             }
+//            val database2 = Firebase.database.getReference("Schedule")
+//            database2.get().addOnSuccessListener {
+//                val iter = it.children.iterator()
+//                while (iter.hasNext()){
+//                    val temp = iter.next()
+//                    val schedule = temp.getValue<Schedule>() as Schedule
+//                    val calendar = schedule.calendar_list as ArrayList<Calendar>
+//                }
+//            }
         }
     }
-
         // 앱이 처음 생성되는 순간, SP를 새로 만들어주고, 레트로핏 인스턴스를 생성합니다.
         override fun onCreate() {
             super.onCreate()
@@ -72,5 +81,4 @@ class ApplicationClass : Application() {
             //spEditor.remove("calendars").apply()
             user_id = sSharedPreferences.getString("user_email", null)
         }
-
 }
