@@ -9,11 +9,13 @@ import android.util.Log
 import android.view.Gravity
 import android.widget.ImageButton
 import android.widget.TextView
+import androidx.core.content.ContextCompat.startActivity
 import androidx.core.view.GravityCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.example.krew.ApplicationClass
+import com.example.krew.ApplicationClass.Companion.cur_user
 import com.example.krew.R
 import com.example.krew.adapter.AdapterDay
 import com.example.krew.adapter.AdapterDayInfo
@@ -50,16 +52,9 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         dayInfoBinding = DayInfoBinding.inflate(layoutInflater)
-
-        println("cur_user " + ApplicationClass.cur_user)
         setContentView(binding.root)
-        val bundle = intent.extras!!
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            cur_user = bundle.getSerializable("cur_user", User::class.java) as User
-        }else{
-            @Suppress("DEPRECATION")
-            cur_user = bundle.getSerializable("cur_user") as User
-        }
+
+        cur_user = ApplicationClass.cur_user
         initCalendar()
         initDrawer()
 

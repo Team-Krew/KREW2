@@ -99,6 +99,7 @@ class AddSchedule : AppCompatActivity() {
                 clearAllBtn()
                 val intent = Intent(this@AddSchedule, MainActivity::class.java)
                 startActivity(intent)
+                finish()
             }
             checkBtn.setOnClickListener{
                 //해당 부분에 main calendar View로 돌아가는 intent문 작성

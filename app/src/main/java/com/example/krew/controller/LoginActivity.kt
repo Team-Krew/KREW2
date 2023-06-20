@@ -80,7 +80,6 @@ class LoginActivity : AppCompatActivity() {
                                                         })
                                                 }else{
                                                     cur_user = firebaseAuth.currentUser!!
-                                                    val intent = Intent(this@LoginActivity, MainActivity::class.java)
                                                     database.child("User").child(cur_user.uid).get().addOnSuccessListener {
                                                         val intent = Intent(this, MainActivity::class.java)
                                                         cur_user2 = it.getValue<User>() as User
