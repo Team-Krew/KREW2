@@ -1,6 +1,7 @@
 package com.example.krew.controller
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
@@ -8,21 +9,23 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.krew.ApplicationClass
 import com.example.krew.R
-import com.example.krew.adapter.GroupFBAdapter
 import com.example.krew.adapter.MemberRVAdapter
 import com.example.krew.databinding.ActivityGroupBinding
 import com.example.krew.model.Calendar
-import com.google.android.datatransport.runtime.util.PriorityMapping.toInt
+import com.example.krew.model.Invitation
+import com.example.krew.model.TempUser
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.database.ktx.getValue
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.*
-import kotlinx.coroutines.tasks.await
-import org.json.JSONObject
-import kotlin.collections.ArrayList
-import kotlin.collections.HashMap
-import kotlin.collections.MutableMap
-import kotlin.collections.arrayListOf
+import java.io.OutputStreamWriter
+import java.net.HttpURLConnection
+import java.net.URL
 import kotlin.collections.set
 
 /*
@@ -41,6 +44,7 @@ class GroupActivity : AppCompatActivity() {
     lateinit var binding: ActivityGroupBinding
     lateinit var memberRVAdapter: MemberRVAdapter
     val userArr = ArrayList<String>()
+    var cNum = 0
 
     var curCalendarID: String? = null
     var colorCode: Int = 0
@@ -78,7 +82,7 @@ class GroupActivity : AppCompatActivity() {
         memberRVAdapter = MemberRVAdapter(userArr)
         binding.rvGroup.adapter = memberRVAdapter
         binding.rvGroup.layoutManager =
-            LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+            LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
 
         memberRVAdapter.itemClickListener = object : MemberRVAdapter.OnItemClickListener {
             override fun OnItemClick(position: Int) {
@@ -111,7 +115,7 @@ class GroupActivity : AppCompatActivity() {
                 }
             }
 
-            binding.ivBack.setOnClickListener{
+            binding.ivBack.setOnClickListener {
                 finish()
             }
 
@@ -162,14 +166,19 @@ class GroupActivity : AppCompatActivity() {
             dlg.setOnClickedListener(object : GroupDialog.ButtonClickListener {
                 @SuppressLint("NotifyDataSetChanged")
                 override fun onClicked(email: String) {
-                    Log.e("IMECallback", email)
                     userArr.add(email)
-                    Log.d("IMECallback", userArr.toString())
                     binding.rvGroup.adapter?.notifyDataSetChanged()
                 }
             })
             btnAddUser.setOnClickListener {
                 dlg.show()
+            }
+
+            val db = Firebase.database.reference
+
+            db.child("CNum").get().addOnSuccessListener {
+                Log.e("Firebase communication", "getting cnum val :${it.value.toString()}")
+                cNum = it.value.toString().toInt()
             }
         }
     }
@@ -179,34 +188,26 @@ class GroupActivity : AppCompatActivity() {
             val calendar = Firebase.database.getReference("Calendar")
             if (curCalendarID == null) {
                 val db = Firebase.database.reference
-                var cNum = 0
 
+                val email = ApplicationClass.sSharedPreferences.getString("user_email", null)
+                val cal = Calendar(
+                    cNum.toString(),
+                    etGroupName.text.toString(),
+                    etGroupInfo.text.toString(),
+                    colorCode,
+                    email,
+                    userArr
+                )
+                calendar.child(cNum.toString()).setValue(cal)
+                addtoSharedPreference(cNum.toString())
+
+                Log.e(
+                    "Firebase communication", "checking sSharedPreference :" +
+                            "${ApplicationClass.sSharedPreferences.getString("calendars", "")}"
+                )
+                db.child("CNum").setValue(cNum + 1)
                 db.child("CNum").get().addOnSuccessListener {
-                    Log.e("Firebase communication", "getting cnum val :${it.value.toString()}")
-                    cNum = it.value.toString().toInt()
-
-                    val email = ApplicationClass.sSharedPreferences.getString("user_email", null)
-                    val cal = Calendar(
-                        cNum.toString(),
-                        etGroupName.text.toString(),
-                        etGroupInfo.text.toString(),
-                        colorCode,
-                        email,
-                        userArr
-                    )
-                    calendar.child(cNum.toString()).setValue(cal)
-                    addtoSharedPreference(cNum.toString())
-
-                    Log.e("Firebase communication", "checking sSharedPreference :" +
-                            "${ApplicationClass.sSharedPreferences.getString("calendars", "")}")
-                    db.child("CNum").setValue(cNum + 1)
-                    db.child("CNum").get().addOnSuccessListener {
-                        Log.e(
-                            "Firebase communication",
-                            "getting cnum val again and again:${it.value.toString()}"
-                        )
-                    }
-
+                    sendInvitation()
                     Toast.makeText(this@GroupActivity, "등록되었습니다.", Toast.LENGTH_SHORT).show()
                     finish()
                 }
@@ -229,7 +230,7 @@ class GroupActivity : AppCompatActivity() {
         val mDatabase = Firebase.database.getReference("Calendar")
         mDatabase.child(curCalendarID!!).get().addOnSuccessListener {
             Log.e("Firebase communication", "value: ${it.value.toString()}")
-            val cal : Calendar
+            val cal: Calendar
             cal = it.getValue<Calendar>() as Calendar
             binding.apply {
                 etGroupName.setText(cal.name)
@@ -244,7 +245,7 @@ class GroupActivity : AppCompatActivity() {
                 if (i < 5) rg1.check(rbArr[i])
                 else rg2.check(rbArr[i]);
             }
-            if(it.value.toString().contains("participant")){
+            if (it.value.toString().contains("participant")) {
 
                 val arr = cal.Participant.toString().removeSurrounding("[", "]").split(",")
                 userArr.apply {
@@ -270,6 +271,84 @@ class GroupActivity : AppCompatActivity() {
     }
 
     private fun sendInvitation() {
+        Log.e("Firebase Communication", "0 added Successfully")
+        val fcmUrl = URL("https://fcm.googleapis.com/fcm/send")
+        val connection = fcmUrl.openConnection() as HttpURLConnection
 
+        connection.requestMethod = "POST"
+        connection.doOutput = true
+        connection.doInput = true
+
+        // FCM 서버 키 설정
+        connection.setRequestProperty(
+            "Authorization",
+            "key=AAAAdfM93ZU:APA91bEVZZFgM7tNf9iZA0Io635iKosh7t1igKfDmdBmThrPJTL_eC1VjGKGeF8TwfjCYj2URqglZKHhnof4f5ThSR9rYSrls0FsYcQFSkAdPmKmg_llUiM3iopOxLttOcU_TdQoNCie"
+        )
+        connection.setRequestProperty("Content-Type", "application/json")
+        val database = FirebaseDatabase.getInstance()
+        val ref = database.getReference("User")
+
+        ref.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                for (userSnapshot in dataSnapshot.children) {
+                    for (email in userArr) {
+                        val user = userSnapshot.getValue(TempUser::class.java)
+                        if (email == user!!.user_email) {
+                            val dataref = database.reference.child("Invitation")
+                            val newDataref = dataref.push()
+                            newDataref.setValue(
+                                Invitation(
+                                    cNum.toString(),
+                                    binding.etGroupName.text.toString(),
+                                    ApplicationClass.user_id.toString(),
+                                    email
+                                )
+                            ).addOnSuccessListener {
+                                Log.e("Firebase Communication", "added Successfully")
+                            }
+                                .addOnCanceledListener {
+                                    Log.e("Firebase Communication", "add Failed")
+                                }
+
+
+                            CoroutineScope(Dispatchers.IO).launch {
+                                // 메시지 생성
+                                val message = """
+        {
+            "to": "${user.user_token}",
+            "priority" : "high",
+            "data": {
+                "title": "Title",
+                "body": "Body"
+            }
+        }
+    """.trimIndent()
+
+                                // 메시지 전송
+                                withContext(Dispatchers.IO) {
+                                    val outputStreamWriter =
+                                        OutputStreamWriter(connection.outputStream)
+                                    outputStreamWriter.write(message)
+                                    outputStreamWriter.flush()
+                                    outputStreamWriter.close()
+                                }
+
+                                // 응답 처리
+                                val responseCode = connection.responseCode
+                                if (responseCode == HttpURLConnection.HTTP_OK) {
+                                    Log.e("json_result", "Message sent successfully")
+                                } else {
+                                    Log.e("json_result", "Message not sent")
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                Log.e("Firebase Communication", error.toString())
+            }
+        })
     }
 }

@@ -16,6 +16,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.KREW">
         <activity
+            android:name=".controller.InviteActivity"
+            android:exported="false" />
+        <activity
             android:name=".controller.CheckRegisterActivity"
             android:exported="true" />
         <activity
