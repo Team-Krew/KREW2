@@ -1,17 +1,19 @@
 package com.example.krew.controller
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
-import androidx.core.content.ContextCompat.startActivity
+import androidx.activity.result.contract.ActivityResultContracts
 import com.example.krew.ApplicationClass
+import com.example.krew.ApplicationClass.Companion.cur_user
 import com.example.krew.R
-import com.example.krew.databinding.ActivityMainBinding
 import com.example.krew.databinding.ActivityProfileBinding
 import com.example.krew.model.User
+import com.google.android.libraries.places.api.Places
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.FirebaseDatabase
@@ -26,10 +28,29 @@ class ProfileActivity : AppCompatActivity() {
     lateinit var user_token: String
     val database = FirebaseDatabase.getInstance().getReference()
 
+    val activityResultLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()){
+            if(it.resultCode == Activity.RESULT_OK){
+                val location = it.data?.getStringExtra("formattedAddress")
+                if(!location.isNullOrBlank())
+                    binding.profileEditStartLoc.setText(location)
+            }
+        }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityProfileBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        val apikey = getString(R.string.apiKey)
+        if (!Places.isInitialized()) {
+            Places.initialize(applicationContext, apikey)
+        }
+        binding.apply {
+            profileEditName.setText(profileVar.name.toString())
+            profileEditSelfIntro.setText(profileVar.intro.toString())
+            profileEditStartLoc.setText(profileVar.address.toString())
+            profileEditReadyTime.setText(profileVar.time.toString())
+        }
         initLayout()
     }
 
@@ -65,5 +86,32 @@ class ProfileActivity : AppCompatActivity() {
             intent.putExtra("cur_user", cur_user2)
             startActivity(intent)
         }
+
+        binding.profileEditStartLoc.setOnClickListener {
+            backupDataBeforeIntent()
+            val intent =
+                Intent(this@ProfileActivity, ProgrammaticAutocompleteGeocodingActivity::class.java)
+            //intent.putExtra("selected_date", today)
+            activityResultLauncher.launch(intent)
+        }
+        if (intent.hasExtra("formattedAddress")) {
+            val formattedAddr = intent.getStringExtra("formattedAddress")
+            binding.profileEditStartLoc.setText(formattedAddr.toString())
+        }
+
+    }
+
+    fun backupDataBeforeIntent(){
+        binding.apply {
+            profileVar.name = binding.profileEditName.textAlignment.toString()
+            profileVar.intro = binding.profileEditSelfIntro.textAlignment.toString()
+            profileVar.time = binding.profileEditReadyTime.textAlignment.toString()
+        }
+    }
+
+    fun clearVar() {
+        profileVar.name = ""
+        profileVar.intro = ""
+        profileVar.time = ""
     }
 }

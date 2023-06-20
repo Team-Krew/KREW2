@@ -10,6 +10,7 @@ import android.util.Log
 import androidx.core.app.NotificationCompat
 import com.example.krew.ApplicationClass
 import com.example.krew.R
+import com.example.krew.controller.LoginActivity
 import com.example.krew.controller.MainActivity
 import com.google.firebase.messaging.FirebaseMessaging
 import com.google.firebase.messaging.FirebaseMessagingService
@@ -40,7 +41,11 @@ class MyFirebaseMessagingService:FirebaseMessagingService() {
         if(remoteMessage.data.isNotEmpty()){
             Log.e(TAG, "remote data: ${remoteMessage.data["title"]}")
             Log.e(TAG, "remote data: ${remoteMessage.data["body"]}")
-            sendNotification(remoteMessage)
+            if(remoteMessage.data["title"] == "초대합니다."){
+                sendNotification(remoteMessage)
+            } else{
+                send1Notification(remoteMessage)
+            }
         }
     }
 
@@ -63,7 +68,7 @@ class MyFirebaseMessagingService:FirebaseMessagingService() {
 
         // 알림에 대한 UI 정보, 작업
         val notificationBuilder = NotificationCompat.Builder(this, channelId)
-            .setSmallIcon(R.mipmap.ic_launcher)                     // 아이콘 설정
+            .setSmallIcon(R.drawable.baseline_location_on_24)                     // 아이콘 설정
             .setContentTitle(remoteMessage.data["title"].toString())// 제목
             .setContentText(remoteMessage.data["body"].toString())  // 메시지 내용
             .setAutoCancel(true)                                    // 알람클릭시 삭제여부
@@ -91,19 +96,27 @@ class MyFirebaseMessagingService:FirebaseMessagingService() {
             .setAutoCancel(true)
 
         /*notification 클릭 관련 처리*/
-        val intent = Intent(this, MainActivity::class.java)
-        intent.putExtra("invitation", "check")
-        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP //앱을 top으로 올림
-
-        val pendingIntent = PendingIntent.getActivity(this, 100,
-            intent, PendingIntent.FLAG_IMMUTABLE)
+//        val intent = Intent(this, LoginActivity::class.java)
+//        intent.putExtra("invitation", "check")
+//        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP //앱을 top으로 올림
+        val intent = packageManager.getLaunchIntentForPackage(applicationContext.packageName)
+        intent?.putExtra("invitation", "check")
+        intent?.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+        val pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_IMMUTABLE)
         builder.setContentIntent(pendingIntent)
+
+//        val pendingIntent = PendingIntent.getActivity(this, 100,
+//            intent, PendingIntent.FLAG_IMMUTABLE)
+//        builder.setContentIntent(pendingIntent)
 
         val notification = builder.build()
 
         val manager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         manager.createNotificationChannel(notificationChannel)
         manager.notify(10, notification)
+
+
+
     }
 
 }
