@@ -78,8 +78,6 @@ class MyFirebaseMessagingService:FirebaseMessagingService() {
         notificationManager.notify(uniId, notificationBuilder.build())
     }
 
-
-
     private fun sendNotification(remoteMessage: RemoteMessage) {
         Log.e(TAG, "Notification Called")
         val id = "MyChannel"

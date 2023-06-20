@@ -7,7 +7,6 @@ import android.app.TimePickerDialog
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.provider.CalendarContract.Calendars
 import android.util.Log
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
@@ -25,6 +24,7 @@ import com.example.krew.model.Calendar
 import com.example.krew.model.GroupItem
 import com.example.krew.model.Schedule
 import com.google.android.libraries.places.api.Places
+import com.google.android.play.integrity.internal.f
 import com.google.firebase.database.*
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
@@ -33,12 +33,19 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 class AddSchedule : AppCompatActivity() {
+    lateinit var binding:ActivityAddScheduleBinding
+    lateinit var layoutManager:LayoutManager
+    lateinit var ScheduleAdapter:ScheduleAdapter
+    lateinit var today: String
     lateinit var binding: ActivityAddScheduleBinding
     lateinit var layoutManager: LayoutManager
     lateinit var ScheduleAdapter: ScheduleAdapter
     var itemarr = ArrayList<GroupItem>()
     var calarr = ArrayList<Calendar>()
     var checked_groupItems = ArrayList<GroupItem>()
+    lateinit var apikey :String
+    private val AUTOCOMPLETE_REQUEST_CODE = 1
+
 
     var formattedAddress:String ?= ""
     var place:String ?= ""
@@ -71,6 +78,11 @@ class AddSchedule : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
         Log.i("checkONCreate","checkONCreate")
+        apikey = getString(R.string.apiKey)
+        Log.i("OnCreateStartAddScheduleActivity","OnCreateStartAddScheduleActivity")
+        if(apikey.isEmpty()){
+            Toast.makeText(this,"API is not exist",Toast.LENGTH_SHORT).show()
+            return
         val apikey = getString(R.string.apiKey)
         if (!Places.isInitialized()) {
             Places.initialize(applicationContext, apikey)
@@ -162,6 +174,7 @@ class AddSchedule : AppCompatActivity() {
                     ) {
                         //여기다가 schedule add하는 과정 추가
                         makeSchedule()
+                        makeALARM()
                         var intent = Intent(this@AddSchedule, CheckRegisterActivity::class.java)
                         startActivity(intent)
                         clearVar()
@@ -360,6 +373,7 @@ class AddSchedule : AppCompatActivity() {
             Toast.makeText(this@AddSchedule, "등록되었습니다.", Toast.LENGTH_SHORT).show()
             finish()
         }
+
     }
 
     fun backupDateBeforeIntent() {

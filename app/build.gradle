@@ -56,7 +56,12 @@ dependencies {
 
     //places api implementation
     implementation 'com.google.android.libraries.places:places:3.1.0'
+    implementation 'com.google.maps.android:android-maps-utils:3.4.0'
+
+    //FCM
     implementation 'com.google.firebase:firebase-messaging-ktx:23.0.3'
+    implementation 'com.google.maps:google-maps-services:2.2.0'
+    implementation 'com.squareup.okhttp3:okhttp:5.0.0-alpha.11'
 
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
