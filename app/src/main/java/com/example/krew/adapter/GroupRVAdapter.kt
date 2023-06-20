@@ -14,7 +14,7 @@ import com.example.krew.model.Calendar
 import com.example.krew.model.GroupItem
 
 class GroupRVAdapter(
-    private val dataList: ArrayList<GroupItem>,
+    private val dataList: ArrayList<Calendar>,
 ) : RecyclerView.Adapter<GroupRVAdapter.ItemViewHolder>(){
 
     interface OnItemClickListener{
@@ -44,10 +44,10 @@ class GroupRVAdapter(
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
         val listposition = dataList[position]
         holder.binding.apply {
-            tvGroupName.text = listposition.group_name
-            tvGroupHead.text = listposition.group_head
+            tvGroupName.text = listposition.name
+            tvGroupHead.text = listposition.admin
             //tagColor.setBackgroundColor(listposition.group_label)
-            tagColor.backgroundTintList = ColorStateList.valueOf(listposition.group_label)
+            tagColor.backgroundTintList = ColorStateList.valueOf(listposition.label)
             //rvGroup.setBackgroundColor(resources.getColor(colorCode, null))
         }
 

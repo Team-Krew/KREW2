@@ -84,7 +84,6 @@ class LoginActivity : AppCompatActivity() {
                                                         val intent = Intent(this, MainActivity::class.java)
                                                         cur_user2 = it.getValue<User>() as User
                                                         ApplicationClass.cur_user = cur_user2
-                                                        ApplicationClass.updateCalendarList()
                                                         intent.putExtra("cur_user", cur_user2)
                                                         startActivity(intent)
                                                     }
