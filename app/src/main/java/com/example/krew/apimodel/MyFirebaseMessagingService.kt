@@ -112,9 +112,5 @@ class MyFirebaseMessagingService:FirebaseMessagingService() {
         val manager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         manager.createNotificationChannel(notificationChannel)
         manager.notify(10, notification)
-
-
-
     }
-
 }

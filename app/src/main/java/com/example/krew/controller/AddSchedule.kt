@@ -75,26 +75,26 @@ class AddSchedule : AppCompatActivity() {
         Log.i("checkONCreate", "checkONCreate")
         apikey = getString(R.string.apiKey)
         Log.i("OnCreateStartAddScheduleActivity", "OnCreateStartAddScheduleActivity")
-        if (apikey.isEmpty()) {
+        if(apikey.isEmpty()){
             Toast.makeText(this, "API is not exist", Toast.LENGTH_SHORT).show()
             return
-            val apikey = getString(R.string.apiKey)
-            if (!Places.isInitialized()) {
-                Places.initialize(applicationContext, apikey)
-            }
-            binding.ScheduleName.setText(scheduleVar.Name)
-            binding.LocationAddr.setText(scheduleVar.locationAddr)
-            binding.toggleButton.isChecked = scheduleVar.istoggleChecked
-            binding.startDateBtn1.setText(startDate)
-            binding.startDateBtn2.setText(scheduleVar.startDateHour)
-            binding.endDateBtn1.setText(endDate)
-            binding.endDateBtn2.setText(scheduleVar.endDateHour)
-            binding.LocationName.text = scheduleVar.placename
-
-            today = intent.getStringExtra("selected_date")!!
-            initRecyclerView()
-            initLayout()
         }
+        if (!Places.isInitialized()) {
+            Places.initialize(applicationContext, apikey)
+        }
+        binding.ScheduleName.setText(scheduleVar.Name)
+        binding.LocationAddr.setText(scheduleVar.locationAddr)
+        binding.toggleButton.isChecked = scheduleVar.istoggleChecked
+        binding.startDateBtn1.setText(startDate)
+        binding.startDateBtn2.setText(scheduleVar.startDateHour)
+        binding.endDateBtn1.setText(endDate)
+        binding.endDateBtn2.setText(scheduleVar.endDateHour)
+        binding.LocationName.text = scheduleVar.placename
+
+        today = intent.getStringExtra("selected_date")!!
+        itemarrAdd()
+        initRecyclerView()
+        initLayout()
     }
 
     //데이터 읽어와서 쓰고 수정.
@@ -429,9 +429,7 @@ class AddSchedule : AppCompatActivity() {
     override fun onStart() {
         super.onStart()
         CoroutineScope(Dispatchers.Main).launch {
-
             ApplicationClass.updateCalendarList()
-
             val calendars =
                 ApplicationClass.sSharedPreferences.getString("calendars", null)?.split(",")
             //GroupActivity에서 일정 추가하고 다시 돌아왔을때 ApplicationClass에 데이터 추가가 안돼서 오류가 나옴.
@@ -441,6 +439,8 @@ class AddSchedule : AppCompatActivity() {
                 itemarr.clear()
                 itemarrAdd()
             }
+            Log.i("itemarr",itemarr.toString())
+            Log.i("checkFuck","checkFuck")
             layoutManager = LinearLayoutManager(this@AddSchedule,
                 LinearLayoutManager.HORIZONTAL, false)
             ScheduleAdapter.notifyDataSetChanged()

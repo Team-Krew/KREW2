@@ -5,23 +5,12 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
 import com.example.krew.ApplicationClass
 import com.example.krew.ApplicationClass.Companion.cur_user
 import com.example.krew.R
-import com.example.krew.model.Calendar
-import com.example.krew.model.Schedule
 import com.example.krew.model.User
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.getValue
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 class SplashActivity : AppCompatActivity() {
     val database = FirebaseDatabase.getInstance().getReference()
@@ -33,7 +22,6 @@ class SplashActivity : AppCompatActivity() {
 //        val sch_list = arrayListOf<Schedule>(Schedule(0, arrayListOf<Calendar>()))
 //        database.child("Calendar").child("0").setValue(Calendar("0", "whereami2048@gmail.com", "good gag",
 //            2131034164, "whereami2048@gmail.com", par_list, null))
-
         Handler(Looper.getMainLooper()).postDelayed({
             if(ApplicationClass.sSharedPreferences.getString("user_uid", "") != ""){
                 val cur_uid = ApplicationClass.sSharedPreferences.getString("user_uid", "")!!
