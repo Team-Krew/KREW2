@@ -1,10 +1,14 @@
 package com.example.krew.adapter
 
+import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.res.ColorStateList
 import android.content.res.Resources
 import android.content.res.loader.ResourcesProvider
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.RecyclerView
@@ -12,6 +16,7 @@ import com.example.krew.R
 import com.example.krew.databinding.GroupItemBinding
 import com.example.krew.model.Calendar
 import com.example.krew.model.GroupItem
+import kotlin.coroutines.CoroutineContext
 
 class GroupRVAdapter(
     private val dataList: ArrayList<Calendar>,
@@ -46,7 +51,7 @@ class GroupRVAdapter(
             tvGroupName.text = listposition.name
             tvGroupHead.text = listposition.admin
 
-            //tagColor.setBackgroundColor(listposition.group_label)
+            Log.d("ColorCode", "color = ${listposition.label}, ${R.color.color_gr4}")
             tagColor.backgroundTintList = ColorStateList.valueOf(listposition.label)
             //rvGroup.setBackgroundColor(resources.getColor(colorCode, null))
 

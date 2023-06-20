@@ -1,5 +1,6 @@
 package com.example.krew.controller
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
@@ -155,17 +156,21 @@ class ProgrammaticAutocompleteGeocodingActivity : AppCompatActivity() {
     @SuppressWarnings("deprecation")
     fun ActivityIntent(placePrediction: AutocompletePrediction,result:GeocodingResult){
         Log.i("ACTIVITYINTENTINPABEFORE","ACTIVITYINTENTINPABEFORE")
-        val intent_ret = Intent(this@ProgrammaticAutocompleteGeocodingActivity, AddSchedule::class.java)
+//        val intent_ret = Intent(this@ProgrammaticAutocompleteGeocodingActivity, AddSchedule::class.java)
+//        intent_ret.putExtra("formattedAddress",result.formatted_address)
+//        intent_ret.putExtra("place",placePrediction.getPrimaryText(null).toString())
+//        intent_ret.putExtra("selected_date", intent.getStringExtra("selected_date").toString())
+//        startActivity(intent_ret)
+
+        val intent_ret = Intent()
         intent_ret.putExtra("formattedAddress",result.formatted_address)
         intent_ret.putExtra("place",placePrediction.getPrimaryText(null).toString())
         intent_ret.putExtra("selected_date", intent.getStringExtra("selected_date").toString())
-        startActivity(intent_ret)
+        setResult(Activity.RESULT_OK, intent_ret)
         finish()
     }
 
     override fun onBackPressed() {
-        val intent = Intent(this@ProgrammaticAutocompleteGeocodingActivity,AddSchedule::class.java)
-        startActivity(intent)
         finish()
     }
 }

@@ -48,7 +48,6 @@ class MainActivity : AppCompatActivity() {
     lateinit var cur_user : User
     lateinit var dayInfoBinding: DayInfoBinding
 
-    lateinit var invitationArr:ArrayList<String>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -121,7 +120,6 @@ class MainActivity : AppCompatActivity() {
             }
             groupRVAdapter.notifyDataSetChanged()
         }
-        //Log.e("Firebase communication", "Calendar list2 => ${ApplicationClass.cur_calendar_list}")
     }
 
     fun initCalendar() {

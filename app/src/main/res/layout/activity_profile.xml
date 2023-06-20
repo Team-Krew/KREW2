@@ -133,6 +133,10 @@
                 android:layout_width="match_parent"
                 android:padding="8dp"
                 android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="textPersonName"
+                android:focusable="false"
+                tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck"
                 android:background="@drawable/edit_text_border" />
 
             <TextView

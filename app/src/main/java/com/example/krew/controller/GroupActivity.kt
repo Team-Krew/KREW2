@@ -281,7 +281,6 @@ class GroupActivity : AppCompatActivity() {
                     for (email in userArr) {
                         val user = userSnapshot.getValue(TempUser::class.java)
                         if (email == user!!.user_email) {
-                            Log.e(tagNotification, "why fucking repeated ${email}")
                             val dataref = database.reference.child("Invitation")
                             val newDataref = dataref.push()
                             newDataref.setValue(
