@@ -14,14 +14,6 @@ class ApplicationClass : Application() {
         lateinit var sSharedPreferences: SharedPreferences
         lateinit var spEditor:SharedPreferences.Editor
 
-        // JWT Token Header 키 값
-        val X_ACCESS_TOKEN = "X-ACCESS-TOKEN"
-
-
-        val REQUIRED_PERMISSIONS = arrayOf(
-            android.Manifest.permission.READ_EXTERNAL_STORAGE
-        )
-
         //유저 아이디
         var user_id:String?=null
     }
@@ -30,11 +22,13 @@ class ApplicationClass : Application() {
     // 앱이 처음 생성되는 순간, SP를 새로 만들어주고, 레트로핏 인스턴스를 생성합니다.
     override fun onCreate() {
         super.onCreate()
-        Log.e("created application", "wowowo")
         sSharedPreferences = applicationContext.getSharedPreferences("KREW", MODE_PRIVATE)
         spEditor = sSharedPreferences.edit()
 
-        //spEditor.putString("id", null) //wiping calendar data
+        //spEditor.remove("calendars").apply()
         user_id = sSharedPreferences.getString("user_email", null)
+
     }
+
+
 }

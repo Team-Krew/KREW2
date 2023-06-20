@@ -7,23 +7,15 @@ import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import android.view.Window
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
-import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.core.content.ContextCompat.getSystemService
 import com.example.krew.databinding.GroupDialogBinding
-import com.example.krew.model.TempUser
-import com.example.krew.model.User
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
 
-class GroupDialog(private val context : AppCompatActivity) : Dialog(context){
+class JoinGroupDialog(private val context : AppCompatActivity) : Dialog(context){
     val pattern1 = Regex("""\w+@\w+.\w+$""")
 
     private lateinit var binding : GroupDialogBinding
@@ -66,40 +58,11 @@ class GroupDialog(private val context : AppCompatActivity) : Dialog(context){
             val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
             imm.hideSoftInputFromWindow(currentFocus?.windowToken, 0)
             val str = binding.etGroupDialog.text.toString()
-            var isAvailable = false
-            val database = FirebaseDatabase.getInstance()
-            val ref = database.getReference("User")
+            onClickedListener.onClicked(str)
 
-            ref.addValueEventListener(object : ValueEventListener {
-                override fun onDataChange(dataSnapshot: DataSnapshot) {
-                    for (userSnapshot in dataSnapshot.children) {
-                        val user = userSnapshot.getValue(TempUser::class.java)
-                        Log.e("Firebase Communication", "checking validity => ${user!!.user_email}==${str}")
-                        if(user.user_email == str) {
-                            isAvailable = true
-                            Log.e("Firebase Communication", "Fucking Available")
-                            break;
-                        }
-                    }
-
-                    if(isAvailable){
-                        onClickedListener.onClicked(str)
-                        binding.etGroupDialog.text.clear()
-                        binding.btnGroupDialog.isEnabled = false
-                        dismiss()
-                    } else{
-                        Log.e("Firebase Communication", "Fucking not Available")
-                        Toast.makeText(context, "가입되지 않은 이메일입니다.", Toast.LENGTH_SHORT).show()
-                    }
-                }
-
-                override fun onCancelled(error: DatabaseError) {
-                    Log.e("Firebase Communication", "error!!")
-                }
-            })
-
-
-
+            binding.etGroupDialog.text.clear()
+            binding.btnGroupDialog.isEnabled = false
+            dismiss()
         }
 
         binding.btnCancel.setOnClickListener{
@@ -107,5 +70,4 @@ class GroupDialog(private val context : AppCompatActivity) : Dialog(context){
             dismiss()
         }
     }
-
 }

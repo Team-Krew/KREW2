@@ -23,8 +23,13 @@ import com.example.krew.databinding.ActivityMainBinding
 import com.example.krew.databinding.DayInfoBinding
 import com.example.krew.model.Calendar
 import com.example.krew.model.GroupItem
+import com.example.krew.model.Invitation
 import com.example.krew.model.User
 import com.google.android.gms.tasks.OnCompleteListener
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.database.ktx.getValue
 import com.google.firebase.ktx.Firebase
@@ -38,6 +43,8 @@ class MainActivity : AppCompatActivity() {
     val groupArr = ArrayList<GroupItem>()
     lateinit var cur_user : User
     lateinit var dayInfoBinding: DayInfoBinding
+
+    lateinit var invitationArr:ArrayList<String>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -67,6 +74,7 @@ class MainActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         val mDatabase = Firebase.database.getReference("Calendar")
+
         val calendars =
             ApplicationClass.sSharedPreferences.getString("calendars", null)?.split(",")
         Log.e("Firebase communication", "${calendars?.size}")
@@ -87,12 +95,13 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
+
+        checkInvitation()
     }
 
     @SuppressLint("NotifyDataSetChanged")
     override fun onPause() {
         super.onPause()
-        Log.e("Condition Check", "On Pause Called")
         groupArr.clear()
         groupRVAdapter.notifyDataSetChanged()
     }
@@ -125,7 +134,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initDrawer() {
-
         val rv_nav = findViewById<RecyclerView>(R.id.rv_groups)!!
         val button = findViewById<ImageButton>(R.id.iv_add_groups)!!
 
@@ -155,10 +163,30 @@ class MainActivity : AppCompatActivity() {
 
                 }
             }
-
         }
-
     }
 
+    private fun checkInvitation(){
+        val database = FirebaseDatabase.getInstance()
+        val ref = database.getReference("Invitation")
 
+        ref.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                for (inviteSnapshot in dataSnapshot.children) {
+                    val invitation = inviteSnapshot.getValue(Invitation::class.java)
+                    val key = inviteSnapshot.key
+                    if(invitation!!.target == ApplicationClass.user_id) {
+                        val intent = Intent(this@MainActivity, InviteActivity::class.java)
+                        intent.putExtra("invite", invitation)
+                        intent.putExtra("key", key)
+                        startActivity(intent)
+                    }
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                Log.e("Firebase Communication", error.toString())
+            }
+        })
+    }
 }
