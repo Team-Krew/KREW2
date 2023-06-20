@@ -77,6 +77,7 @@ class LoginActivity : AppCompatActivity() {
                                                             ApplicationClass.cur_user = cur_user2
                                                             database.child("User").child(firebaseAuth.currentUser!!.uid).setValue(cur_user2)
                                                             ApplicationClass.spEditor.putString("user_email", email).apply()
+                                                            ApplicationClass.spEditor.putString("user_uid", cur_user2.user_id).apply()
                                                             intent.putExtra("user_token", deviceToken)
                                                             startActivity(intent)
                                                         })

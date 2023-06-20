@@ -30,7 +30,6 @@ class GroupRVAdapter(
                 itemClickListener!!.OnItemClick(bindingAdapterPosition)
             }
 
-
         }
     }
 
@@ -46,13 +45,12 @@ class GroupRVAdapter(
         holder.binding.apply {
             tvGroupName.text = listposition.name
             tvGroupHead.text = listposition.admin
+
             //tagColor.setBackgroundColor(listposition.group_label)
             tagColor.backgroundTintList = ColorStateList.valueOf(listposition.label)
             //rvGroup.setBackgroundColor(resources.getColor(colorCode, null))
+
         }
-
-
-
     }
 
     override fun getItemCount(): Int = dataList.size

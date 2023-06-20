@@ -3,9 +3,12 @@ package com.example.krew
 import android.annotation.SuppressLint
 import android.app.Application
 import android.content.SharedPreferences
+import android.os.Build
 import android.util.Log
+import androidx.annotation.RequiresApi
 import com.example.krew.model.Calendar
 import com.example.krew.model.GroupItem
+import com.example.krew.model.Schedule
 import com.example.krew.model.User
 import com.google.firebase.database.ktx.database
 import com.google.firebase.database.ktx.getValue
@@ -21,11 +24,9 @@ class ApplicationClass : Application() {
         lateinit var sSharedPreferences: SharedPreferences
         lateinit var spEditor: SharedPreferences.Editor
 
-        // JWT Token Header 키 값
-        val X_ACCESS_TOKEN = "X-ACCESS-TOKEN"
-
+        @RequiresApi(Build.VERSION_CODES.TIRAMISU)
         val REQUIRED_PERMISSIONS = arrayOf(
-            android.Manifest.permission.READ_EXTERNAL_STORAGE
+            android.Manifest.permission.POST_NOTIFICATIONS
         )
 
         // 현재 로그인 유저 User 객체
@@ -42,6 +43,7 @@ class ApplicationClass : Application() {
             Log.i("제발 먼저 실행","제발 먼저 실행")
             val database = Firebase.database.getReference("Calendar")
             database.get().addOnSuccessListener {
+                cur_calendar_list.clear()
                 val iter = it.children.iterator()
                 cur_calendar_list.clear()
                 val calendar_list = ArrayList<Calendar>()
@@ -67,7 +69,6 @@ class ApplicationClass : Application() {
             Log.i("캘린더 사이즈",cur_calendar_list.size.toString())
         }
     }
-
         // 앱이 처음 생성되는 순간, SP를 새로 만들어주고, 레트로핏 인스턴스를 생성합니다.
         override fun onCreate() {
             super.onCreate()
@@ -77,5 +78,4 @@ class ApplicationClass : Application() {
             //spEditor.remove("calendars").apply()
             user_id = sSharedPreferences.getString("user_email", null)
         }
-
 }

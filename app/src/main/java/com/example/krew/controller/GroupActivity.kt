@@ -40,6 +40,7 @@ import kotlin.collections.set
 *             -> 새로운 창을 만들어서 날라온 요청들에 응답
 * */
 class GroupActivity : AppCompatActivity() {
+    val tagNotification = "Notification Check"
 
     lateinit var binding: ActivityGroupBinding
     lateinit var memberRVAdapter: MemberRVAdapter
@@ -197,20 +198,13 @@ class GroupActivity : AppCompatActivity() {
                     colorCode,
                     email,
                     userArr,
-                    null,
+                    null
                 )
                 calendar.child(cNum.toString()).setValue(cal)
-                addtoSharedPreference(cNum.toString())
 
-                Log.e(
-                    "Firebase communication", "checking sSharedPreference :" +
-                            "${ApplicationClass.sSharedPreferences.getString("calendars", "")}"
-                )
                 db.child("CNum").setValue(cNum + 1)
                 db.child("CNum").get().addOnSuccessListener {
                     sendInvitation()
-                    Toast.makeText(this@GroupActivity, "등록되었습니다.", Toast.LENGTH_SHORT).show()
-                    finish()
                 }
             } else {
                 val taskMap: MutableMap<String, Any> = HashMap()
@@ -237,7 +231,7 @@ class GroupActivity : AppCompatActivity() {
             binding.apply {
                 etGroupName.setText(cal.name)
                 etGroupInfo.setText(cal.comment)
-                colorCode = cal.label.toInt()
+                colorCode = cal.label
 
                 var i = 0;
                 for (code in colorArr) {
@@ -262,15 +256,6 @@ class GroupActivity : AppCompatActivity() {
         }
     }
 
-    private fun addtoSharedPreference(id: String) {
-        var str = ApplicationClass.sSharedPreferences.getString("calendars", null)
-        if (str != null) {
-            str += ",$id"
-        } else {
-            str = id
-        }
-        ApplicationClass.spEditor.putString("calendars", str).apply()
-    }
 
     private fun sendInvitation() {
         Log.e("Firebase Communication", "0 added Successfully")
@@ -293,9 +278,11 @@ class GroupActivity : AppCompatActivity() {
         ref.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 for (userSnapshot in dataSnapshot.children) {
+                    Log.e(tagNotification, userArr.size.toString())
                     for (email in userArr) {
                         val user = userSnapshot.getValue(TempUser::class.java)
                         if (email == user!!.user_email) {
+                            Log.e(tagNotification, "why fucking repeated ${email}")
                             val dataref = database.reference.child("Invitation")
                             val newDataref = dataref.push()
                             newDataref.setValue(
@@ -306,10 +293,10 @@ class GroupActivity : AppCompatActivity() {
                                     email
                                 )
                             ).addOnSuccessListener {
-                                Log.e("Firebase Communication", "added Successfully")
+                                Log.e(tagNotification, "added Successfully")
                             }
                                 .addOnCanceledListener {
-                                    Log.e("Firebase Communication", "add Failed")
+                                    Log.e(tagNotification, "add Failed")
                                 }
 
 
@@ -346,6 +333,9 @@ class GroupActivity : AppCompatActivity() {
                         }
                     }
                 }
+
+                Toast.makeText(this@GroupActivity, "등록되었습니다.", Toast.LENGTH_SHORT).show()
+                finish()
             }
 
             override fun onCancelled(error: DatabaseError) {
