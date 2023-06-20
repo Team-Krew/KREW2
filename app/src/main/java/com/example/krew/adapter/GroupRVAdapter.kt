@@ -51,9 +51,6 @@ class GroupRVAdapter(
             tagColor.backgroundTintList = ColorStateList.valueOf(listposition.label)
             //rvGroup.setBackgroundColor(resources.getColor(colorCode, null))
         }
-
-
-
     }
 
     override fun getItemCount(): Int = dataList.size

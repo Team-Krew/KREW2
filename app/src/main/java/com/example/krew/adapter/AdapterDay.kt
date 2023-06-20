@@ -5,10 +5,13 @@ import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.example.krew.ApplicationClass
 import com.example.krew.controller.DayInfoActivity
 import com.example.krew.databinding.ListItemDayBinding
+import com.example.krew.model.Schedule
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.collections.ArrayList
 
 class AdapterDay(val tempMonth:Int, val dayList: MutableList<Date>): RecyclerView.Adapter<AdapterDay.DayView>() {
     val ROW = 6
@@ -21,7 +24,21 @@ class AdapterDay(val tempMonth:Int, val dayList: MutableList<Date>): RecyclerVie
 
     override fun onBindViewHolder(holder: DayView, position: Int) {
         //날짜 클릭시 이벤트 처리
+        val today = formatDate(dayList[position])
+        println("today: " + today)
+        val schedule_list =  ArrayList<Schedule>()
+        for (cal in ApplicationClass.cur_calendar_list){
+//            println(cal)
+            val temp_schedule_list = cal.schedule_list as ArrayList<Schedule>
+            for (t in temp_schedule_list){
+                println("target_date: " + t.date)
+                if(t.date == today){
+                    schedule_list.add(t)
+                }
+            }
+        }
 
+//        println(schedule_list)
 
         holder.dayBinding.itemDayLayout.setOnClickListener {
             val intent = Intent(holder.dayBinding.root.context, DayInfoActivity::class.java)
