@@ -44,7 +44,7 @@ import kotlin.coroutines.CoroutineContext
 
 class MainActivity : AppCompatActivity() {
     lateinit var binding: ActivityMainBinding
-
+    lateinit var monthListAdapter: AdapterMonth
     lateinit var groupRVAdapter: GroupRVAdapter
     val groupArr = ArrayList<GroupItem>()
     lateinit var cur_user : User
@@ -102,7 +102,6 @@ class MainActivity : AppCompatActivity() {
     @SuppressLint("NotifyDataSetChanged")
     override fun onResume() {
         super.onResume()
-
         val database = Firebase.database.getReference("Calendar")
         database.get().addOnSuccessListener {
             ApplicationClass.cur_calendar_list.clear()
@@ -124,14 +123,21 @@ class MainActivity : AppCompatActivity() {
                     }
                 }
             }
+            CoroutineScope(Dispatchers.Main).launch {
+                ApplicationClass.updateCalendarList()
+//                println(ApplicationClass.cur_calendar_list)
+                monthListAdapter.notifyDataSetChanged()
+            }
+
             groupRVAdapter.notifyDataSetChanged()
+
         }
     }
 
     fun initCalendar() {
         //메인 캘린더 open
         val monthListManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
-        val monthListAdapter = AdapterMonth()
+        monthListAdapter = AdapterMonth()
 
         binding.mainTitle.text = cur_user.name + "의 달력"
         binding.calendarCustom.apply {

@@ -2,6 +2,7 @@ package com.example.krew.adapter
 
 import android.content.Intent
 import android.graphics.Color
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -35,8 +36,10 @@ class AdapterDay(val tempMonth:Int, val dayList: MutableList<Date>): RecyclerVie
 
     override fun onBindViewHolder(holder: DayView, position: Int) {
         CoroutineScope(Dispatchers.Main).launch {
+            Log.e("adapterday", "adapterDay")
             ApplicationClass.updateCalendarList()
             val today = formatDate(dayList[position])
+            println("today"+today)
             val dayInfo_list =  ArrayList<DayInfo>()
             for (cal in ApplicationClass.cur_calendar_list){
                 if(cal.schedule_list != null) {
@@ -48,7 +51,7 @@ class AdapterDay(val tempMonth:Int, val dayList: MutableList<Date>): RecyclerVie
                     }
                 }
             }
-
+            println("dayinfolist" + dayInfo_list)
             val count = dayInfo_list.size
             if(count != 0) holder.dayBinding.numSchedule.setText("+$count")
 
@@ -77,7 +80,7 @@ class AdapterDay(val tempMonth:Int, val dayList: MutableList<Date>): RecyclerVie
     }
 
     fun formatDate(date: Date): String {
-        val format = SimpleDateFormat("yyyy년 MM월 dd일", Locale.getDefault())
+        val format = SimpleDateFormat("yyyy-M-dd", Locale.getDefault())
         return format.format(date)
     }
 
