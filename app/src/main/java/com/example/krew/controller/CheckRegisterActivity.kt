@@ -49,7 +49,7 @@ class CheckRegisterActivity : AppCompatActivity() {
     fun init(){
         binding.apply {
             checkOk.setOnClickListener {
-                val intent = Intent(this@CheckRegisterActivity,DayInfoActivity::class.java)
+                val intent = Intent(this@CheckRegisterActivity,MainActivity::class.java)
                 startActivity(intent)
                 finish()
             }

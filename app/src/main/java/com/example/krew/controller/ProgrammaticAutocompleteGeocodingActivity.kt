@@ -162,7 +162,8 @@ class ProgrammaticAutocompleteGeocodingActivity : AppCompatActivity() {
 //        intent_ret.putExtra("selected_date", intent.getStringExtra("selected_date").toString())
 //        startActivity(intent_ret)
 
-        val intent_ret = Intent()
+        val intent_ret = Intent(this@ProgrammaticAutocompleteGeocodingActivity, AddSchedule::class.java)
+
         intent_ret.putExtra("formattedAddress",result.formatted_address)
         intent_ret.putExtra("place",placePrediction.getPrimaryText(null).toString())
         intent_ret.putExtra("selected_date", intent.getStringExtra("selected_date").toString())

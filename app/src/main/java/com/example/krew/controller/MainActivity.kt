@@ -46,8 +46,7 @@ import androidx.core.app.NotificationCompat
 
 class MainActivity : AppCompatActivity() {
     lateinit var binding: ActivityMainBinding
-
-
+    lateinit var monthListAdapter: AdapterMonth
     lateinit var groupRVAdapter: GroupRVAdapter
     val notificationArr = ArrayList<String>()
     lateinit var cur_user: User
@@ -63,7 +62,6 @@ class MainActivity : AppCompatActivity() {
         checkNotificationPermission()
         CoroutineScope(Dispatchers.Main).launch {
             ApplicationClass.updateCalendarList()
-
         }
 
         cur_user = ApplicationClass.cur_user
@@ -79,7 +77,6 @@ class MainActivity : AppCompatActivity() {
                 return@OnCompleteListener
             }
             val deviceToken = task.result
-            Log.d("Firebase Communication", "token=${deviceToken}")
         })
 
         val database = FirebaseDatabase.getInstance()
@@ -117,7 +114,6 @@ class MainActivity : AppCompatActivity() {
     @SuppressLint("NotifyDataSetChanged")
     override fun onResume() {
         super.onResume()
-
         val database = Firebase.database.getReference("Calendar")
         database.get().addOnSuccessListener {
             ApplicationClass.cur_calendar_list.clear()
@@ -139,6 +135,11 @@ class MainActivity : AppCompatActivity() {
                     }
                 }
             }
+            CoroutineScope(Dispatchers.Main).launch {
+                ApplicationClass.updateCalendarList()
+
+                monthListAdapter.notifyDataSetChanged()
+            }
             groupRVAdapter.notifyDataSetChanged()
         }
     }
@@ -146,7 +147,7 @@ class MainActivity : AppCompatActivity() {
     fun initCalendar() {
         //메인 캘린더 open
         val monthListManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
-        val monthListAdapter = AdapterMonth()
+        monthListAdapter = AdapterMonth()
 
         binding.mainTitle.text = cur_user.name + "의 달력"
         binding.calendarCustom.apply {
@@ -173,8 +174,14 @@ class MainActivity : AppCompatActivity() {
         val rv_nav = findViewById<RecyclerView>(com.example.krew.R.id.rv_groups)!!
         val button = findViewById<ImageButton>(com.example.krew.R.id.iv_add_groups)!!
 
-        val tv_name = findViewById<TextView>(com.example.krew.R.id.tv_name)
-        val tv_email = findViewById<TextView>(com.example.krew.R.id.tv_email)
+        val tv_name = findViewById<TextView>(R.id.tv_name)
+        val tv_email = findViewById<TextView>(R.id.tv_email)
+        val iv_setting = findViewById<ImageButton>(R.id.iv_setting)
+        iv_setting.setOnClickListener {
+            val intent = Intent(this, ProfileActivity::class.java)
+            intent.putExtra("user_token", cur_user.user_token)
+            startActivity(intent)
+        }
         tv_name.text = cur_user.name
         tv_email.text = ApplicationClass.sSharedPreferences.getString("user_email", "").toString()
 
@@ -197,6 +204,19 @@ class MainActivity : AppCompatActivity() {
                     val intent = Intent(this@MainActivity, GroupActivity::class.java)
                     intent.putExtra("id", ApplicationClass.cur_calendar_list[position].calendar_id)
                     startActivity(intent)
+                }
+            }
+
+            override fun OnSwitchClick(position: Int, isChecked: Boolean) {
+                val temp = ApplicationClass.cur_calendar_list[position]
+                if (isChecked == true) {
+                    if (temp !in ApplicationClass.on_calendar_list) {
+                        ApplicationClass.on_calendar_list.add(temp)
+                        monthListAdapter.notifyDataSetChanged()
+                    }
+                } else {
+                    ApplicationClass.on_calendar_list.remove(temp)
+                    monthListAdapter.notifyDataSetChanged()
                 }
             }
         }

@@ -29,14 +29,14 @@ class DayInfoActivity : AppCompatActivity(){
         binding.dayText.setText(today)
 
         for (day in dayInfo_list){
-            dayInfoData.add(DayInfo(day.location, day.time, day.color))
+            dayInfoData.add(DayInfo(day.title, day.location, day.time, day.color))
         }
 
         binding.backBtn.setOnClickListener {
             finish()
         }
         binding.addBtn.setOnClickListener {
-            val intent = Intent(this@DayInfoActivity,AddSchedule::class.java)
+            val intent = Intent(this@DayInfoActivity, AddSchedule::class.java)
             intent.putExtra("selected_date", today)
             startActivity(intent)
             finish()
