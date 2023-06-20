@@ -23,7 +23,6 @@ class ApplicationClass : Application() {
         // JWT Token Header 키 값
         val X_ACCESS_TOKEN = "X-ACCESS-TOKEN"
 
-
         val REQUIRED_PERMISSIONS = arrayOf(
             android.Manifest.permission.READ_EXTERNAL_STORAGE
         )
@@ -49,9 +48,14 @@ class ApplicationClass : Application() {
                     calendar_list.add(iter.next().getValue<Calendar>() as Calendar)
                 }
                 for (cal in calendar_list) {
+                    if (cal.admin == user_id) {
+                        cur_calendar_list?.add(cal)
+                        continue
+                    }
                     if (cal.Participant != null){
                         if (user_id in cal.Participant as ArrayList<String>) {
                             cur_calendar_list?.add(cal)
+                            continue
                         }
                     }
                 }
