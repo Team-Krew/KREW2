@@ -45,7 +45,7 @@ class AdapterDay(val tempMonth:Int, val dayList: MutableList<Date>): RecyclerVie
                     for (t in temp_schedule_list) {
 //                        println("target_date: " + t.date)
                         if (t.date == today) {
-                            dayInfo_list.add(DayInfo(t.place, t.time, Color.CYAN))
+                            dayInfo_list.add(DayInfo(t.title, t.place, t.time, Color.CYAN))
                         }
                     }
                 }

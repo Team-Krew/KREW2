@@ -10,6 +10,7 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView.LayoutManager
 import com.example.krew.ApplicationClass
@@ -55,7 +56,6 @@ class AddSchedule : AppCompatActivity() {
                 place = it.data?.getStringExtra("place")
                 selected_date = it.data?.getStringExtra("selected_date")
 
-
                 Log.e("Firebase Communication", "in addschedule $formattedAddress, $place, $selected_date")
 
                 placename = place!!
@@ -77,7 +77,12 @@ class AddSchedule : AppCompatActivity() {
         Log.i("OnCreateStartAddScheduleActivity", "OnCreateStartAddScheduleActivity")
         if (apikey.isEmpty()) {
             Toast.makeText(this, "API is not exist", Toast.LENGTH_SHORT).show()
-            return
+            val apikey = getString(R.string.apiKey)
+            if (!Places.isInitialized()) {
+                Places.initialize(applicationContext, apikey)
+                return
+            }
+        }else{
             val apikey = getString(R.string.apiKey)
             if (!Places.isInitialized()) {
                 Places.initialize(applicationContext, apikey)
@@ -99,8 +104,7 @@ class AddSchedule : AppCompatActivity() {
 
     //데이터 읽어와서 쓰고 수정.
     fun initRecyclerView() {
-        layoutManager =
-            LinearLayoutManager(this@AddSchedule, LinearLayoutManager.HORIZONTAL, false)
+        layoutManager = LinearLayoutManager(this@AddSchedule, LinearLayoutManager.HORIZONTAL, false)
         ScheduleAdapter = ScheduleAdapter(itemarr)
         ScheduleAdapter.itemClickListener = object : ScheduleAdapter.OnItemClickListener {
             override fun OnItemClick(position: Int) {
@@ -305,10 +309,7 @@ class AddSchedule : AppCompatActivity() {
                     Intent(this@AddSchedule, ProgrammaticAutocompleteGeocodingActivity::class.java)
                 intent.putExtra("selected_date", today)
                 activityResultLauncher.launch(intent)
-
-                startActivity(intent)
-                finish()
-                }
+            }
             addMemberButton.setOnClickListener {
                 val intent = Intent(this@AddSchedule,GroupActivity::class.java)
                 startActivity(intent)
@@ -343,8 +344,8 @@ class AddSchedule : AppCompatActivity() {
             val sch = Schedule(
                 sNum.toString(),
                 binding.ScheduleName.text.toString(),
-                today,
                 startDate1,
+                startDate2,
                 binding.LocationAddr.text.toString()
             )
             Schedule.child(sNum.toString()).setValue(sch)
