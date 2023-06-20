@@ -12,8 +12,6 @@ import android.widget.Toast
 import androidx.core.content.ContextCompat.startActivity
 import com.example.krew.ApplicationClass
 import com.example.krew.R
-import com.example.krew.apimodel.Constant2.Companion.ALARM_TIMER
-import com.example.krew.apimodel.Constant2.Companion.NOTIFICATION_ID
 import com.example.krew.apimodel.MyFirebaseMessagingService
 import com.example.krew.databinding.ActivityCheckRegisterBinding
 import com.example.krew.model.Schedule
@@ -81,23 +79,4 @@ class CheckRegisterActivity : AppCompatActivity() {
             }
         }
     }
-
-    override fun onStop() {
-        super.onStop()
-        val alarmManager = getSystemService(ALARM_SERVICE) as AlarmManager
-        val intent = Intent(this@CheckRegisterActivity,MyFirebaseMessagingService::class.java)
-        val pendingIntent = PendingIntent.getBroadcast(
-            this, NOTIFICATION_ID, intent,
-            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
-        Log.i("ALARM_TIMER2", ALARM_TIMER.toString())
-        val triggerTime = ALARM_TIMER // ms 이기 때문에 초단위로 변환 (*1000)
-        if (triggerTime != null) {
-            alarmManager.set(
-                AlarmManager.ELAPSED_REALTIME_WAKEUP,
-                triggerTime,
-                pendingIntent
-            )
-        }
-    }
-
 }
