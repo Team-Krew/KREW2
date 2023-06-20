@@ -74,16 +74,18 @@ class InviteActivity : AppCompatActivity() {
                     Log.e("Firebase communication", "value: ${it.value.toString()}")
                     val cal: Calendar
                     cal = it.getValue<Calendar>() as Calendar
+                    val arr = cal.Participant
 
                     for(email in cal.Participant!!){
                         if(email == invitation.target){
-                            cal.Participant!!.remove(email)
+                            arr?.remove(email)
                             break
                         }
                     }
 
-                    val participant = mDatabase.child("${cal.toString()}/Participants")
-                    //participant.updateChildren()
+                    val updates = HashMap<String, Any>()
+                    updates["participants"] = arr as List<Any>
+                    //cal.updateChildren()
 
 
 //                    if (it.value.toString().contains("participant")) {

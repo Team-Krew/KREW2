@@ -85,6 +85,7 @@ class MainActivity : AppCompatActivity() {
 
         ApplicationClass.updateCalendarList()
 
+
 //        if (calendars != null) {
 //            for (id in calendars) {
 //                mDatabase.child(id).get().addOnSuccessListener {

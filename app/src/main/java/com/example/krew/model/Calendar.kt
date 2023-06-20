@@ -8,6 +8,7 @@ data class Calendar(
     var admin: String?,
     var Participant: ArrayList<String>?,
     var schedule_list: ArrayList<Schedule>?,
+    var isCheck:Boolean
 ){
     constructor(): this(
         "no_info",
@@ -17,5 +18,6 @@ data class Calendar(
         null,
         null,
         null,
+        false
         )
 }

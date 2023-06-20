@@ -198,6 +198,7 @@ class GroupActivity : AppCompatActivity() {
                     email,
                     userArr,
                     null,
+                    false
                 )
                 calendar.child(cNum.toString()).setValue(cal)
                 addtoSharedPreference(cNum.toString())
