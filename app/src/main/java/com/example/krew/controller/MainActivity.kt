@@ -1,6 +1,5 @@
 package com.example.krew.controller
 
-import android.R
 import android.annotation.SuppressLint
 import android.app.Notification
 import android.app.NotificationChannel
@@ -42,6 +41,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import androidx.core.app.NotificationCompat
+import com.example.krew.R
 
 
 class MainActivity : AppCompatActivity() {
@@ -171,12 +171,11 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initDrawer() {
-        val rv_nav = findViewById<RecyclerView>(com.example.krew.R.id.rv_groups)!!
-        val button = findViewById<ImageButton>(com.example.krew.R.id.iv_add_groups)!!
-
+        val rv_nav = findViewById<RecyclerView>(R.id.rv_groups)!!
+        val button = findViewById<ImageButton>(R.id.iv_add_groups)!!
         val tv_name = findViewById<TextView>(R.id.tv_name)
-        val tv_email = findViewById<TextView>(R.id.tv_email)
-        val iv_setting = findViewById<ImageButton>(R.id.iv_setting)
+        val tv_email = findViewById<TextView>(R.id.tv_email)!!
+        val iv_setting = findViewById<ImageButton>(R.id.iv_setting)!!
         iv_setting.setOnClickListener {
             val intent = Intent(this, ProfileActivity::class.java)
             intent.putExtra("user_token", cur_user.user_token)
@@ -233,7 +232,7 @@ class MainActivity : AppCompatActivity() {
             notificationChannel.lockscreenVisibility = Notification.VISIBILITY_PRIVATE
 
             val builder = NotificationCompat.Builder(this, id)
-                .setSmallIcon(R.drawable.ic_menu_add)
+                .setSmallIcon(R.drawable.baseline_group_24)
                 .setContentTitle("KREW 알림 수신 동의하셨습니다.")
                 .setAutoCancel(true)
 

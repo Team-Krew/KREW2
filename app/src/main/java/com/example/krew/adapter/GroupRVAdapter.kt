@@ -26,6 +26,7 @@ import kotlin.coroutines.CoroutineContext
 
 @Suppress("DEPRECATION")
 class GroupRVAdapter(
+    val context: Context,
     private val dataList: ArrayList<Calendar>,
 ) : RecyclerView.Adapter<GroupRVAdapter.ItemViewHolder>(){
 
