@@ -29,7 +29,7 @@ class DayInfoActivity : AppCompatActivity(){
         binding.dayText.setText(today)
 
         for (day in dayInfo_list){
-            dayInfoData.add(DayInfo(day.location, day.time, day.color))
+            dayInfoData.add(DayInfo(day.title, day.location, day.time, day.color))
         }
 
         binding.backBtn.setOnClickListener {
