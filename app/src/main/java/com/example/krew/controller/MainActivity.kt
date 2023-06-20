@@ -58,7 +58,6 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
         CoroutineScope(Dispatchers.Main).launch {
             ApplicationClass.updateCalendarList()
-
         }
 
         cur_user = ApplicationClass.cur_user
@@ -127,9 +126,7 @@ class MainActivity : AppCompatActivity() {
                 ApplicationClass.updateCalendarList()
                 monthListAdapter.notifyDataSetChanged()
             }
-
             groupRVAdapter.notifyDataSetChanged()
-
         }
     }
 
@@ -186,6 +183,19 @@ class MainActivity : AppCompatActivity() {
                     val intent = Intent(this@MainActivity, GroupActivity::class.java)
                     intent.putExtra("id", ApplicationClass.cur_calendar_list[position].calendar_id)
                     startActivity(intent)
+                }
+            }
+
+            override fun OnSwitchClick(position: Int, isChecked: Boolean) {
+                val temp = ApplicationClass.cur_calendar_list[position]
+                if (isChecked == true) {
+                    if (temp !in ApplicationClass.on_calendar_list) {
+                        ApplicationClass.on_calendar_list.add(temp)
+                        monthListAdapter.notifyDataSetChanged()
+                    }
+                } else {
+                    ApplicationClass.on_calendar_list.remove(temp)
+                    monthListAdapter.notifyDataSetChanged()
                 }
             }
         }

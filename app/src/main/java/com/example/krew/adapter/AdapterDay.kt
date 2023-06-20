@@ -40,7 +40,7 @@ class AdapterDay(val tempMonth:Int, val dayList: MutableList<Date>): RecyclerVie
             val today = formatDate(dayList[position])
             val dayInfo_list =  ArrayList<DayInfo>()
             val sch_list = ArrayList<String>()
-            for (cal in ApplicationClass.cur_calendar_list){
+            for (cal in ApplicationClass.on_calendar_list){
                 if(cal.schedule_list != null) {
                     val temp_schedule_list = cal.schedule_list as ArrayList<Schedule>
                     for (t in temp_schedule_list) {
