@@ -21,6 +21,8 @@ class AdapterDay(val tempMonth:Int, val dayList: MutableList<Date>): RecyclerVie
 
     override fun onBindViewHolder(holder: DayView, position: Int) {
         //날짜 클릭시 이벤트 처리
+
+
         holder.dayBinding.itemDayLayout.setOnClickListener {
             val intent = Intent(holder.dayBinding.root.context, DayInfoActivity::class.java)
             //날짜 가공

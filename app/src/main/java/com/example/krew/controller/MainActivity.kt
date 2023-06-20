@@ -78,7 +78,6 @@ class MainActivity : AppCompatActivity() {
         groupRVAdapter.notifyDataSetChanged()
         Log.d("Firebase communication", "${calendars?.size}")
 
-
         ApplicationClass.updateCalendarList()
 
 //        if (calendars != null) {
