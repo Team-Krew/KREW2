@@ -81,23 +81,27 @@ class MainActivity : AppCompatActivity() {
         val calendars =
             ApplicationClass.sSharedPreferences.getString("calendars", null)?.split(",")
         Log.d("Firebase communication", "${calendars?.size}")
-        if (calendars != null) {
-            for (id in calendars) {
-                mDatabase.child(id).get().addOnSuccessListener {
-                    val cal: Calendar
-                    cal = it.getValue<Calendar>() as Calendar
 
-                    groupArr.add(GroupItem(
-                        cal.calendar_id,
-                        cal.name,
-                        cal.admin.toString(),
-                        resources.getColor(cal.label, null),
-                        true
-                    ))
-                    groupRVAdapter.notifyDataSetChanged()
-                }
-            }
-        }
+
+        ApplicationClass.updateCalendarList()
+
+//        if (calendars != null) {
+//            for (id in calendars) {
+//                mDatabase.child(id).get().addOnSuccessListener {
+//                    val cal: Calendar
+//                    cal = it.getValue<Calendar>() as Calendar
+//
+//                    groupArr.add(GroupItem(
+//                        cal.calendar_id,
+//                        cal.name,
+//                        cal.admin.toString(),
+//                        resources.getColor(cal.label, null),
+//                        true
+//                    ))
+//                    groupRVAdapter.notifyDataSetChanged()
+//                }
+//            }
+//        }
 
         checkInvitation()
     }
@@ -149,7 +153,7 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-        groupRVAdapter = GroupRVAdapter(groupArr)
+        groupRVAdapter = GroupRVAdapter(ApplicationClass.cur_calendar_list)
         rv_nav.adapter = groupRVAdapter
         rv_nav.layoutManager = LinearLayoutManager(
             this, LinearLayoutManager.VERTICAL, false
