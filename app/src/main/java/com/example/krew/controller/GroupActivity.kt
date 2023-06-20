@@ -13,6 +13,7 @@ import com.example.krew.adapter.MemberRVAdapter
 import com.example.krew.databinding.ActivityGroupBinding
 import com.example.krew.model.Calendar
 import com.example.krew.model.Invitation
+import com.example.krew.model.Schedule
 import com.example.krew.model.TempUser
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
@@ -198,7 +199,7 @@ class GroupActivity : AppCompatActivity() {
                     colorCode,
                     email,
                     userArr,
-                    null
+                    ArrayList<Schedule>(),
                 )
                 calendar.child(cNum.toString()).setValue(cal)
 

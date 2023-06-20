@@ -57,6 +57,10 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         dayInfoBinding = DayInfoBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        CoroutineScope(Dispatchers.Main).launch {
+            ApplicationClass.updateCalendarList()
+
+        }
 
         cur_user = ApplicationClass.cur_user
         initCalendar()

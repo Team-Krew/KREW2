@@ -8,7 +8,7 @@ data class Calendar(
     var admin: String?,
     var Participant: ArrayList<String>?,
     var schedule_list: ArrayList<Schedule>?
-){
+):java.io.Serializable{
     constructor(): this(
         "no_info",
         "no_info",
@@ -16,6 +16,6 @@ data class Calendar(
         0,
         null,
         null,
-        null
+        ArrayList<Schedule>(),
         )
 }

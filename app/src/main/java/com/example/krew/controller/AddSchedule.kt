@@ -279,8 +279,7 @@ class AddSchedule : AppCompatActivity() {
         //title->name 날짜: startdate, startdatehour(if종일, 00:00), place->string
         val mDatabase = Firebase.database.getReference("Calendar")
         val checked_items = checked_groupItems
-//        val calendars =
-//            ApplicationClass.sSharedPreferences.getString("calendars", null)?.split(",")
+
         if (checked_items != null) {
             for (group_item in checked_items) {
                 for (cal in ApplicationClass.cur_calendar_list){
@@ -291,7 +290,7 @@ class AddSchedule : AppCompatActivity() {
                 }
             }
         }
-        println("calarrrrrr" + calarr)
+
         db.child("SNum").get().addOnSuccessListener {
             sNum = it.value.toString().toInt()
             val sch = Schedule(
@@ -303,6 +302,23 @@ class AddSchedule : AppCompatActivity() {
                 binding.LocationAddr.text.toString()
             )
             Schedule.child(sNum.toString()).setValue(sch)
+            val user_calendar = ApplicationClass.cur_calendar_list
+//            println(user_calendar[0].schedule_list)
+            for (cal in user_calendar){
+                for (uCal in calarr){
+                    if (uCal.calendar_id == cal.calendar_id){
+                        if (cal.schedule_list!!.size == 0){
+//                            val temp_list = ArrayList<Schedule>()
+                            cal.schedule_list!!.add(sch)
+//                            println("dsffdsdf" + uCal.schedule_list)
+                        }
+                    }
+                }
+
+//                println(uCal)
+                mDatabase.child(uCal.calendar_id).setValue(uCal)
+            }
+
             db.child("SNum").setValue(sNum + 1)
             Toast.makeText(this@AddSchedule, "등록되었습니다.", Toast.LENGTH_SHORT).show()
             finish()
@@ -362,15 +378,11 @@ class AddSchedule : AppCompatActivity() {
     override fun onStart() {
         super.onStart()
         CoroutineScope(Dispatchers.Main).launch {
-            Log.i("OnStart","OnStart")
+
             ApplicationClass.updateCalendarList()
-            Log.i("onresume","onresume")
+
             val calendars =
                 ApplicationClass.sSharedPreferences.getString("calendars", null)?.split(",")
-            Log.d("Firebase communication", "${calendars?.size}")
-            Log.i("제발나중에 실행","제발나중에 실행")
-            Log.i("checkcur_calendar_list.size",ApplicationClass.cur_calendar_list.size.toString())
-            Log.i("checkitemarrsize",itemarr.size.toString())
             //GroupActivity에서 일정 추가하고 다시 돌아왔을때 ApplicationClass에 데이터 추가가 안돼서 오류가 나옴.
             if(itemarr==null) {
                 itemarrAdd()
@@ -381,7 +393,6 @@ class AddSchedule : AppCompatActivity() {
             layoutManager = LinearLayoutManager(this@AddSchedule,
                 LinearLayoutManager.HORIZONTAL, false)
             ScheduleAdapter.notifyDataSetChanged()
-            Log.i("onstartend","onstartend")
         }
     }
     fun itemarrAdd(){
@@ -401,7 +412,6 @@ class AddSchedule : AppCompatActivity() {
     }
     override fun onDestroy() {
         super.onDestroy()
-        Log.i("onDestroy","onDestroy")
     }
 }
 

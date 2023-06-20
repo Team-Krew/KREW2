@@ -33,17 +33,15 @@ class ApplicationClass : Application() {
         lateinit var cur_user: User
 
         // 현재 유저가 속한 Calendar 리스트
-        var cur_calendar_list: ArrayList<Calendar> = ArrayList<Calendar>()
+        var cur_calendar_list: ArrayList<Calendar> = ArrayList()
 
         //유저 아이디
         var user_id: String? = null
 
         //유저 캘린더 리스트 업데이트 함수
         suspend fun updateCalendarList() {
-            Log.i("제발 먼저 실행","제발 먼저 실행")
             val database = Firebase.database.getReference("Calendar")
             database.get().addOnSuccessListener {
-                cur_calendar_list.clear()
                 val iter = it.children.iterator()
                 cur_calendar_list.clear()
                 val calendar_list = ArrayList<Calendar>()
@@ -53,20 +51,16 @@ class ApplicationClass : Application() {
                 for (cal in calendar_list) {
                     if (cal.admin == user_id) {
                         cur_calendar_list.add(cal)
-                        Log.i("printcalendar.list.cal",cal.toString())
                         continue
                     }
                     if (cal.Participant != null) {
                         if (user_id in cal.Participant as ArrayList<String>) {
-                            Log.i("printcalendar.list.cal2",cal.toString())
                             cur_calendar_list.add(cal)
                             continue
                         }
                     }
                 }
             }.await()
-            Log.i("제발 두번째 실행","제발 두번째 실행")
-            Log.i("캘린더 사이즈",cur_calendar_list.size.toString())
         }
     }
         // 앱이 처음 생성되는 순간, SP를 새로 만들어주고, 레트로핏 인스턴스를 생성합니다.
