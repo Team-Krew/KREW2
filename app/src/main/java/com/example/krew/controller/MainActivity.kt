@@ -50,11 +50,14 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         dayInfoBinding = DayInfoBinding.inflate(layoutInflater)
+
+        println("cur_user " + ApplicationClass.cur_user)
         setContentView(binding.root)
         val bundle = intent.extras!!
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             cur_user = bundle.getSerializable("cur_user", User::class.java) as User
         }else{
+            @Suppress("DEPRECATION")
             cur_user = bundle.getSerializable("cur_user") as User
         }
         initCalendar()
@@ -66,7 +69,7 @@ class MainActivity : AppCompatActivity() {
                 return@OnCompleteListener
             }
             val deviceToken = task.result
-            Log.e("Firebase Communication", "token=${deviceToken}")
+            Log.d("Firebase Communication", "token=${deviceToken}")
         })
     }
 
@@ -77,7 +80,7 @@ class MainActivity : AppCompatActivity() {
 
         val calendars =
             ApplicationClass.sSharedPreferences.getString("calendars", null)?.split(",")
-        Log.e("Firebase communication", "${calendars?.size}")
+        Log.d("Firebase communication", "${calendars?.size}")
         if (calendars != null) {
             for (id in calendars) {
                 mDatabase.child(id).get().addOnSuccessListener {
@@ -88,7 +91,7 @@ class MainActivity : AppCompatActivity() {
                         cal.calendar_id,
                         cal.name,
                         cal.admin.toString(),
-                        resources.getColor(cal.label.toInt(), null),
+                        resources.getColor(cal.label, null),
                         true
                     ))
                     groupRVAdapter.notifyDataSetChanged()
@@ -130,7 +133,6 @@ class MainActivity : AppCompatActivity() {
                 binding.drawer.closeDrawer(GravityCompat.START)
             }
         }
-
     }
 
     private fun initDrawer() {
@@ -160,7 +162,6 @@ class MainActivity : AppCompatActivity() {
                     val intent = Intent(this@MainActivity, GroupActivity::class.java)
                     intent.putExtra("id", groupArr[position].group_id)
                     startActivity(intent)
-
                 }
             }
         }

@@ -7,6 +7,7 @@ import android.os.Handler
 import android.os.Looper
 import com.example.krew.R
 import com.example.krew.model.Calendar
+import com.example.krew.model.Schedule
 import com.example.krew.model.User
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
@@ -16,22 +17,15 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 
 class SplashActivity : AppCompatActivity() {
-//    val database = FirebaseDatabase.getInstance().getReference()
+    val database = FirebaseDatabase.getInstance().getReference()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash)
 //        addCalendar()
-//        database.child("Calendar").orderByKey().addListenerForSingleValueEvent(object : ValueEventListener{
-//            override fun onDataChange(snapshot: DataSnapshot) {
-//                for (i in snapshot.children){
-//                    println(i.child("admin"))
-//                }
-//            }
-//
-//            override fun onCancelled(error: DatabaseError) {
-//                TODO("Not yet implemented")
-//            }
-//        })
+        val par_list = arrayListOf<String>("whereami2048@gmail.com")
+//        val sch_list = arrayListOf<Schedule>(Schedule(0, arrayListOf<Calendar>()))
+//        database.child("Calendar").child("0").setValue(Calendar("0", "whereami2048@gmail.com", "good gag",
+//            2131034164, "whereami2048@gmail.com", par_list, null))
 
         Handler(Looper.getMainLooper()).postDelayed({
             val intent = Intent(this, LoginActivity::class.java)

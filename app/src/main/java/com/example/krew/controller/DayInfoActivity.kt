@@ -3,12 +3,10 @@ package com.example.krew.controller
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
-import android.os.PersistableBundle
-import android.widget.Toast
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.krew.adapter.AdapterDayInfo
-import com.example.krew.databinding.ActivityMainBinding
 import com.example.krew.databinding.DayInfoBinding
 import com.example.krew.model.DayInfo
 
@@ -25,9 +23,8 @@ class DayInfoActivity : AppCompatActivity(){
     }
 
     fun initData(){
-        val receivedIntent = intent // AdapterDay에서 전달받은 intent
-
-        binding.dayText.setText(intent.getStringExtra("today"))
+        val today = intent.getStringExtra("today")
+        binding.dayText.setText(today)
 
         dayInfoData.add(DayInfo("예를 들면 헬스장", "08:00", Color.CYAN))
         dayInfoData.add(DayInfo("건대입구", "14:00", Color.MAGENTA))
@@ -36,7 +33,8 @@ class DayInfoActivity : AppCompatActivity(){
             finish()
         }
         binding.addBtn.setOnClickListener {
-            val intent = Intent(this@DayInfoActivity,addSchedule::class.java)
+            val intent = Intent(this@DayInfoActivity,AddSchedule::class.java)
+            intent.putExtra("selected_date", today)
             startActivity(intent)
             finish()
         }

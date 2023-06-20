@@ -14,12 +14,14 @@ import com.example.krew.model.User
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
+import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.auth.AuthCredential
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ktx.getValue
+import com.google.firebase.messaging.FirebaseMessaging
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -45,8 +47,8 @@ class LoginActivity : AppCompatActivity() {
         firebaseAuth = FirebaseAuth.getInstance()
         launcher = registerForActivityResult(
             ActivityResultContracts.StartActivityForResult(), ActivityResultCallback { result ->
-                Log.e(TAG, "resultCode : ${result.resultCode}")
-                Log.e(TAG, "result : $result")
+                Log.d(TAG, "resultCode : ${result.resultCode}")
+                Log.d(TAG, "result : $result")
                 if (result.resultCode == RESULT_OK) {
                     val task = GoogleSignIn.getSignedInAccountFromIntent(result.data)
                     try {
@@ -63,16 +65,27 @@ class LoginActivity : AppCompatActivity() {
                                                 Log.d(TAG, "googleSignInToken : $googleSignInToken")
                                                 val user_email = ApplicationClass.sSharedPreferences.getString("user_email", null)
                                                 if(user_email == null){
-                                                    val intent = Intent(this@LoginActivity, ProfileActivity::class.java)
-                                                    database.child("User").child(firebaseAuth.currentUser!!.uid).setValue(User(firebaseAuth.currentUser!!.uid, account.displayName.toString(), "", "", ""))
-                                                    ApplicationClass.spEditor.putString("user_email", email).apply()
-                                                    startActivity(intent)
+                                                    FirebaseMessaging.getInstance().token.addOnCompleteListener(
+                                                        OnCompleteListener { task ->
+                                                            if (!task.isSuccessful) {
+                                                                Log.d("Firebase Communication", "Fetching FCM registration token failed ${task.exception}")
+                                                                return@OnCompleteListener
+                                                            }
+                                                            val deviceToken = task.result
+                                                            val intent = Intent(this@LoginActivity, ProfileActivity::class.java)
+                                                            database.child("User").child(firebaseAuth.currentUser!!.uid).setValue(User(firebaseAuth.currentUser!!.uid, deviceToken, email, account.displayName.toString(), "", "", "", ))
+                                                            ApplicationClass.spEditor.putString("user_email", email).apply()
+                                                            intent.putExtra("user_token", deviceToken)
+                                                            startActivity(intent)
+                                                        })
                                                 }else{
                                                     cur_user = firebaseAuth.currentUser!!
                                                     val intent = Intent(this@LoginActivity, MainActivity::class.java)
                                                     database.child("User").child(cur_user.uid).get().addOnSuccessListener {
                                                         val intent = Intent(this, MainActivity::class.java)
                                                         cur_user2 = it.getValue<User>() as User
+                                                        ApplicationClass.cur_user = cur_user2
+                                                        ApplicationClass.updateCalendarList()
                                                         intent.putExtra("cur_user", cur_user2)
                                                         startActivity(intent)
                                                     }

@@ -53,7 +53,7 @@
             <!-- </intent-filter> -->
         </activity>
         <activity
-            android:name=".controller.addSchedule"
+            android:name=".controller.AddSchedule"
             android:exported="true">
 
             <!-- <intent-filter> -->

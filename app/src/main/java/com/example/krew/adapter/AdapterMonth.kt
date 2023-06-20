@@ -28,7 +28,6 @@ class AdapterMonth() : RecyclerView.Adapter<AdapterMonth.MonthView>() {
         calendar.set(Calendar.DAY_OF_MONTH, 1)
         calendar.add(Calendar.MONTH, position - center)
 
-
         holder.monthBinding.itemMonthText.text = "${calendar.get(Calendar.YEAR)}년 ${calendar.get(Calendar.MONTH) + 1}월"
         val tempMonth = calendar.get(Calendar.MONTH)
 
