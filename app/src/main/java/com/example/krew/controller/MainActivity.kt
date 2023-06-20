@@ -9,6 +9,7 @@ import android.util.Log
 import android.view.Gravity
 import android.widget.ImageButton
 import android.widget.TextView
+import androidx.core.content.ContextCompat.startActivity
 import androidx.core.view.GravityCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.PagerSnapHelper
@@ -53,16 +54,9 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         dayInfoBinding = DayInfoBinding.inflate(layoutInflater)
-
-        println("cur_user " + ApplicationClass.cur_user)
         setContentView(binding.root)
-        val bundle = intent.extras!!
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            cur_user = bundle.getSerializable("cur_user", User::class.java) as User
-        }else{
-            @Suppress("DEPRECATION")
-            cur_user = bundle.getSerializable("cur_user") as User
-        }
+
+        cur_user = ApplicationClass.cur_user
         initCalendar()
         initDrawer()
 
@@ -103,7 +97,6 @@ class MainActivity : AppCompatActivity() {
     @SuppressLint("NotifyDataSetChanged")
     override fun onResume() {
         super.onResume()
-        Log.e("Invitation Communication", "Is Called Multiple Times")
 
         val database = Firebase.database.getReference("Calendar")
         database.get().addOnSuccessListener {

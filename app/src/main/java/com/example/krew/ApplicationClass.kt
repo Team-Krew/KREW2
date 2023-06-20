@@ -42,7 +42,7 @@ class ApplicationClass : Application() {
             database.get().addOnSuccessListener {
                 cur_calendar_list.clear()
                 val iter = it.children.iterator()
-
+                cur_calendar_list.clear()
                 val calendar_list = ArrayList<Calendar>()
                 while (iter.hasNext()) {
                     calendar_list.add(iter.next().getValue<Calendar>() as Calendar)
