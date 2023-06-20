@@ -37,9 +37,6 @@ class AddSchedule : AppCompatActivity() {
     lateinit var layoutManager:LayoutManager
     lateinit var ScheduleAdapter:ScheduleAdapter
     lateinit var today: String
-    lateinit var binding: ActivityAddScheduleBinding
-    lateinit var layoutManager: LayoutManager
-    lateinit var ScheduleAdapter: ScheduleAdapter
     var itemarr = ArrayList<GroupItem>()
     var calarr = ArrayList<Calendar>()
     var checked_groupItems = ArrayList<GroupItem>()
@@ -50,8 +47,6 @@ class AddSchedule : AppCompatActivity() {
     var formattedAddress:String ?= ""
     var place:String ?= ""
     var selected_date:String ?= ""
-
-    lateinit var today: String
 
     val activityResultLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()){
@@ -77,28 +72,29 @@ class AddSchedule : AppCompatActivity() {
         binding = ActivityAddScheduleBinding.inflate(layoutInflater)
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
-        Log.i("checkONCreate","checkONCreate")
+        Log.i("checkONCreate", "checkONCreate")
         apikey = getString(R.string.apiKey)
-        Log.i("OnCreateStartAddScheduleActivity","OnCreateStartAddScheduleActivity")
-        if(apikey.isEmpty()){
-            Toast.makeText(this,"API is not exist",Toast.LENGTH_SHORT).show()
+        Log.i("OnCreateStartAddScheduleActivity", "OnCreateStartAddScheduleActivity")
+        if (apikey.isEmpty()) {
+            Toast.makeText(this, "API is not exist", Toast.LENGTH_SHORT).show()
             return
-        val apikey = getString(R.string.apiKey)
-        if (!Places.isInitialized()) {
-            Places.initialize(applicationContext, apikey)
-        }
-        binding.ScheduleName.setText(scheduleVar.Name)
-        binding.LocationAddr.setText(scheduleVar.locationAddr)
-        binding.toggleButton.isChecked = scheduleVar.istoggleChecked
-        binding.startDateBtn1.setText(startDate)
-        binding.startDateBtn2.setText(scheduleVar.startDateHour)
-        binding.endDateBtn1.setText(endDate)
-        binding.endDateBtn2.setText(scheduleVar.endDateHour)
-        binding.LocationName.text = scheduleVar.placename
+            val apikey = getString(R.string.apiKey)
+            if (!Places.isInitialized()) {
+                Places.initialize(applicationContext, apikey)
+            }
+            binding.ScheduleName.setText(scheduleVar.Name)
+            binding.LocationAddr.setText(scheduleVar.locationAddr)
+            binding.toggleButton.isChecked = scheduleVar.istoggleChecked
+            binding.startDateBtn1.setText(startDate)
+            binding.startDateBtn2.setText(scheduleVar.startDateHour)
+            binding.endDateBtn1.setText(endDate)
+            binding.endDateBtn2.setText(scheduleVar.endDateHour)
+            binding.LocationName.text = scheduleVar.placename
 
-        today = intent.getStringExtra("selected_date")!!
-        initRecyclerView()
-        initLayout()
+            today = intent.getStringExtra("selected_date")!!
+            initRecyclerView()
+            initLayout()
+        }
     }
 
     //데이터 읽어와서 쓰고 수정.
@@ -174,7 +170,6 @@ class AddSchedule : AppCompatActivity() {
                     ) {
                         //여기다가 schedule add하는 과정 추가
                         makeSchedule()
-                        makeALARM()
                         var intent = Intent(this@AddSchedule, CheckRegisterActivity::class.java)
                         startActivity(intent)
                         clearVar()
@@ -310,7 +305,7 @@ class AddSchedule : AppCompatActivity() {
                     Intent(this@AddSchedule, ProgrammaticAutocompleteGeocodingActivity::class.java)
                 intent.putExtra("selected_date", today)
                 activityResultLauncher.launch(intent)
-                
+
                 startActivity(intent)
                 finish()
                 }
@@ -320,7 +315,7 @@ class AddSchedule : AppCompatActivity() {
             }
         }
     }
-    
+
     fun makeSchedule(){
         val startDate1 = binding.startDateBtn1.text.toString()
         val startDate2 = binding.startDateBtn2.text.toString()
