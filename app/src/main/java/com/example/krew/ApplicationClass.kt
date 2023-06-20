@@ -3,7 +3,9 @@ package com.example.krew
 import android.annotation.SuppressLint
 import android.app.Application
 import android.content.SharedPreferences
+import android.os.Build
 import android.util.Log
+import androidx.annotation.RequiresApi
 import com.example.krew.model.Calendar
 import com.example.krew.model.GroupItem
 import com.example.krew.model.User
@@ -20,11 +22,9 @@ class ApplicationClass : Application() {
         lateinit var sSharedPreferences: SharedPreferences
         lateinit var spEditor: SharedPreferences.Editor
 
-        // JWT Token Header 키 값
-        val X_ACCESS_TOKEN = "X-ACCESS-TOKEN"
-
+        @RequiresApi(Build.VERSION_CODES.TIRAMISU)
         val REQUIRED_PERMISSIONS = arrayOf(
-            android.Manifest.permission.READ_EXTERNAL_STORAGE
+            android.Manifest.permission.POST_NOTIFICATIONS
         )
 
         // 현재 로그인 유저 User 객체
@@ -40,6 +40,7 @@ class ApplicationClass : Application() {
         fun updateCalendarList() {
             val database = Firebase.database.getReference("Calendar")
             database.get().addOnSuccessListener {
+                cur_calendar_list.clear()
                 val iter = it.children.iterator()
                 cur_calendar_list.clear()
                 val calendar_list = ArrayList<Calendar>()
@@ -48,12 +49,12 @@ class ApplicationClass : Application() {
                 }
                 for (cal in calendar_list) {
                     if (cal.admin == user_id) {
-                        cur_calendar_list?.add(cal)
+                        cur_calendar_list.add(cal)
                         continue
                     }
                     if (cal.Participant != null) {
                         if (user_id in cal.Participant as ArrayList<String>) {
-                            cur_calendar_list?.add(cal)
+                            cur_calendar_list.add(cal)
                             continue
                         }
                     }
