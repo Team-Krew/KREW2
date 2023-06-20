@@ -75,6 +75,7 @@ class MainActivity : AppCompatActivity() {
 
         val calendars =
             ApplicationClass.sSharedPreferences.getString("calendars", null)?.split(",")
+        groupRVAdapter.notifyDataSetChanged()
         Log.d("Firebase communication", "${calendars?.size}")
 
 

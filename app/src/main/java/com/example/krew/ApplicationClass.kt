@@ -41,9 +41,8 @@ class ApplicationClass : Application() {
             val database = Firebase.database.getReference("Calendar")
             database.get().addOnSuccessListener {
                 val iter = it.children.iterator()
-
+                cur_calendar_list.clear()
                 val calendar_list = ArrayList<Calendar>()
-                val user_calendar_list = ArrayList<Calendar>()
                 while (iter.hasNext()) {
                     calendar_list.add(iter.next().getValue<Calendar>() as Calendar)
                 }
