@@ -39,17 +39,17 @@
         android:textSize="20dp"
         />
 
-    <Button
-        android:id="@+id/searchBtn"
-        android:background="@drawable/bg_radius_100dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="15dp"
-        android:layout_weight="1"
-        android:text="경로 찾기"
-        android:textColor="@color/black"
-        android:textStyle="bold"
-        android:textSize="20dp"/>
+        <Button
+            android:id="@+id/searchBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="15dp"
+            android:layout_weight="1"
+            android:background="@drawable/bg_radius_100dp"
+            android:text="경로 찾기"
+            android:textColor="@color/black"
+            android:textSize="20dp"
+            android:textStyle="bold" />
     </LinearLayout>
 
     <TextView

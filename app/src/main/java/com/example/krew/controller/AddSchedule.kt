@@ -322,6 +322,8 @@ class AddSchedule : AppCompatActivity() {
     fun makeSchedule(){
         val startDate1 = binding.startDateBtn1.text.toString()
         val startDate2 = binding.startDateBtn2.text.toString()
+        val dd = Date(startDate2)
+        println(dd)
         val Schedule = Firebase.database.getReference("Schedule")
         val db = Firebase.database.reference
         var sNum = 0;
