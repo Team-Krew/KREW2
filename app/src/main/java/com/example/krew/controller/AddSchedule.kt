@@ -37,30 +37,33 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 class AddSchedule : AppCompatActivity() {
-    lateinit var binding:ActivityAddScheduleBinding
-    lateinit var layoutManager:LayoutManager
-    lateinit var ScheduleAdapter:ScheduleAdapter
+    lateinit var binding: ActivityAddScheduleBinding
+    lateinit var layoutManager: LayoutManager
+    lateinit var ScheduleAdapter: ScheduleAdapter
     lateinit var today: String
     var itemarr = ArrayList<GroupItem>()
     var calarr = ArrayList<Calendar>()
     var checked_groupItems = ArrayList<GroupItem>()
-    lateinit var check_msgUser:MutableSet<String>
-    lateinit var apikey :String
+    lateinit var check_msgUser: MutableSet<String>
+    lateinit var apikey: String
     private val AUTOCOMPLETE_REQUEST_CODE = 1
 
 
-    var formattedAddress:String ?= ""
-    var place:String ?= ""
-    var selected_date:String ?= ""
+    var formattedAddress: String? = ""
+    var place: String? = ""
+    var selected_date: String? = ""
 
     val activityResultLauncher =
-        registerForActivityResult(ActivityResultContracts.StartActivityForResult()){
-            if(it.resultCode == Activity.RESULT_OK){
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+            if (it.resultCode == Activity.RESULT_OK) {
                 formattedAddress = it.data?.getStringExtra("formattedAddress")
                 place = it.data?.getStringExtra("place")
                 selected_date = it.data?.getStringExtra("selected_date")
 
-                Log.e("Firebase Communication", "in addschedule $formattedAddress, $place, $selected_date")
+                Log.e(
+                    "Firebase Communication",
+                    "in addschedule $formattedAddress, $place, $selected_date"
+                )
 
                 placename = place!!
                 locationAddr = formattedAddress!!
@@ -76,11 +79,11 @@ class AddSchedule : AppCompatActivity() {
         binding = ActivityAddScheduleBinding.inflate(layoutInflater)
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
-        check_msgUser =kotlin.collections.mutableSetOf()
+        check_msgUser = kotlin.collections.mutableSetOf()
         Log.i("checkONCreate", "checkONCreate")
         apikey = getString(R.string.apiKey)
         Log.i("OnCreateStartAddScheduleActivity", "OnCreateStartAddScheduleActivity")
-        if(apikey.isEmpty()){
+        if (apikey.isEmpty()) {
             Toast.makeText(this, "API is not exist", Toast.LENGTH_SHORT).show()
             return
         }
@@ -612,10 +615,10 @@ class AddSchedule : AppCompatActivity() {
             }
         }
 
-    override fun onDestroy() {
-        super.onDestroy()
+        override fun onDestroy() {
+            super.onDestroy()
+        }
     }
-}
 
 
 //backup
