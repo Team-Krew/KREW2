@@ -30,7 +30,6 @@ class GroupRVAdapter(
                 itemClickListener!!.OnItemClick(bindingAdapterPosition)
             }
 
-
         }
     }
 
@@ -49,6 +48,7 @@ class GroupRVAdapter(
             //tagColor.setBackgroundColor(listposition.group_label)
             tagColor.backgroundTintList = ColorStateList.valueOf(listposition.label)
             //rvGroup.setBackgroundColor(resources.getColor(colorCode, null))
+
         }
 
 
