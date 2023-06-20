@@ -64,7 +64,7 @@ class LoginActivity : AppCompatActivity() {
                                             if (googleSignInToken != "") {
                                                 Log.d(TAG, "googleSignInToken : $googleSignInToken")
                                                 val user_email = ApplicationClass.sSharedPreferences.getString("user_email", null)
-                                                if(user_email == null){
+                                                if(user_email == null){ //처음 로그인 한 경우
                                                     FirebaseMessaging.getInstance().token.addOnCompleteListener(
                                                         OnCompleteListener { task ->
                                                             if (!task.isSuccessful) {
@@ -73,12 +73,14 @@ class LoginActivity : AppCompatActivity() {
                                                             }
                                                             val deviceToken = task.result
                                                             val intent = Intent(this@LoginActivity, ProfileActivity::class.java)
-                                                            database.child("User").child(firebaseAuth.currentUser!!.uid).setValue(User(firebaseAuth.currentUser!!.uid, deviceToken, email, account.displayName.toString(), "", "", "", ))
+                                                            cur_user2 = User(firebaseAuth.currentUser!!.uid, deviceToken, email, account.displayName.toString(), "", "", "", )
+                                                            ApplicationClass.cur_user = cur_user2
+                                                            database.child("User").child(firebaseAuth.currentUser!!.uid).setValue(cur_user2)
                                                             ApplicationClass.spEditor.putString("user_email", email).apply()
                                                             intent.putExtra("user_token", deviceToken)
                                                             startActivity(intent)
                                                         })
-                                                }else{
+                                                }else{  //기 로그인인 경우
                                                     cur_user = firebaseAuth.currentUser!!
                                                     database.child("User").child(cur_user.uid).get().addOnSuccessListener {
                                                         val intent = Intent(this, MainActivity::class.java)
