@@ -75,7 +75,7 @@ class CheckRegisterActivity : AppCompatActivity() {
          // set : 일회성 알림
         binding.apply {
             checkOk.setOnClickListener {
-                val intent = Intent(this@CheckRegisterActivity,DayInfoActivity::class.java)
+                val intent = Intent(this@CheckRegisterActivity,MainActivity::class.java)
                 startActivity(intent)
                 finish()
             }

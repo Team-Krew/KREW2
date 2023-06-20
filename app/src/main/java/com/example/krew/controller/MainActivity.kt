@@ -1,30 +1,31 @@
 package com.example.krew.controller
 
 import android.annotation.SuppressLint
+import android.app.Notification
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.graphics.Color
 import android.os.Build
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.view.Gravity
 import android.widget.ImageButton
 import android.widget.TextView
-import androidx.core.content.ContextCompat.startActivity
+import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
 import androidx.core.view.GravityCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.example.krew.ApplicationClass
-import com.example.krew.ApplicationClass.Companion.cur_user
-import com.example.krew.R
-import com.example.krew.adapter.AdapterDay
-import com.example.krew.adapter.AdapterDayInfo
 import com.example.krew.adapter.AdapterMonth
 import com.example.krew.adapter.GroupRVAdapter
 import com.example.krew.databinding.ActivityMainBinding
 import com.example.krew.databinding.DayInfoBinding
 import com.example.krew.model.Calendar
-import com.example.krew.model.GroupItem
 import com.example.krew.model.Invitation
 import com.example.krew.model.User
 import com.google.android.gms.tasks.OnCompleteListener
@@ -39,26 +40,28 @@ import com.google.firebase.messaging.FirebaseMessaging
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import org.json.JSONObject
-import kotlin.coroutines.CoroutineContext
+import androidx.core.app.NotificationCompat
+import com.example.krew.R
+
 
 class MainActivity : AppCompatActivity() {
     lateinit var binding: ActivityMainBinding
-
+    lateinit var monthListAdapter: AdapterMonth
     lateinit var groupRVAdapter: GroupRVAdapter
-    val groupArr = ArrayList<GroupItem>()
-    lateinit var cur_user : User
+    val notificationArr = ArrayList<String>()
+    lateinit var cur_user: User
     lateinit var dayInfoBinding: DayInfoBinding
 
 
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         dayInfoBinding = DayInfoBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        checkNotificationPermission()
         CoroutineScope(Dispatchers.Main).launch {
             ApplicationClass.updateCalendarList()
-
         }
 
         cur_user = ApplicationClass.cur_user
@@ -67,11 +70,13 @@ class MainActivity : AppCompatActivity() {
 
         FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
             if (!task.isSuccessful) {
-                Log.d("Firebase Communication", "Fetching FCM registration token failed ${task.exception}")
+                Log.d(
+                    "Firebase Communication",
+                    "Fetching FCM registration token failed ${task.exception}"
+                )
                 return@OnCompleteListener
             }
             val deviceToken = task.result
-            Log.d("Firebase Communication", "token=${deviceToken}")
         })
 
         val database = FirebaseDatabase.getInstance()
@@ -79,12 +84,19 @@ class MainActivity : AppCompatActivity() {
 
         ref.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
-                Log.e("Invitation Communication", "Invitation num on FB + ${dataSnapshot.children.count()}")
+                Log.e(
+                    "Invitation Communication",
+                    "Invitation num on FB + ${dataSnapshot.children.count()}"
+                )
                 for (inviteSnapshot in dataSnapshot.children) {
+                    if(notificationArr.contains(inviteSnapshot.key.toString())){
+                        continue
+                    }
+                    notificationArr.add(inviteSnapshot.key.toString())
                     val invitation = inviteSnapshot.getValue(Invitation::class.java)
                     val key = inviteSnapshot.key
-                    if(invitation!!.target == ApplicationClass.user_id) {
-                        Log.e("Invitation Communication", "entering checkinvitation")
+                    if (invitation!!.target == ApplicationClass.user_id) {
+                        Log.e("Invitation Communication", "must appear once per message")
                         val intent = Intent(this@MainActivity, InviteActivity::class.java)
                         intent.putExtra("invite", invitation)
                         intent.putExtra("key", key)
@@ -102,7 +114,6 @@ class MainActivity : AppCompatActivity() {
     @SuppressLint("NotifyDataSetChanged")
     override fun onResume() {
         super.onResume()
-
         val database = Firebase.database.getReference("Calendar")
         database.get().addOnSuccessListener {
             ApplicationClass.cur_calendar_list.clear()
@@ -124,6 +135,11 @@ class MainActivity : AppCompatActivity() {
                     }
                 }
             }
+            CoroutineScope(Dispatchers.Main).launch {
+                ApplicationClass.updateCalendarList()
+
+                monthListAdapter.notifyDataSetChanged()
+            }
             groupRVAdapter.notifyDataSetChanged()
         }
     }
@@ -131,13 +147,13 @@ class MainActivity : AppCompatActivity() {
     fun initCalendar() {
         //메인 캘린더 open
         val monthListManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
-        val monthListAdapter = AdapterMonth()
+        monthListAdapter = AdapterMonth()
 
         binding.mainTitle.text = cur_user.name + "의 달력"
         binding.calendarCustom.apply {
             layoutManager = monthListManager
             adapter = monthListAdapter
-            scrollToPosition(Int.MAX_VALUE/2)
+            scrollToPosition(Int.MAX_VALUE / 2)
         }
 
         val snap = PagerSnapHelper()
@@ -146,9 +162,9 @@ class MainActivity : AppCompatActivity() {
         val dayText = dayInfoBinding.dayText
 
         binding.mainBtnNav.setOnClickListener {
-            if(!binding.drawer.isDrawerOpen(GravityCompat.START)){
+            if (!binding.drawer.isDrawerOpen(GravityCompat.START)) {
                 binding.drawer.openDrawer(GravityCompat.START)
-            }else{
+            } else {
                 binding.drawer.closeDrawer(GravityCompat.START)
             }
         }
@@ -157,9 +173,14 @@ class MainActivity : AppCompatActivity() {
     private fun initDrawer() {
         val rv_nav = findViewById<RecyclerView>(R.id.rv_groups)!!
         val button = findViewById<ImageButton>(R.id.iv_add_groups)!!
-
         val tv_name = findViewById<TextView>(R.id.tv_name)
-        val tv_email = findViewById<TextView>(R.id.tv_email)
+        val tv_email = findViewById<TextView>(R.id.tv_email)!!
+        val iv_setting = findViewById<ImageButton>(R.id.iv_setting)!!
+        iv_setting.setOnClickListener {
+            val intent = Intent(this, ProfileActivity::class.java)
+            intent.putExtra("user_token", cur_user.user_token)
+            startActivity(intent)
+        }
         tv_name.text = cur_user.name
         tv_email.text = ApplicationClass.sSharedPreferences.getString("user_email", "").toString()
 
@@ -168,25 +189,66 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-        groupRVAdapter = GroupRVAdapter(ApplicationClass.cur_calendar_list)
+        groupRVAdapter = GroupRVAdapter(this, ApplicationClass.cur_calendar_list)
         rv_nav.adapter = groupRVAdapter
         rv_nav.layoutManager = LinearLayoutManager(
             this, LinearLayoutManager.VERTICAL, false
         )
 
-        groupRVAdapter.itemClickListener = object:GroupRVAdapter.OnItemClickListener{
+        groupRVAdapter.itemClickListener = object : GroupRVAdapter.OnItemClickListener {
             override fun OnItemClick(position: Int) {
-                if(ApplicationClass.cur_calendar_list[position].admin
-                    == ApplicationClass.sSharedPreferences.getString("user_email", "").toString()){
+                if (ApplicationClass.cur_calendar_list[position].admin
+                    == ApplicationClass.sSharedPreferences.getString("user_email", "").toString()
+                ) {
                     val intent = Intent(this@MainActivity, GroupActivity::class.java)
                     intent.putExtra("id", ApplicationClass.cur_calendar_list[position].calendar_id)
                     startActivity(intent)
                 }
             }
+
+            override fun OnSwitchClick(position: Int, isChecked: Boolean) {
+                val temp = ApplicationClass.cur_calendar_list[position]
+                if (isChecked == true) {
+                    if (temp !in ApplicationClass.on_calendar_list) {
+                        ApplicationClass.on_calendar_list.add(temp)
+                        monthListAdapter.notifyDataSetChanged()
+                    }
+                } else {
+                    ApplicationClass.on_calendar_list.remove(temp)
+                    monthListAdapter.notifyDataSetChanged()
+                }
+            }
         }
     }
 
-    private fun checkInvitation(){
+    fun checkNotificationPermission(){
+        if(ActivityCompat.checkSelfPermission(this, android.Manifest.permission.POST_NOTIFICATIONS)
+        != PackageManager.PERMISSION_GRANTED){
+            val id = "MyChannel"
+            val name = "TimeCheckChannel"
+            val notificationChannel = NotificationChannel(id, name, NotificationManager.IMPORTANCE_DEFAULT)
+            notificationChannel.enableLights(true)
+            notificationChannel.lightColor = Color.BLUE
+            notificationChannel.lockscreenVisibility = Notification.VISIBILITY_PRIVATE
+
+            val builder = NotificationCompat.Builder(this, id)
+                .setSmallIcon(R.drawable.baseline_group_24)
+                .setContentTitle("KREW 알림 수신 동의하셨습니다.")
+                .setAutoCancel(true)
+
+            val notification = builder.build()
+
+            val manager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            manager.createNotificationChannel(notificationChannel)
+            manager.notify(10, notification)
+        }
+    }
+
+}
+
+
+/*
+private fun checkInvitation(){
         val database = FirebaseDatabase.getInstance()
         val ref = database.getReference("Invitation")
 
@@ -211,4 +273,4 @@ class MainActivity : AppCompatActivity() {
             }
         })
     }
-}
+ */

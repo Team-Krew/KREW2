@@ -2,6 +2,7 @@ package com.example.krew.adapter
 
 import android.content.Intent
 import android.graphics.Color
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -38,19 +39,21 @@ class AdapterDay(val tempMonth:Int, val dayList: MutableList<Date>): RecyclerVie
             ApplicationClass.updateCalendarList()
             val today = formatDate(dayList[position])
             val dayInfo_list =  ArrayList<DayInfo>()
-            for (cal in ApplicationClass.cur_calendar_list){
+            val sch_list = ArrayList<String>()
+            for (cal in ApplicationClass.on_calendar_list){
                 if(cal.schedule_list != null) {
                     val temp_schedule_list = cal.schedule_list as ArrayList<Schedule>
-//                    println(temp_schedule_list)
                     for (t in temp_schedule_list) {
-//                        println("target_date: " + t.date)
-                        if (t.date == today) {
-                            dayInfo_list.add(DayInfo(t.title, t.place, t.time, Color.CYAN))
+                        if (t.date == today && t.schedule_id !in sch_list) {
+                            sch_list.add(t.schedule_id)
+                            dayInfo_list.add(DayInfo(t.title, t.place, t.time, cal.label))
                         }
                     }
                 }
             }
 
+            val count = dayInfo_list.size
+            if(count != 0) holder.dayBinding.numSchedule.setText("+$count")
 
             holder.dayBinding.itemDayLayout.setOnClickListener {
                 val intent = Intent(holder.dayBinding.root.context, DayInfoActivity::class.java)
@@ -60,7 +63,6 @@ class AdapterDay(val tempMonth:Int, val dayList: MutableList<Date>): RecyclerVie
                 intent.putExtra("dayInfo_list", dayInfo_list)
                 holder.dayBinding.root.context.startActivity(intent)
             }
-
 
             holder.dayBinding.itemDayText.text = dayList[position].date.toString()
             holder.dayBinding.itemDayText.setTextColor(when(position%7){
@@ -78,7 +80,7 @@ class AdapterDay(val tempMonth:Int, val dayList: MutableList<Date>): RecyclerVie
     }
 
     fun formatDate(date: Date): String {
-        val format = SimpleDateFormat("yyyy년 MM월 dd일", Locale.getDefault())
+        val format = SimpleDateFormat("yyyy-M-dd", Locale.getDefault())
         return format.format(date)
     }
 

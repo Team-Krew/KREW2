@@ -34,7 +34,7 @@ class ApplicationClass : Application() {
 
         // 현재 유저가 속한 Calendar 리스트
         var cur_calendar_list: ArrayList<Calendar> = ArrayList()
-
+        var on_calendar_list: ArrayList<Calendar> = ArrayList()
         //유저 아이디
         var user_id: String? = null
 
