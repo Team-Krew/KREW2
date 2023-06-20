@@ -125,7 +125,6 @@ class MainActivity : AppCompatActivity() {
             }
             CoroutineScope(Dispatchers.Main).launch {
                 ApplicationClass.updateCalendarList()
-//                println(ApplicationClass.cur_calendar_list)
                 monthListAdapter.notifyDataSetChanged()
             }
 

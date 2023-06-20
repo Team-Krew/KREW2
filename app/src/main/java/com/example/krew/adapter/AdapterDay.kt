@@ -36,22 +36,22 @@ class AdapterDay(val tempMonth:Int, val dayList: MutableList<Date>): RecyclerVie
 
     override fun onBindViewHolder(holder: DayView, position: Int) {
         CoroutineScope(Dispatchers.Main).launch {
-            Log.e("adapterday", "adapterDay")
             ApplicationClass.updateCalendarList()
             val today = formatDate(dayList[position])
-            println("today"+today)
             val dayInfo_list =  ArrayList<DayInfo>()
+            val sch_list = ArrayList<String>()
             for (cal in ApplicationClass.cur_calendar_list){
                 if(cal.schedule_list != null) {
                     val temp_schedule_list = cal.schedule_list as ArrayList<Schedule>
                     for (t in temp_schedule_list) {
-                        if (t.date == today) {
+                        if (t.date == today && t.schedule_id !in sch_list) {
+                            sch_list.add(t.schedule_id)
                             dayInfo_list.add(DayInfo(t.title, t.place, t.time, Color.CYAN))
                         }
                     }
                 }
             }
-            println("dayinfolist" + dayInfo_list)
+
             val count = dayInfo_list.size
             if(count != 0) holder.dayBinding.numSchedule.setText("+$count")
 
